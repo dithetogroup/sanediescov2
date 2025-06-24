@@ -1,0 +1,102 @@
+<form [formGroup]="projectForm">
+    <div class="techclassification mb-25">
+            <h5 class="innerheaders">Previous Projects</h5>
+            <div class="row">
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <i class="ri-user-3-line"></i>
+                            <mat-label>Client Name<span>*</span></mat-label>
+                            <input matInput #input formControlName="he_client_name" name="he_client_name"
+                                placeholder="Client Name" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <i class="ri-user-3-line"></i>
+                            <mat-label>Contact Person<span>*</span></mat-label>
+                            <input matInput #input formControlName="he_contact_person" name="he_contact_person"
+                                placeholder="Contact Person" />
+
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <i class="flaticon-phone-call"></i>
+                            <mat-label>Contact Number<span>*</span></mat-label>
+                            <input matInput #input formControlName="he_client_contact_no" name="he_client_contact_no"
+                                placeholder="Client contact number" maxlength="10" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <i class="flaticon-envelope"></i>
+                            <mat-label>Client Email<span>*</span></mat-label>
+                            <input matInput input type="email" formControlName="he_contact_email"
+                                name="he_contact_email" placeholder="Client Email" />
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="tagus-form-group without-icon">
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Project Start Date<span>*</span> </mat-label>
+                            <input matInput [matDatepicker]="startPicker" formControlName="he_proj_start_date"
+                                [max]="maxtDate" placeholder="Select start project date">
+                            <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #startPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="tagus-form-group without-icon">
+                        <mat-form-field appearance="fill" class="example-full-width">
+                            <mat-label>Project End Date<span>*</span> </mat-label>
+                            <input matInput [matDatepicker]="endPicker" formControlName="he_proj_end_date"
+                                [max]="maxEndDate" placeholder="Select project end date">
+                            <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+                            <mat-datepicker #endPicker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <i class="flaticon-chat"></i>
+                            <mat-label>Project Description<span>*</span> </mat-label>
+                            <textarea matInput formControlName="he_proj_desc"
+                                placeholder="Project Description"></textarea>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6">
+                    <div class="tagus-form-group without-icon">
+                            <mat-form-field appearance="fill" floatLabel="always" class="example-full-width">
+                            <i class="laticon-credit-card"></i>
+                            <mat-label>Project Value</mat-label>
+                            <input matInput type="number" class="example-right-align" placeholder="0"
+                                formControlName="he_proj_value">
+                            <span matTextPrefix>R&nbsp;</span>
+                            <span matTextSuffix>.00</span>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <!-- Begining of Reference Upload-->
+                <div class="col-lg-6 col-md-6 col-sm-6 mb-5">
+                    <div class="tagus-form-group">
+                        <label class="d-block mb-12 fw-semibold gray-color">Reference Letter</label>
+                        <!-- Add a file input field -->
+                        <input type="file" (change)="onFileSelected($event)" />
+                    </div>
+                </div>
+            </div>
+    </div>
+    <button mat-flat-button class="me-15" color="accent" (click)="submitForm()"> Save<mat-icon>save</mat-icon> </button>
+</form>

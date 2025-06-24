@@ -1,0 +1,32 @@
+<div fxFlex>
+  <mat-card>
+    <h1>Progress: {{progress}}%</h1>
+    <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+  </mat-card>
+</div>
+
+<div fxLayout="row" fxLayoutGap="20px">
+  <mat-vertical-stepper #stepper linear>
+    <mat-step [stepControl]="step1Form">
+      <form [formGroup]="step1Form">
+        <ng-template matStepLabel>Previous Projects</ng-template>
+        <app-previous-projects></app-previous-projects>
+        <button mat-button matStepperNext>Next</button>
+      </form>
+    </mat-step>
+    <mat-step [stepControl]="step2Form">
+      <form [formGroup]="step2Form">
+        <ng-template matStepLabel>Energy Services Offered</ng-template>
+        <app-energy-service-offered></app-energy-service-offered>
+        <button mat-button matStepperNext>Next</button>
+      </form>
+    </mat-step>
+    <mat-step>
+      <form [formGroup]="step3Form">
+        <ng-template matStepLabel>Company Info</ng-template>
+        <app-company-information></app-company-information>
+        <button mat-button (click)="completeStepper()">Complete</button>
+      </form>
+    </mat-step>
+  </mat-vertical-stepper>
+</div>

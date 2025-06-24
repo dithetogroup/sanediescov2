@@ -1,0 +1,32 @@
+<form [formGroup]="serviceOfferedForm">
+    <div class="row mt-3">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="tagus-form-group">
+                <mat-form-field appearance="fill">
+                    <i class="ri-list-check"></i>
+                    <mat-label>Services Offered</mat-label>
+                    <mat-select formControlName="so_industry" multiple>
+                    <!-- <mat-option *ngFor="let service of offeredservices" [value]="service.so_name">{{ service.so_name }}</mat-option> -->
+                     <mat-option value="4">4</mat-option>
+                      <mat-option value="5">5</mat-option>
+                      <mat-option value="6">6</mat-option>
+                    </mat-select>
+                  </mat-form-field>
+            </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="tagus-form-group">
+                <mat-form-field appearance="fill">
+                    <i class="ri-list-check"></i>
+                    <mat-label>Please Specify Other</mat-label>
+                <input matInput #input formControlName="so_isOther" name="so_isOther" placeholder="Other" />
+            </mat-form-field>   
+            </div>
+        </div>
+        <div class="mt-5">
+            <button mat-flat-button class="tagus" type="submit" (click)="submitServiceOffered()">Save<mat-icon>save</mat-icon></button>
+        </div>
+
+    </div>
+</form>

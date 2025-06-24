@@ -1,0 +1,53 @@
+
+<form [formGroup]="companyInformationForm">
+    <div class="row mt-5">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="tagus-form-group">
+                <mat-form-field appearance="fill">
+                    <i class="ri-list-check"></i>
+                    <mat-label>Years in ESCo/energy managment business</mat-label>
+                    <mat-select name="ci_energy_man_exp" formControlName="ci_energy_man_exp" placeholder="Select number of years of energy management experience">
+                        <mat-option *ngFor="let number of yearsInESCoBusiness" [value]="number">{{ number }}</mat-option>
+                    </mat-select>
+                 
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="tagus-form-group">
+                <mat-form-field appearance="fill">
+                    <i class="ri-list-check"></i>
+                    <mat-label>Number of years of combined technical professional experience</mat-label>
+                    <mat-select name="ci_com_exp_of_tech_pro" formControlName="ci_com_exp_of_tech_pro" placeholder="Number of years of combined technical professional experience">
+                        <mat-option *ngFor="let number of EnumTeamExperience" [value]="number">{{ number }}</mat-option>
+                    </mat-select>
+                 
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="tagus-form-group">
+                <mat-form-field appearance="fill">
+                    <i class="ri-list-check"></i>
+                    <mat-label>Business activities in the following Provinces</mat-label>
+                    <mat-select name="ci_business_activities_provinces" multiple formControlName="ci_business_activities_provinces" placeholder="Business activities in the provinces">
+                        <mat-option *ngFor="let province of saProvinces" [value]="province">{{ province }}</mat-option>
+                    </mat-select>
+               
+                </mat-form-field>
+            </div>
+        </div>
+
+
+        <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="tagus-form-group">
+                    <!-- Upload CICP Document -->
+                    <input type="file" (change)="onFileSelected($event)" />
+            </div>
+        </div>
+
+    </div>
+    <div class="mt-5">
+        <button mat-flat-button matStepperNext class="tagus" [disabled]="companyInformationForm.invalid" (click)="submitCompanyInformation()">Save<mat-icon>save</mat-icon></button>
+    </div>
+</form>
