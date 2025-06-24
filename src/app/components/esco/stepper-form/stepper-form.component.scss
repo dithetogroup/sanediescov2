@@ -1,0 +1,18 @@
+::ng-deep .custom-progress-bar {
+    height: 16px;
+  
+    // The actual fill bar in MDC!
+    .mdc-linear-progress__primary-bar {
+      background-color: var(--progress-bar-color, #ff0000) !important;
+      transition: background-color 0.5s;
+      border-radius: 8px;
+      height: 16px;
+    }
+  
+    // Optional: round the track as well
+    .mdc-linear-progress__bar {
+      border-radius: 8px;
+      height: 16px;
+    }
+  }
+  

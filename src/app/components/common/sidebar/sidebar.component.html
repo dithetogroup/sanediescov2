@@ -6,10 +6,11 @@
     [class.hide-sidebar]="themeService.isHideSidebar()"
 >
     <div class="logo bg-white">
-        <a routerLink="/" class="d-flex align-items-center">
-            <img src="img/logo-icon.png" alt="logo">
-            <span>Tagus</span>
-        </a>
+        <div class="logo bg-white">
+            <a routerLink="/" class="d-flex align-items-center">
+                <img src="img/Sanedlogo.png" alt="logo">
+            </a>
+        </div>
     </div>
     <div class="burger-menu" (click)="toggle()" [ngClass]="{'active': isToggled}">
         <span class="top-bar"></span>
@@ -119,6 +120,13 @@
                             </li>
                         </ul>
                     </mat-expansion-panel>
+
+                    <a routerLink="/forms/esco-profile" class="sidebar-menu-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                        <i class="flaticon-to-do-list"></i>
+                        <span class="title">My Application</span>
+                    </a>
+
+
                     <a routerLink="/to-do-list" class="sidebar-menu-link" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
                         <i class="flaticon-to-do-list"></i>
                         <span class="title">To Do List</span>

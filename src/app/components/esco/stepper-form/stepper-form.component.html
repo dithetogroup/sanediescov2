@@ -1,7 +1,14 @@
 <div fxFlex>
-  <mat-card>
-    <h1>Progress: {{progress}}%</h1>
-    <mat-progress-bar mode="determinate" [value]="progress"></mat-progress-bar>
+  <mat-card class="mb-25 tagus-card">
+    <mat-card-header>
+      <h5 class="mb-0">Progress: {{progress}}%</h5>
+    </mat-card-header>
+    <mat-card-content>
+      <mat-progress-bar mode="determinate" [value]="progress" class="custom-progress-bar"
+        [ngStyle]="{ '--progress-bar-color': getProgressBarColor(progress) }">
+      </mat-progress-bar>
+
+    </mat-card-content>
   </mat-card>
 </div>
 
@@ -10,23 +17,36 @@
     <mat-step [stepControl]="step1Form">
       <form [formGroup]="step1Form">
         <ng-template matStepLabel>Previous Projects</ng-template>
-        <app-previous-projects></app-previous-projects>
-        <button mat-button matStepperNext>Next</button>
+        <app-previous-projects #step1Ref [parentForm]="step1Form"></app-previous-projects>
+        <button
+         
+          mat-flat-button color="primary"
+          matStepperNext
+          [disabled]="!step1Ref.noProjects && step1Form.invalid">
+          Next
+        </button>
       </form>
     </mat-step>
+
     <mat-step [stepControl]="step2Form">
       <form [formGroup]="step2Form">
-        <ng-template matStepLabel>Energy Services Offered</ng-template>
-        <app-energy-service-offered></app-energy-service-offered>
-        <button mat-button matStepperNext>Next</button>
+        <ng-template matStepLabel>Energy Service Offered</ng-template>
+        <app-energy-service-offered #step2Ref></app-energy-service-offered>
+        <button mat-button matStepperNext [disabled]="!step2Ref.noEnergyOffered && step2Form.invalid">
+          Next
+        </button>
       </form>
     </mat-step>
-    <mat-step>
+
+    <mat-step [stepControl]="step3Form">
       <form [formGroup]="step3Form">
-        <ng-template matStepLabel>Company Info</ng-template>
-        <app-company-information></app-company-information>
-        <button mat-button (click)="completeStepper()">Complete</button>
+        <ng-template matStepLabel>Company Information</ng-template>
+        <app-company-information #step3Ref></app-company-information>
+        <button mat-button matStepperNext [disabled]="step3Form.invalid">
+          <button mat-button (click)="completeStepper()">Complete</button>
+        </button>
       </form>
     </mat-step>
+
   </mat-vertical-stepper>
 </div>
