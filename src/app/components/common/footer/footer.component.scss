@@ -1,5 +1,11 @@
 .footer-area {
+
     padding: 25px;
+    font-size: 12px;
+
+    .copyright {
+        font-size: 12px;
+    }
 
     &.card-borderd-theme {
         box-shadow: var(--borderBoxShadow) !important;

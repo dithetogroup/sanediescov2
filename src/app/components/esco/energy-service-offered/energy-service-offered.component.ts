@@ -1,6 +1,6 @@
 import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, Input } from '@angular/core';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -8,6 +8,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
+import { MatSlideToggle } from '@angular/material/slide-toggle';
 
 @Component({
   selector: 'app-energy-service-offered',
@@ -21,12 +22,16 @@ import { MatSelectModule } from '@angular/material/select';
     MatOptionModule,
     MatSelectModule,    
     MatIconModule,
-   // NgFor
+    FormsModule,
+    MatSlideToggle
 ],
   templateUrl: './energy-service-offered.component.html',
   styleUrl: './energy-service-offered.component.scss'
 })
 export class EnergyServiceOfferedComponent {
+
+  @Input() parentForm!: FormGroup; 
+  public noEnergyOffered = false;
 
   serviceOfferedForm: FormGroup;
 
@@ -35,6 +40,16 @@ export class EnergyServiceOfferedComponent {
       so_isOther: [''],
       so_industry: ['', Validators.required],
     });
+  }
+
+
+  onNoEnergyOfferedChange(event: any) {
+    if (this.noEnergyOffered) {
+      this.serviceOfferedForm.reset();
+      this.serviceOfferedForm.disable();
+    } else {
+      this.serviceOfferedForm.enable();
+    }
   }
 
 
