@@ -26,7 +26,7 @@ export class LoginComponent {
 
     constructor(
         public themeService: CustomizerSettingsService,
-        private fb: FormBuilder, private authService: AuthService, private router: Router
+        private fb: FormBuilder, private router: Router
         
     ) {
         this.loginForm = this.fb.group({
@@ -35,53 +35,7 @@ export class LoginComponent {
           });
     }
 
-    onSubmit() {
-        if (this.loginForm.invalid) {
-          return;
-        }
-     //   this.isLoading = true;
-    //    this.errorMessage = '';
-    
-        this.authService.login(this.loginForm.value).subscribe({
-          
-          next: () => {
-            this.isLoading = false;
-            this.router.navigate(['/']); // Redirect to homepage or dashboard
-          },
-          error: (error) => {
-            this.isLoading = false;
-            this.errorMessage = error.error.message || 'Login failed';
-          }
-        });
-      }
 
-      onTest() {
-        this.authService.testConnection().subscribe({
-          next: (res) => {
-            console.log('✅ Laravel API is reachable:', res);
-          },
-          error: (err) => {
-            console.error('❌ Failed to connect to Laravel:', err);
-          }
-        });
-        
-      }
-
-      testApi() {
-        this.authService.testConnection().subscribe({
-          next: (res) => console.log('✅ Test OK:', res),
-          error: (err) => console.error('❌ CORS or server issue:', err)
-        });
-      }
-
-      testFree(){
-        this.authService.testPing().subscribe({
-          next: (res) => console.log('✅ API OK:', res),
-          error: (err) => console.error('❌ Still blocked:', err)
-        });
-      }
-      
-      
 
    
 

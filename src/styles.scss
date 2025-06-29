@@ -7,6 +7,8 @@
 // Utilities CSS
 @use "./utilities";
 
+@use "./esco";
+
 
 // Form
 @use "./form";/* You can add global styles to this file, and also import other style files */
@@ -18,7 +20,7 @@
     --color-orange: #FF8C00;
     --fontFamily: 'Open Sans', sans-serif;
     --headingFontFamily: 'Raleway', sans-serif;
-    --heraBlueColor: #398c27;
+    --heraBlueColor: #264e22;
     --aareRiverColor: #FF8C00;
     --blackColor: #260944;
     --paragraphColor: #5b5b98;
