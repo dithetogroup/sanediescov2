@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, NgZone, AfterViewInit , ChangeDetectorRef} from '@angular/core';
 import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBar } from '@angular/material/progress-bar';
@@ -12,7 +12,11 @@ import { SectorExperienceComponent } from '../sector-experience/sector-experienc
 import { TechnologyClassificationComponent } from '../technology-classification/technology-classification.component';
 import { EnergyServiceOfferedComponent } from '../energy-service-offered/energy-service-offered.component';
 import { CompanyEquityComponent } from "../company-equity/company-equity.component";
-import { NgStyle } from '@angular/common';
+import { NgIf, NgStyle } from '@angular/common';
+import { PreviousprojectDialogComponent } from '../../ui-kit/dialog/previousproject-dialog/previousproject-dialog.component';
+import { MatDialog } from '@angular/material/dialog';
+import { MatIconModule } from '@angular/material/icon';
+import { EnergyserviceDialogComponent } from '../../ui-kit/dialog/energyservice-dialog/energyservice-dialog.component';
 
 @Component({
   selector: 'app-stepper-form',
@@ -26,6 +30,8 @@ import { NgStyle } from '@angular/common';
     MatButtonModule,
     PreviousProjectsComponent,
     NgStyle,
+    MatIconModule,
+    NgIf,
     // KeyEmployeesComponent,
     //ClientReferencesComponent,
     CompanyInformationComponent,
@@ -38,7 +44,7 @@ import { NgStyle } from '@angular/common';
   templateUrl: './stepper-form.component.html',
   styleUrl: './stepper-form.component.scss'
 })
-export class StepperFormComponent {
+export class StepperFormComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
   progress: number = 0;
   totalSteps: number = 3;
@@ -47,65 +53,76 @@ export class StepperFormComponent {
   step2Form: FormGroup;
   step3Form: FormGroup;
 
-  constructor(private fb: FormBuilder) {
+  constructor(
+    private fb: FormBuilder,
+    public dialog: MatDialog, 
+    private ngZone: NgZone,
+    private cdr: ChangeDetectorRef
+) {
+
     this.step1Form = this.fb.group({
-      projects: this.fb.array([this.createProjectGroup()])
+      projects: this.fb.array([]) 
     });
-    this.step2Form = this.fb.group({
-      // Example field
-      energy_service: ['', Validators.required]
-    });
+
+    this.step2Form = this.fb.group({});
+
     this.step3Form = this.fb.group({
-      // Example field
       company_name: ['', Validators.required]
     });
+    
   }
 
-  createProjectGroup() {
-    return this.fb.group({
-      he_client_name: ['', Validators.required],
-      he_contact_person: ['', Validators.required],
-      he_client_contact_no: ['', Validators.required],
-      he_proj_desc: ['', Validators.required],
-      he_contact_email: ['', [Validators.required, Validators.email]],
-      he_proj_value: ['', Validators.required],
-      he_proj_start_date: ['', Validators.required],
-      he_proj_end_date: ['', Validators.required],
-      he_reference_letter: [null]
-    });
-  }
-
-  get projectsArray() {
-    return this.step1Form.get('projects') as FormArray;
-  }
-
-  addProject() {
-    if (this.projectsArray.length < 5) {
-      this.projectsArray.push(this.createProjectGroup());
-    }
-  }
-
-  removeProject(index: number) {
-    if (this.projectsArray.length > 1) {
-      this.projectsArray.removeAt(index);
+  ngOnInit() {
+    // Optionally initialize one empty project if needed
+    const projectsArray = this.step1Form.get('projects') as FormArray;
+    if (projectsArray.length === 0) {
+      // Let PreviousProjectsComponent initialize via its addProject() method if needed
     }
   }
 
   ngAfterViewInit() {
-    this.updateProgress();
-    this.stepper.selectionChange.subscribe(() => {
+    //This ensures progress updates even when clicking "Next"
+    this.ngZone.onStable.subscribe(() => {
+      setTimeout(() => this.updateProgress(), 0);
+    });
+
+
+    this.stepper.selectionChange.subscribe((event) => {
+      console.log('Stepper moved to step:', event.selectedIndex);
       this.updateProgress();
     });
-  }
+    setTimeout(() => this.cdr.detectChanges());
 
+  }
+  
   updateProgress() {
-    this.progress = Math.round((this.stepper.selectedIndex / this.totalSteps) * 100);
+    const selectedIndex = this.stepper?.selectedIndex ?? 0;
+    const stepCount = this.stepper?.steps?.length ?? this.totalSteps;
+    if (stepCount <= 1) {
+      this.progress = 0;
+      return;
+    }
+    // Show 100% only after last step is confirmed/complete
+    this.progress = Math.round((selectedIndex / stepCount) * 100);
   }
-
   completeStepper() {
     alert('🎉 Form completed!');
     this.progress = 100;
   }
+  
+
+  // updateProgress() {
+  //   const selectedIndex = this.stepper?.selectedIndex ?? 0;
+  //   const stepCount = this.stepper?.steps?.length ?? this.totalSteps;
+  //   // Avoid division by zero
+  //   if (stepCount <= 1) {
+  //     this.progress = 0;
+  //     return;
+  //   }
+  //   // Calculate percentage (0% at step 0, 100% at last step)
+  //   this.progress = Math.round((selectedIndex / (stepCount - 1)) * 100);
+  // }
+
 
   getProgressBarColor(progress: number): string {
     let r, g, b;
@@ -119,5 +136,23 @@ export class StepperFormComponent {
       b = 0;
     }
     return `rgb(${r},${g},${b})`;
+  }
+
+  get currentStep(): number {
+    return (this.stepper?.selectedIndex ?? 0) + 1;
+  }
+  
+  get stepCount(): number {
+    return this.stepper?.steps?.length ?? 0;
+  }
+  
+
+  /* Dialog triggers */
+  openDialogPreviousProjects() {
+    this.dialog.open(PreviousprojectDialogComponent);
+  }
+
+  openDialogEnergyService() {
+    this.dialog.open(EnergyserviceDialogComponent);
   }
 }

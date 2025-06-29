@@ -1,5 +1,5 @@
-import { NgForOf, NgIf } from '@angular/common';
-import { Component, Input } from '@angular/core';
+import { CommonModule, NgForOf, NgIf } from '@angular/common';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormGroup, FormsModule, ReactiveFormsModule, FormArray, Validators, FormBuilder, AbstractControl, ValidationErrors, ValidatorFn } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatNativeDateModule } from '@angular/material/core';
@@ -13,6 +13,7 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
 @Component({
   selector: 'app-previous-projects',
   imports: [
+    CommonModule,
     ReactiveFormsModule,
     MatButtonModule,
     MatFormField,
@@ -33,25 +34,36 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
   styleUrl: './previous-projects.component.scss'
 })
 
-export class PreviousProjectsComponent {
+export class PreviousProjectsComponent implements OnInit {
 
   @Input() parentForm!: FormGroup; 
   public noProjects = false;
   public maxtDate: Date = new Date();
   public maxEndDate: Date = new Date();
 
-
   constructor(private fb: FormBuilder) {}
 
-
+  ngOnInit() {
+    // Only add a project if user says they DO have projects
+    if (!this.noProjects && this.projectsArray.length === 0) {
+      this.addProject();
+    }
+  }
+  
   onNoProjectsChange() {
     if (this.noProjects) {
       this.parentForm.reset();
       this.parentForm.disable();
     } else {
       this.parentForm.enable();
+  
+      const projects = this.projectsArray;
+      if (projects.length === 0) {
+        this.addProject(); // Ensure one form is shown when toggle is OFF
+      }
     }
   }
+  
 
   createProjectGroup(): FormGroup {
     return this.fb.group({
@@ -60,7 +72,7 @@ export class PreviousProjectsComponent {
       he_client_contact_no: ['', Validators.required],
       he_proj_desc: ['', Validators.required],
       he_contact_email: ['', [Validators.required, Validators.email]],
-      he_proj_value: ['', Validators.required],
+      he_proj_value: [''],
       he_proj_start_date: ['', Validators.required],
       he_proj_end_date: ['', Validators.required],
       he_reference_letter: [null]

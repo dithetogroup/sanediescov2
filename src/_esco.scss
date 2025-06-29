@@ -1,0 +1,64 @@
+
+/* First step */
+#cdk-stepper-0-content-0 {
+    .mat-stepper-next {
+        margin-top: 20px;
+    }
+}
+
+
+.title-wrapper {
+    background: var(--heraBlueColor);
+    // #264e22
+    padding: 25px;
+    color: #fff !important;
+}
+
+.dialogtitle {
+    color: #fff !important;
+    margin-right: 10px;
+}
+
+ .title-wrapper  .flaticon-close {
+    width: 32px;
+    height: 32px;
+    background-color: #00000080;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color .3s ease;
+    border: none;
+}
+
+.maticon-question {
+    color: orange !important;
+}
+
+.mat-stepper-next {
+    margin-top: 20px;
+}
+
+.mdc-button .mdc-button__label {
+    color: #fff !important;
+}
+
+.mat-calendar-arrow {
+    fill: #fff !important
+}
+
+::ng-deep .custom-progress-bar .mat-progress-bar-fill::after {
+    transition: transform 0.4s ease;
+  }
+
+
+.actionbt {
+    .actionbutton {
+    float: left;
+    margin: 20px 10px 0 0;
+    }
+}
+  
