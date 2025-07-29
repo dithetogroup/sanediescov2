@@ -18,7 +18,9 @@ import { NgFor } from '@angular/common';
     MatSelectModule,
     MatInputModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    MatOptionModule,
+    NgFor
 ],
   templateUrl: './company-information.component.html',
   styleUrl: './company-information.component.scss'
@@ -29,10 +31,10 @@ export class CompanyInformationComponent {
     @Output() fileUploaded = new EventEmitter<File>();
   
     yearsInESCoBusiness: string[] = [
-      '1-2', '3-5', '6-10', '10+'
+      '1 - 2', '3 - 5', '6 - 10', '10+'
     ];
     EnumTeamExperience: string[] = [
-      '1-3', '4-6', '7-10', '10+'
+      '1 - 3', '4 -6 ', '7 - 10', '10+'
     ];
     saProvinces: string[] = [
       'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo', 'Mpumalanga', 'North West', 'Northern Cape', 'Western Cape'

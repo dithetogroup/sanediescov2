@@ -17,6 +17,8 @@ import { PreviousprojectDialogComponent } from '../../ui-kit/dialog/previousproj
 import { MatDialog } from '@angular/material/dialog';
 import { MatIconModule } from '@angular/material/icon';
 import { EnergyserviceDialogComponent } from '../../ui-kit/dialog/energyservice-dialog/energyservice-dialog.component';
+import { KeyemplouyeeDialogComponent } from '../../ui-kit/dialog/keyemplouyee-dialog/keyemplouyee-dialog.component';
+import { TechnologyClassificationDialogComponent } from '../../ui-kit/dialog/technology-classification-dialog/technology-classification-dialog.component';
 
 @Component({
   selector: 'app-stepper-form',
@@ -36,9 +38,10 @@ import { EnergyserviceDialogComponent } from '../../ui-kit/dialog/energyservice-
     //ClientReferencesComponent,
     CompanyInformationComponent,
     //SectorExperienceComponent,
-    //TechnologyClassificationComponent,
     EnergyServiceOfferedComponent,
-   // CompanyEquityComponent
+    KeyEmployeesComponent,
+    TechnologyClassificationComponent,
+    SectorExperienceComponent
 ],
   //bootstrap: [AppComponent],
   templateUrl: './stepper-form.component.html',
@@ -52,6 +55,9 @@ export class StepperFormComponent implements OnInit {
   step1Form: FormGroup;
   step2Form: FormGroup;
   step3Form: FormGroup;
+  step4Form: FormGroup;
+  step5Form: FormGroup;
+  step6Form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -69,15 +75,40 @@ export class StepperFormComponent implements OnInit {
     this.step3Form = this.fb.group({
       company_name: ['', Validators.required]
     });
+
+    this.step4Form = this.fb.group({
+      keyemployees: this.fb.array([]) 
+    });
+
+    this.step5Form = this.fb.group({
+      techclassification: this.fb.array([]) 
+    });
+
+    this.step6Form = this.fb.group({});
     
   }
 
+  checkEmptyFormArray(form: FormGroup, arrayName: string): boolean {
+    const arr = form.get(arrayName) as FormArray;
+    return arr.length === 0;
+  }
+
+
   ngOnInit() {
-    // Optionally initialize one empty project if needed
-    const projectsArray = this.step1Form.get('projects') as FormArray;
-    if (projectsArray.length === 0) {
-      // Let PreviousProjectsComponent initialize via its addProject() method if needed
-    }
+    // Add each step/array combo you want to check here
+    const checks = [
+      {form: this.step1Form, arrayName: 'projects'},
+      {form: this.step4Form, arrayName: 'keyemployees'},
+      // Add more steps as you need (e.g., step2Form/arrayName)
+    ];
+
+    checks.forEach(cfg => {
+      if (this.checkEmptyFormArray(cfg.form, cfg.arrayName)) {
+        // You can handle the empty array case here
+        // For example:
+        // this.doSomethingForEmptyArray(cfg.form, cfg.arrayName);
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -85,7 +116,6 @@ export class StepperFormComponent implements OnInit {
     this.ngZone.onStable.subscribe(() => {
       setTimeout(() => this.updateProgress(), 0);
     });
-
 
     this.stepper.selectionChange.subscribe((event) => {
       console.log('Stepper moved to step:', event.selectedIndex);
@@ -111,19 +141,6 @@ export class StepperFormComponent implements OnInit {
   }
   
 
-  // updateProgress() {
-  //   const selectedIndex = this.stepper?.selectedIndex ?? 0;
-  //   const stepCount = this.stepper?.steps?.length ?? this.totalSteps;
-  //   // Avoid division by zero
-  //   if (stepCount <= 1) {
-  //     this.progress = 0;
-  //     return;
-  //   }
-  //   // Calculate percentage (0% at step 0, 100% at last step)
-  //   this.progress = Math.round((selectedIndex / (stepCount - 1)) * 100);
-  // }
-
-
   getProgressBarColor(progress: number): string {
     let r, g, b;
     if (progress < 50) {
@@ -145,6 +162,13 @@ export class StepperFormComponent implements OnInit {
   get stepCount(): number {
     return this.stepper?.steps?.length ?? 0;
   }
+
+
+// isStep6NextDisabled(step6Ref: any): boolean {
+//   if (step6Ref?.noSectorExperience) return false;
+//   return this.step6Form.invalid;
+// }
+
   
 
   /* Dialog triggers */
@@ -154,5 +178,13 @@ export class StepperFormComponent implements OnInit {
 
   openDialogEnergyService() {
     this.dialog.open(EnergyserviceDialogComponent);
+  }
+
+  openDialogKeyEmployee() {
+    this.dialog.open(KeyemplouyeeDialogComponent);
+  }
+
+  openDialogTechnologyClass(){
+    this.dialog.open(TechnologyClassificationDialogComponent);
   }
 }

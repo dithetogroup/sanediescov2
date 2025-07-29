@@ -9,7 +9,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatSlideToggle } from '@angular/material/slide-toggle';
 import { ReadService } from '../../common/services/read/read.service';
 import { ServicesOffered } from '../../../escoentities';
-import { servicesOfferedValues } from '../../../selectentities';
 import { ValidationsService } from '../../common/services/utilities/validations.service';
 import { MatOptionModule } from '@angular/material/core';
 
@@ -69,10 +68,8 @@ export class EnergyServiceOfferedComponent implements OnInit{
   ngOnInit(): void {
     this.parentForm.addControl('so_industry', this.fb.control('', Validators.required));
     this.parentForm.addControl('so_isOther', this.fb.control(''));
-
   //  this.loadServiceOffered();
   }
-
 
   onNoEnergyOfferedChange() {
     if (this.noEnergyOffered) {
@@ -81,9 +78,7 @@ export class EnergyServiceOfferedComponent implements OnInit{
     } else {
       this.parentForm.enable();
     }
-    
   }
-
 
   submitServiceOffered() {
     if (this.parentForm.valid) {
@@ -95,7 +90,6 @@ export class EnergyServiceOfferedComponent implements OnInit{
   
 
   loadServiceOffered(): void {
-    debugger;
     this.readService.getEscoEntity({ "entity": "services_offered", "esco_id": this.esco_id }).subscribe((response: any) => {
       this.energyServicesOffered = response as ServicesOffered[];      
 
@@ -129,8 +123,5 @@ export class EnergyServiceOfferedComponent implements OnInit{
       }
     );
   }
-
-
- 
 
 }
