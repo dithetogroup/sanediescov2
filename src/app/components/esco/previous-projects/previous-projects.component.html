@@ -9,8 +9,6 @@
   </small>
 </div>
 
-
-
 <form *ngIf="!noProjects" [formGroup]="parentForm" class="mt-25">
   <div formArrayName="projects">
     <div *ngFor="let projectGroup of projectsArray.controls; let i = index" [formGroupName]="i" class="mb-10">
@@ -82,6 +80,15 @@
         <div class="col-lg-6 col-md-6 col-sm-6">
           <div class="tagus-form-group">
             <mat-form-field appearance="fill">
+              <i class="flaticon-activity"></i>
+              <mat-label>Savings on completed projects in MWh or kWh</mat-label>
+              <input matInput type="tel" formControlName="he_savingkilowatz" placeholder="Client Email" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group">
+            <mat-form-field appearance="fill">
               <i class="flaticon-chat"></i>
               <mat-label>Project Description</mat-label>
               <textarea matInput formControlName="he_proj_desc" placeholder="Project Description"></textarea>
@@ -107,7 +114,7 @@
         </div>
       </div>
       <button mat-stroked-button color="warn" (click)="removeProject(i)" *ngIf="projectsArray.length > 1">
-      
+
         Remove Project
       </button>
       <mat-divider class="my-3" *ngIf="i < projectsArray.length - 1"></mat-divider>
@@ -115,7 +122,7 @@
     <div class="actionbt">
       <!-- Add Project -->
       <button mat-flat-button color="primary" (click)="addProject()"
-        [disabled]="projectsArray.length >= 5 || (projectsArray.length > 0 && !projectsArray.at(projectsArray.length - 1)?.valid)"
+        [disabled]="projectsArray.length >= 5 || (projectsArray.length > 0 && !projectsArray.at(projectsArray.length - 1).valid)"
         class="my-3 actionbutton">
         <mat-icon>note_add</mat-icon>
         Add Project

@@ -67,12 +67,13 @@ export class PreviousProjectsComponent implements OnInit {
 
   createProjectGroup(): FormGroup {
     return this.fb.group({
-      he_client_name: ['', Validators.required],
-      he_contact_person: ['', Validators.required],
-      he_client_contact_no: ['', Validators.required],
-      he_proj_desc: ['', Validators.required],
-      he_contact_email: ['', [Validators.required, Validators.email]],
-      he_proj_value: [''],
+      he_client_name: ['Jason', Validators.required],
+      he_contact_person: ['Mathipa', Validators.required],
+      he_client_contact_no: ['0764631679', Validators.required],
+      he_proj_desc: ['This is th description', Validators.required],
+      he_contact_email: ['jason@dithetogroup.co.za', [Validators.required, Validators.email]],
+      he_proj_value: ['2323'],
+      he_savingkilowatz: ['1290'],
       he_proj_start_date: ['', Validators.required],
       he_proj_end_date: ['', Validators.required],
       he_reference_letter: [null]

@@ -1,1 +1,46 @@
-<p>sector-experience works!</p>
+<mat-slide-toggle [(ngModel)]="noSectorExperience" (change)="onNoSectorExperienceChange()" class="mb-25">
+    {{ noSectorExperience ? "I don't have sector experience" : "I do have sector experience" }}
+  </mat-slide-toggle>
+  
+  <div class="mt-1 mb-15">
+    <small class="text-muted">
+      {{ noSectorExperience
+        ? "You have indicated that you don’t have sector experience to declare, Please click Next to proceed."
+        : "Please complete your sector experience details below." }}
+    </small>
+  </div>
+  
+  <form [formGroup]="parentForm">
+    <div class="row mt-3">
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="tagus-form-group">
+          <label class="d-block mb-12 fw-semibold gray-color">Sectors Experienced In<span>*</span></label>
+          <mat-form-field appearance="fill">
+            <i class="ri-list-check"></i>
+            <mat-select formControlName="se_experience" placeholder="Select Sectors" multiple>
+              <mat-option *ngFor="let sector of sectorsExperienced" [value]="sector">{{ sector }}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+  
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="tagus-form-group">
+          <label class="d-block mb-12 fw-semibold gray-color">Please Specify Other</label>
+          <mat-form-field appearance="fill">
+            <i class="ri-user-3-line"></i>
+            <input matInput formControlName="se_isOther" name="se_isOther" placeholder="Other" />
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="mt-5 actionbt">
+        <button mat-flat-button class="tagus" type="submit" (click)="submitSectorExperience()"
+          [disabled]="noSectorExperience || parentForm.invalid">
+          Save<mat-icon>save</mat-icon>
+        </button>
+
+        
+      </div>
+    </div>
+  </form>
+  

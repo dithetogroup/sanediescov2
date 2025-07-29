@@ -19,7 +19,9 @@
   </mat-card>
 </div>
 <div fxLayout="row" fxLayoutGap="20px">
+
   <mat-vertical-stepper #stepper linear>
+    <!-- Previous Projects -->
     <mat-step [stepControl]="step1Form">
       <form [formGroup]="step1Form">
         <ng-template matStepLabel>Previous Projects
@@ -33,6 +35,53 @@
         </button>
       </form>
     </mat-step>
+    <!-- EOF Previous Projects -->
+
+
+    <!-- Technology Classification -->
+    <mat-step [stepControl]="step5Form">
+      <form [formGroup]="step5Form">
+        <ng-template matStepLabel>
+          Technology Classification – EE/RE Technology Experience
+          <button mat-icon-button color="primary" (click)="openDialogTechnologyClass()">
+            <mat-icon class="maticon-question">help_outline</mat-icon>
+          </button>
+        </ng-template>
+        <app-technology-classification #step5Ref [parentForm]="step5Form"></app-technology-classification>
+        <button mat-flat-button color="primary" matStepperNext
+          [disabled]="!step5Ref.techclassification && step5Form.invalid">
+          Next
+        </button>
+      </form>
+    </mat-step>
+    <!-- EOF Technology Classfication -->
+
+    <!-- Sector Experience -->
+    <mat-step [stepControl]="step6Form">
+      <form [formGroup]="step6Form">
+        <ng-template matStepLabel>
+          Sector Experience
+          <button mat-icon-button color="primary" (click)="openDialogTechnologyClass()">
+            <mat-icon class="maticon-question">help_outline</mat-icon>
+          </button>
+        </ng-template>
+        <app-sector-experience #step6Ref [parentForm]="step6Form"></app-sector-experience>
+        <button mat-flat-button color="primary" matStepperNext
+          [disabled]="!step6Ref.noSectorExperience && step6Form.invalid">
+          Next
+        </button>
+
+        <!-- <button mat-flat-button color="primary" matStepperNext
+    [disabled]="isStep6NextDisabled(step6Ref)">
+    Next
+  </button> -->
+
+      </form>
+    </mat-step>
+    <!-- EOF Sector Experience  -->
+
+
+    <!-- Energy service Offered-->
     <mat-step [stepControl]="step2Form">
       <form [formGroup]="step2Form">
         <ng-template matStepLabel>
@@ -42,17 +91,32 @@
           </button>
         </ng-template>
         <app-energy-service-offered #step2Ref [parentForm]="step2Form"></app-energy-service-offered>
-        <!-- <button mat-flat-button color="primary" matStepperNext
-          [disabled]="step2Ref.noEnergyOffered || step2Form.invalid">
-          Next
-        </button> -->
         <button mat-flat-button color="primary" matStepperNext
-        [disabled]="!step2Ref.noEnergyOffered && step2Form.invalid">
-        Next
-      </button>
-
+          [disabled]="!step2Ref.noEnergyOffered && step2Form.invalid">
+          Next
+        </button>
       </form>
     </mat-step>
+    <!-- EOF Energy service Offered-->
+
+    <!-- Key Employee -->
+    <mat-step [stepControl]="step4Form">
+      <form [formGroup]="step4Form">
+        <ng-template matStepLabel>
+          Key Employee
+          <button mat-icon-button color="primary" (click)="openDialogKeyEmployee()">
+            <mat-icon class="maticon-question">help_outline</mat-icon>
+          </button>
+        </ng-template>
+        <app-key-employees #step4Ref [parentForm]="step4Form"></app-key-employees>
+        <button mat-flat-button color="primary" matStepperNext
+          [disabled]="!step4Ref.noKeyEmployees && step4Form.invalid">
+          Next
+        </button>
+      </form>
+    </mat-step>
+
+    <!-- EOF Key Employee -->
     <mat-step [stepControl]="step3Form">
       <form [formGroup]="step3Form">
         <ng-template matStepLabel>Company Information
@@ -66,7 +130,5 @@
         </button>
       </form>
     </mat-step>
-    
-
   </mat-vertical-stepper>
 </div>

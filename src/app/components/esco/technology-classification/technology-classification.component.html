@@ -1,1 +1,95 @@
-<p>technology-classification works!</p>
+<!-- Technology Classification Slide Toggle -->
+<mat-slide-toggle [(ngModel)]="noTechExperience" (change)="onNoTechToggle()" class="mb-25">
+    {{ noTechExperience ? 'I don\'t have technology experience' : 'I do have technology experience' }}
+  </mat-slide-toggle>
+  
+  <div class="mt-2">
+    <small class="text-muted">
+      {{ noTechExperience 
+        ? 'You have indicated that you don’t have technology experience, Please click Next to proceed.'
+        : 'Please complete your technology classification details below.' }}
+    </small>
+  </div>
+  
+  <!-- Only show form if not skipped -->
+  <form *ngIf="!noTechExperience" [formGroup]="parentForm" class="mt-25">
+    <div formArrayName="techClassifications">
+      <div *ngFor="let techGroup of techClassifications.controls; let i = index" [formGroupName]="i" class="mb-10">
+        <div class="row">
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="tagus-form-group">
+              <mat-form-field appearance="fill">
+                <i class="ri-list-check"></i>
+                <mat-label>Technology</mat-label>
+                <mat-select formControlName="tc_tech_entpr_exp" (selectionChange)="onTechSelected(i)">
+                  <mat-option *ngFor="let tech of getAvailableTechnologies(i)" [value]="tech">
+                    {{ tech }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <mat-error *ngIf="techGroup.get('tc_tech_entpr_exp')?.hasError('required') && techGroup.get('tc_tech_entpr_exp')?.touched">
+                Please select a technology.
+              </mat-error>
+            </div>
+          </div>
+          <div class="col-lg-6 col-md-6 col-sm-6">
+            <div class="tagus-form-group d-flex align-items-center">
+              <mat-form-field appearance="fill" class="me-3 flex-grow-1">
+                <i class="ri-list-check"></i>
+                <mat-label>Number of projects completed</mat-label>
+                <mat-select formControlName="tc_no_projs_completed">
+                  <mat-option *ngFor="let projCount of tcProjects" [value]="projCount">
+                    {{ projCount }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+              <button mat-icon-button color="warn" *ngIf="techClassifications.length > 1" (click)="removeTechnologyClassification(i)">
+                <mat-icon>delete</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <mat-divider class="my-3" *ngIf="i < techClassifications.length - 1"></mat-divider>
+      </div>
+
+
+      <div class="actionbt mt-4">
+        <button mat-flat-button color="primary" (click)="addTechnologyClassification()"
+          [disabled]="!canAddMoreTechnology()"
+          class="my-3 actionbutton">
+          <mat-icon>note_add</mat-icon>
+          Add Technology
+        </button>
+        <!-- Save -->
+        <button  class="actionbutton" mat-flat-button color="accent" type="submit"
+          [disabled]="parentForm.invalid || !techClassifications.length"
+          (click)="submitTechnologyClassifications()">
+          Save and Continue
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
+
+
+<!-- 
+
+      <div class="actionbt">
+        <button mat-flat-button color="primary" (click)="addProject()"
+          [disabled]="projectsArray.length >= 5 || (projectsArray.length > 0 && !projectsArray.at(projectsArray.length - 1).valid)"
+          class="my-3 actionbutton">
+          <mat-icon>note_add</mat-icon>
+          Add Project
+        </button>
+        <button class="actionbutton" mat-flat-button color="accent" (click)="submitForm()"
+          [disabled]="parentForm.invalid">
+          Save
+          <mat-icon>save</mat-icon>
+        </button>
+      </div> -->
+
+
+
+
+
+    </div>
+  </form>
+  
