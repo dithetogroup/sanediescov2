@@ -52,7 +52,6 @@
         <mat-divider class="my-3" *ngIf="i < techClassifications.length - 1"></mat-divider>
       </div>
 
-
       <div class="actionbt mt-4">
         <button mat-flat-button color="primary" (click)="addTechnologyClassification()"
           [disabled]="!canAddMoreTechnology()"
@@ -68,27 +67,6 @@
           <mat-icon>save</mat-icon>
         </button>
       </div>
-
-
-<!-- 
-
-      <div class="actionbt">
-        <button mat-flat-button color="primary" (click)="addProject()"
-          [disabled]="projectsArray.length >= 5 || (projectsArray.length > 0 && !projectsArray.at(projectsArray.length - 1).valid)"
-          class="my-3 actionbutton">
-          <mat-icon>note_add</mat-icon>
-          Add Project
-        </button>
-        <button class="actionbutton" mat-flat-button color="accent" (click)="submitForm()"
-          [disabled]="parentForm.invalid">
-          Save
-          <mat-icon>save</mat-icon>
-        </button>
-      </div> -->
-
-
-
-
 
     </div>
   </form>

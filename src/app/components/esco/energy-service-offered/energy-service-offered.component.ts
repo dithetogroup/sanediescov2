@@ -35,12 +35,20 @@ export class EnergyServiceOfferedComponent implements OnInit{
   @Input() parentForm!: FormGroup;
   public noEnergyOffered = false;
 
-  offeredservices = [
-    { so_name: 'Energy Auditing' },
-    { so_name: 'Project Management' },
-    { so_name: 'Measurement & Verification' },
-    { so_name: 'Lighting Retrofit' }
+  serviceOfferings: string[] = [
+    'Energy Auditing',
+    'M&V of Energy Savings',
+    'Engineering Design',
+    'Project Implementation',
+    'Energy Management',
+    'Issuing of Energy Performance Certificates',
+    'Energy Performance Contracts',
+    'Financial modeling of energy projects',
+    'Financing of Energy Projects',
+    'Full ESCo Offering (provision of energy services and solutions)',
+    'Other'
   ];
+  
 
   selectedFile: File[] | [] = [];
   esco_id: string;

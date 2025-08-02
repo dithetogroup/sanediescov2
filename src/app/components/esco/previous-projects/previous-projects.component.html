@@ -72,9 +72,6 @@
               <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
               <mat-datepicker #endPicker></mat-datepicker>
             </mat-form-field>
-            <!-- <small *ngIf="projectGroup.get('he_proj_start_date')?.value" class="text-muted">
-              End date must be on or after {{ projectGroup.get('he_proj_start_date')?.value | date:'mediumDate' }}
-            </small> -->
           </div>
         </div>
         <div class="col-lg-6 col-md-6 col-sm-6">
@@ -114,7 +111,6 @@
         </div>
       </div>
       <button mat-stroked-button color="warn" (click)="removeProject(i)" *ngIf="projectsArray.length > 1">
-
         Remove Project
       </button>
       <mat-divider class="my-3" *ngIf="i < projectsArray.length - 1"></mat-divider>
