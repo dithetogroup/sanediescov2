@@ -19,6 +19,9 @@ import { MatIconModule } from '@angular/material/icon';
 import { EnergyserviceDialogComponent } from '../../ui-kit/dialog/energyservice-dialog/energyservice-dialog.component';
 import { KeyemplouyeeDialogComponent } from '../../ui-kit/dialog/keyemplouyee-dialog/keyemplouyee-dialog.component';
 import { TechnologyClassificationDialogComponent } from '../../ui-kit/dialog/technology-classification-dialog/technology-classification-dialog.component';
+import { ClientReferenceDialogComponent } from '../../ui-kit/dialog/client-reference-dialog/client-reference-dialog.component';
+import { CompanyInformationDialogComponent } from '../../ui-kit/dialog/company-information-dialog/company-information-dialog.component';
+import { SectorExpDialogComponent } from '../../ui-kit/dialog/sector-exp-dialog/sector-exp-dialog.component';
 
 @Component({
   selector: 'app-stepper-form',
@@ -34,14 +37,14 @@ import { TechnologyClassificationDialogComponent } from '../../ui-kit/dialog/tec
     NgStyle,
     MatIconModule,
     NgIf,
-    // KeyEmployeesComponent,
-    //ClientReferencesComponent,
+    ClientReferencesComponent,
     CompanyInformationComponent,
-    //SectorExperienceComponent,
     EnergyServiceOfferedComponent,
     KeyEmployeesComponent,
     TechnologyClassificationComponent,
-    SectorExperienceComponent
+    SectorExperienceComponent,
+    ClientReferencesComponent,
+    CompanyEquityComponent
 ],
   //bootstrap: [AppComponent],
   templateUrl: './stepper-form.component.html',
@@ -58,6 +61,8 @@ export class StepperFormComponent implements OnInit {
   step4Form: FormGroup;
   step5Form: FormGroup;
   step6Form: FormGroup;
+  step7Form: FormGroup;
+  step8Form: FormGroup;
 
   constructor(
     private fb: FormBuilder,
@@ -73,7 +78,10 @@ export class StepperFormComponent implements OnInit {
     this.step2Form = this.fb.group({});
 
     this.step3Form = this.fb.group({
-      company_name: ['', Validators.required]
+      ci_energy_man_exp: ['', Validators.required],
+      ci_com_exp_of_tech_pro: ['', Validators.required],
+      ci_business_activities_provinces: [[], Validators.required],
+      ci_cicp_file: [null]
     });
 
     this.step4Form = this.fb.group({
@@ -84,7 +92,18 @@ export class StepperFormComponent implements OnInit {
       techclassification: this.fb.array([]) 
     });
 
+    this.step7Form = this.fb.group({
+      clientReferences: this.fb.array([]) 
+    });
+
     this.step6Form = this.fb.group({});
+
+    this.step8Form = this.fb.group({
+      ce_woman_owned: ['', Validators.required],
+      ce_black_owned: ['', Validators.required],
+      ce_youth_owned: ['', Validators.required],
+      ce_bee_equity_cert: ['']
+    });
     
   }
 
@@ -99,6 +118,8 @@ export class StepperFormComponent implements OnInit {
     const checks = [
       {form: this.step1Form, arrayName: 'projects'},
       {form: this.step4Form, arrayName: 'keyemployees'},
+      {form: this.step7Form, arrayName: 'clientReferences'},
+      {form: this.step7Form, arrayName: 'techclassification'},
       // Add more steps as you need (e.g., step2Form/arrayName)
     ];
 
@@ -163,14 +184,6 @@ export class StepperFormComponent implements OnInit {
     return this.stepper?.steps?.length ?? 0;
   }
 
-
-// isStep6NextDisabled(step6Ref: any): boolean {
-//   if (step6Ref?.noSectorExperience) return false;
-//   return this.step6Form.invalid;
-// }
-
-  
-
   /* Dialog triggers */
   openDialogPreviousProjects() {
     this.dialog.open(PreviousprojectDialogComponent);
@@ -180,6 +193,10 @@ export class StepperFormComponent implements OnInit {
     this.dialog.open(EnergyserviceDialogComponent);
   }
 
+  openDialogSectorExp(){
+    this.dialog.open(SectorExpDialogComponent)
+  }
+
   openDialogKeyEmployee() {
     this.dialog.open(KeyemplouyeeDialogComponent);
   }
@@ -187,4 +204,18 @@ export class StepperFormComponent implements OnInit {
   openDialogTechnologyClass(){
     this.dialog.open(TechnologyClassificationDialogComponent);
   }
+
+  openDialogClientReferences() {
+    this.dialog.open(ClientReferenceDialogComponent)
+  }
+
+  openDialogCompanyEq() {
+    this.dialog.open(ClientReferenceDialogComponent)
+  }
+
+  openDialogCompanyInfo() {
+    this.dialog.open(CompanyInformationDialogComponent);
+  }
+
+
 }

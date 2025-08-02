@@ -40,20 +40,17 @@
                 </mat-form-field>
             </div>
         </div>
-
-
         <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="tagus-form-group">
                 <!-- Upload CICP Document -->
                 <input type="file" (change)="onFileSelected($event)" />
             </div>
         </div>
-
     </div>
     <div class="mt-5 actionbt">
-        <!-- <button mat-flat-button matStepperNext class="tagus actionbutton" [disabled]="parentForm.invalid"
+        <button mat-flat-button matStepperNext class="tagus actionbutton" [disabled]="parentForm.invalid"
             (click)="submitCompanyInformation()">
             Save<mat-icon>save</mat-icon>
-        </button> -->
+        </button>
     </div>
 </form>

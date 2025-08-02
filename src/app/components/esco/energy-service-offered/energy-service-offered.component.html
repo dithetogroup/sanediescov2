@@ -17,15 +17,17 @@
                 <mat-form-field appearance="fill">
                     <i class="ri-list-check"></i>
                     <mat-select formControlName="so_industry" placeholder="Select Services offered" multiple>
-                        <mat-option *ngFor="let service of offeredservices" [value]="service.so_name">{{ service.so_name }}</mat-option>
-                    </mat-select>
+                        <mat-option *ngFor="let service of serviceOfferings" [value]="service">
+                          {{ service }}
+                        </mat-option>
+                      </mat-select>
                 </mat-form-field>
             </div>
         </div>
 
         <div class="col-lg-6 col-md-6 col-sm-6">
             <div class="tagus-form-group">
-                <label class="d-block mb-12 fw-semibold gray-color">Please Specify Other</label>
+                <label class="d-block mb-12 fw-semibold gray-color">Please Specify Others</label>
                 <mat-form-field appearance="fill">
                 <i class="ri-user-3-line"></i>
                 <input matInput #input formControlName="so_isOther" name="so_isOther" placeholder="Other" />

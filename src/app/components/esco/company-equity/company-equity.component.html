@@ -1,1 +1,39 @@
-<p>company-equity works!</p>
+<form [formGroup]="companyEquityFormGroup">
+    <!-- your fields here -->
+    <div class="row mb-5">
+      <div class="col-lg-6 col-md-6 col-sm-6" *ngFor="let field of [
+        {label: 'Woman Owned', control: 'ce_woman_owned'},
+        {label: 'Black Owned', control: 'ce_black_owned'},
+        {label: 'Youth Owned', control: 'ce_youth_owned'}
+      ]">
+        <div class="tagus-form-group">
+          <label class="d-block mb-12 fw-semibold gray-color">{{ field.label }}<span>*</span></label>
+          <mat-form-field appearance="fill">
+            <i class="ri-list-check"></i>
+            <mat-select [formControlName]="field.control" [placeholder]="field.label">
+              <mat-option *ngFor="let option of equityOptions" [value]="option">{{ option }}</mat-option>
+            </mat-select>
+            <mat-error *ngIf="companyEquityFormGroup.get(field.control)?.dirty || 
+                              companyEquityFormGroup.get(field.control)?.touched">
+              <span *ngIf="companyEquityFormGroup.get(field.control)?.hasError('required')">
+                This field is required.
+              </span>
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+           
+      <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="tagus-form-group">
+            <div class="tagus-form-group">
+                <label class="d-block mb-12 fw-semibold gray-color">Please attach the BEE Certificate </label>
+                <input type="file" id="ce_bee_equity_cert" formControlName="ce_bee_equity_cert" (change)="onFileSelected($event)"  accept=" .pdf, .png, .jpg, .doc, .docx, .ODP">
+            </div>
+        </div>
+    </div>
+
+
+    </div>
+  </form>
+  

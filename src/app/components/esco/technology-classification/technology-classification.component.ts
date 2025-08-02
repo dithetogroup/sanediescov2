@@ -70,19 +70,22 @@ export class TechnologyClassificationComponent {
     }
   }
 
-
   onNoTechToggle() {
     if (this.noTechExperience) {
-      // User says they don't have technology experience, reset FormArray
+      // User says they don't have technology experience, clear and remove validation
       this.techClassifications.clear();
+      this.parentForm.get('techClassifications')?.clearValidators();
+      this.parentForm.get('techClassifications')?.updateValueAndValidity();
       this.parentForm.markAsPristine();
     } else {
-      // User wants to enter info, add first row if empty
+      // User wants to enter info, add first row if empty, restore validation
+      this.parentForm.get('techClassifications')?.setValidators(Validators.required);
       if (this.techClassifications.length === 0) {
         this.addTechnologyClassification();
       }
     }
   }
+  
 
   getAvailableTechnologies(index: number): string[] {
     // Exclude already-selected technologies in other rows
