@@ -8,31 +8,36 @@ import { HttpClient } from '@angular/common/http';
 })
 export class ReadService {
 
-  baseUrl: string = environment.baseUrl;
   urlEndPoints : any = environment.urlEndPoints;
   redirectUrl!: string;
 
   constructor(private httpClient: HttpClient) { }
 
-
-  getEscoEntity(escoEntityReq: any): Observable<any> {
-    debugger;
-    const url = `${this.baseUrl + '/' + this.getEscoEntity }?entity=${escoEntityReq.entity}&esco_id=${escoEntityReq.esco_id}`;
-    console.log('buil url', url);
-    return this.httpClient.get<any>(url).pipe(map(response=> {
-      return response;
-    }));  
+  //Step Company Information
+  StepGetCompanyInformation(esco_id: string) {
+    return this.httpClient.get<any>(
+     `${this.urlEndPoints.StepGetCompanyInformation}?esco_id=${esco_id}`
+    );
+  }
+  
+  StepGetCompanyInformationCICPFILE(esco_id: string) {
+    return this.httpClient.get<any>(
+    `${this.urlEndPoints.StepGetCompanyInformationCICPFILE}?esco_id=${esco_id}`
+    );
   }
 
 
-  //  getHikingTrails(planCode: any) {
-  //   return this.httpClient.post<any>(this.baseUrl + this.urlEndPoints.getHikingList, { planCode }, { withCredentials: true })
-  //   .pipe( map((response) => {
-  //     return response;
-  //   }));
-  // }
-
-
-
+  //step Previous Projects
+  StepGetPreviousProjects(esco_id: string) {
+    return this.httpClient.get<any>(
+     `${this.urlEndPoints.StepGetPreviousProjects}?esco_id=${esco_id}`
+    );
+  }
+  
+  StepGettPreviousProjectsReferenceLetters(esco_id: string) {
+    return this.httpClient.get<any>(
+    `${this.urlEndPoints.StepGettPreviousProjectsReferenceLetters}?esco_id=${esco_id}`
+    );
+  }
 
 }

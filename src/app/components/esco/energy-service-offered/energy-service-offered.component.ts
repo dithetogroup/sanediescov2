@@ -97,39 +97,39 @@ export class EnergyServiceOfferedComponent implements OnInit{
   }
   
 
-  loadServiceOffered(): void {
-    this.readService.getEscoEntity({ "entity": "services_offered", "esco_id": this.esco_id }).subscribe((response: any) => {
-      this.energyServicesOffered = response as ServicesOffered[];      
+  // loadServiceOffered(): void {
+  //   this.readService.getEscoEntity({ "entity": "services_offered", "esco_id": this.esco_id }).subscribe((response: any) => {
+  //     this.energyServicesOffered = response as ServicesOffered[];      
 
-      if (!this.validationService.isObjectNullUndefinedOrEmpty(response.message) && response.message === "no records found") {
-        return;
-      }
+  //     if (!this.validationService.isObjectNullUndefinedOrEmpty(response.message) && response.message === "no records found") {
+  //       return;
+  //     }
 
-      this.isReadOnly = true;       
-      const services: string[] = [];
-      let serviceIsOther: string = '';
+  //     this.isReadOnly = true;       
+  //     const services: string[] = [];
+  //     let serviceIsOther: string = '';
 
-      this.energyServicesOffered.forEach(serviceOff => {
-        let isOther: boolean = serviceOff.so_isOther.toString() === '0' ? false : true;
-        if (isOther) {
-          serviceIsOther = serviceOff.so_industry;
-        } else {
-          services.push(serviceOff.so_industry);
-        }
-      });      
+  //     this.energyServicesOffered.forEach(serviceOff => {
+  //       let isOther: boolean = serviceOff.so_isOther.toString() === '0' ? false : true;
+  //       if (isOther) {
+  //         serviceIsOther = serviceOff.so_industry;
+  //       } else {
+  //         services.push(serviceOff.so_industry);
+  //       }
+  //     });      
 
-      this.serviceOfferedFormGroup = this.fb.group({
-        so_industry: [{ value: services, disabled: this.isReadOnly }],
-        so_isOther: [{ value: serviceIsOther, disabled: this.isReadOnly }],
-        esco_id: [this.esco_id],
-      });      
+  //     this.serviceOfferedFormGroup = this.fb.group({
+  //       so_industry: [{ value: services, disabled: this.isReadOnly }],
+  //       so_isOther: [{ value: serviceIsOther, disabled: this.isReadOnly }],
+  //       esco_id: [this.esco_id],
+  //     });      
 
-      this.error = ''; // Reset error when users are found
-    },
-      (error) => {
-        this.error = 'Sector Experience not found';
-      }
-    );
-  }
+  //     this.error = ''; // Reset error when users are found
+  //   },
+  //     (error) => {
+  //       this.error = 'Sector Experience not found';
+  //     }
+  //   );
+  // }
 
 }

@@ -8,87 +8,103 @@
     'Please complete your previous project details below.' }}
   </small>
 </div>
-
 <form *ngIf="!noProjects" [formGroup]="parentForm" class="mt-25">
   <div formArrayName="projects">
     <div *ngFor="let projectGroup of projectsArray.controls; let i = index" [formGroupName]="i" class="mb-10">
       <div class="row">
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group">
             <mat-form-field appearance="fill">
               <i class="ri-user-3-line"></i>
               <mat-label>Client Name</mat-label>
-              <input matInput formControlName="he_client_name" placeholder="Client Name" />
+              <input matInput formControlName="pp_client_name" placeholder="Client Name" />
+              <mat-error *ngIf="projectGroup.get('pp_client_name')?.dirty || projectGroup.get('pp_client_name')?.touched" class="mb-25">
+                <span *ngIf="projectGroup.get('pp_client_name')?.hasError('required')">Name is required.</span>
+                <span *ngIf="projectGroup.get('pp_client_name')?.hasError('pattern')">Name cannot contain special.</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group">
             <mat-form-field appearance="fill">
               <i class="ri-user-3-line"></i>
               <mat-label>Contact Person</mat-label>
-              <input matInput formControlName="he_contact_person" placeholder="Contact Person" />
+              <input matInput formControlName="pp_contact_person" placeholder="Contact Person" />
+              <mat-error *ngIf="projectGroup.get('pp_contact_person')?.dirty || projectGroup.get('pp_contact_person')?.touched" class="mb-25">
+                <span *ngIf="projectGroup.get('pp_contact_person')?.hasError('required')">Contact Person is required.</span>
+                <span *ngIf="projectGroup.get('pp_contact_person')?.hasError('pattern')">Contact Person cannot contain Characters.</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group">
             <mat-form-field appearance="fill">
               <i class="flaticon-phone-call"></i>
               <mat-label>Contact Number</mat-label>
-              <input matInput formControlName="he_client_contact_no" placeholder="Client contact number"
+              <input matInput formControlName="pp_client_contact_no" placeholder="Client contact number"
                 maxlength="10" />
+                <mat-error *ngIf="projectGroup.get('pp_client_contact_no')?.dirty || projectGroup.get('pp_client_contact_no')?.touched" class="mb-25">
+                  <span *ngIf="projectGroup.get('pp_client_contact_no')?.hasError('required')">Contact Number is required.</span>
+                  <span *ngIf="projectGroup.get('pp_client_contact_no')?.hasError('pattern')">Contact Number cannot contain Characters.</span>
+                </mat-error>
             </mat-form-field>
+            
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group">
             <mat-form-field appearance="fill">
               <i class="flaticon-envelope"></i>
               <mat-label>Client Email</mat-label>
-              <input matInput type="email" formControlName="he_contact_email" placeholder="Client Email" />
+              <input matInput type="email" formControlName="pp_contact_email" placeholder="Client Email" />
+              <mat-error *ngIf="projectGroup.get('pp_contact_email')?.dirty || projectGroup.get('pp_contact_email')?.touched" class="mb-25">
+                <span *ngIf="projectGroup.get('pp_contact_email')?.hasError('required')">Email is required.</span>
+                <span *ngIf="projectGroup.get('pp_contact_email')?.hasError('email')">Email is invalid.</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group without-icon">
             <mat-form-field appearance="fill" class="example-full-width">
               <mat-label>Project Start Date</mat-label>
-              <input matInput [matDatepicker]="startPicker" formControlName="he_proj_start_date" [max]="maxtDate"
+              <input matInput [matDatepicker]="startPicker" formControlName="pp_proj_start_date" [max]="maxtDate"
                 placeholder="Select start project date">
               <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
               <mat-datepicker #startPicker></mat-datepicker>
             </mat-form-field>
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group without-icon">
             <mat-form-field appearance="fill" class="example-full-width">
               <mat-label>Project End Date</mat-label>
-              <input matInput [matDatepicker]="endPicker" formControlName="he_proj_end_date"
-                [disabled]="!projectGroup.get('he_proj_start_date')?.value"
-                [min]="projectGroup.get('he_proj_start_date')?.value" [max]="maxEndDate"
+              <input matInput [matDatepicker]="endPicker" formControlName="pp_proj_end_date"
+                [disabled]="!projectGroup.get('pp_proj_start_date')?.value"
+                [min]="projectGroup.get('pp_proj_start_date')?.value" [max]="maxEndDate"
                 placeholder="Select project end date" />
               <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
               <mat-datepicker #endPicker></mat-datepicker>
             </mat-form-field>
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group">
             <mat-form-field appearance="fill">
               <i class="flaticon-activity"></i>
               <mat-label>Savings on completed projects in MWh or kWh</mat-label>
-              <input matInput type="tel" formControlName="he_savingkilowatz" placeholder="Client Email" />
-            </mat-form-field>
+              <input matInput type="number" formControlName="pp_savingkilowatz" placeholder="Savings in MWh or kWh"/>
+          </mat-form-field>
           </div>
         </div>
-        <div class="col-lg-6 col-md-6 col-sm-6">
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group">
             <mat-form-field appearance="fill">
               <i class="flaticon-chat"></i>
               <mat-label>Project Description</mat-label>
-              <textarea matInput formControlName="he_proj_desc" placeholder="Project Description"></textarea>
+              <textarea matInput formControlName="pp_proj_desc" placeholder="Project Description"></textarea>
             </mat-form-field>
           </div>
         </div>
@@ -97,7 +113,7 @@
             <mat-form-field appearance="fill" floatLabel="always" class="example-full-width">
               <i class="laticon-credit-card"></i>
               <mat-label>Project Value</mat-label>
-              <input matInput type="number" class="example-right-align" placeholder="0" formControlName="he_proj_value">
+              <input matInput type="number" class="example-right-align" placeholder="0" formControlName="pp_proj_value">
               <span matTextPrefix>R&nbsp;</span>
               <span matTextSuffix>.00</span>
             </mat-form-field>
@@ -107,14 +123,36 @@
           <div class="tagus-form-group">
             <label class="d-block mb-12 fw-semibold gray-color">Reference Letter</label>
             <input type="file" (change)="onFileSelected($event, i)" />
+            <div *ngIf="projectsArray.at(i).value.pp_reference_letter">
+              Selected: {{ projectsArray.at(i).value.pp_reference_letter.name }}
+            </div>
+
+            <div *ngIf="projectGroup.get('pp_reference_letter')?.value">
+              <a [href]="'/' + projectGroup.get('pp_reference_letter')?.value" target="_blank">
+                <mat-icon>cloud_download</mat-icon> Uploaded Reference Letter
+              </a>
+            
+            </div>
           </div>
         </div>
       </div>
-      <button mat-stroked-button color="warn" (click)="removeProject(i)" *ngIf="projectsArray.length > 1">
-        Remove Project
-      </button>
+
+      <!-- <button mat-raised-button color="warn"  (click)="removeProject(i)" *ngIf="projectsArray.length > 1">
+      <mat-icon>delete_forever</mat-icon>Remove Project</button> -->
+
       <mat-divider class="my-3" *ngIf="i < projectsArray.length - 1"></mat-divider>
     </div>
+
+       <!-- Success message -->
+    <div *ngIf="saveSuccessMessage" class="alert alert-success mb-3">
+        {{ saveSuccessMessage }}
+    </div>
+    <!-- Error message -->
+    <div *ngIf="saveErrorMessage" class="alert alert-danger mb-3">
+        {{ saveErrorMessage }}
+    </div>
+
+
     <div class="actionbt">
       <!-- Add Project -->
       <button mat-flat-button color="primary" (click)="addProject()"
@@ -124,7 +162,7 @@
         Add Project
       </button>
       <!-- Save -->
-      <button class="actionbutton" mat-flat-button color="accent" (click)="submitForm()"
+      <button class="actionbutton" mat-flat-button color="accent" (click)="submitPreviousProjects()"
         [disabled]="parentForm.invalid">
         Save
         <mat-icon>save</mat-icon>
