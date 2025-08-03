@@ -10,8 +10,8 @@ import { environment } from '../../../environments/environment';
 export class AuthService {
 
   private baseUrl = environment.baseUrl;
-  private endPointsUrl = environment.endPointsUrl;
-  private endPointsPage = environment.endPointsUrl;
+  // private endPointsUrl = environment.endPointsUrl;
+  // private endPointsPage = environment.endPointsUrl;
 
 
   constructor(private http: HttpClient) {}

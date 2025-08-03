@@ -44,8 +44,25 @@
             <div class="tagus-form-group">
                 <!-- Upload CICP Document -->
                 <input type="file" (change)="onFileSelected($event)" />
+                <div *ngIf="latestFile" class="mt-2">
+                    <span>
+                      <a [href]="latestFileUrl" target="_blank" class="btn btn-link" *ngIf="latestFile">
+                        <mat-icon>cloud_download</mat-icon> Uploaded File
+                      </a>
+                        ({{ latestFile.fu_name  }})
+                      <!-- ({{ latestFile.fu_size | number }} bytes) -->
+                    </span>
+                  </div>
             </div>
         </div>
+    </div>
+    <!-- Success message -->
+    <div *ngIf="saveSuccessMessage" class="alert alert-success mb-3">
+        {{ saveSuccessMessage }}
+    </div>
+    <!-- Error message -->
+    <div *ngIf="saveErrorMessage" class="alert alert-danger mb-3">
+        {{ saveErrorMessage }}
     </div>
     <div class="mt-5 actionbt">
         <button mat-flat-button matStepperNext class="tagus actionbutton" [disabled]="parentForm.invalid"

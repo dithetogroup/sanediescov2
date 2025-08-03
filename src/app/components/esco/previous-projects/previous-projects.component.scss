@@ -1,0 +1,13 @@
+.button-row {
+    display: flex;
+    gap: 1rem; // or 16px or whatever gap looks nice for your spacing
+  }
+
+
+  ::ng-deep .mat-form-field input[type="file"] {
+    padding: 8px 0;
+    border: none;
+    box-shadow: none;
+  }
+  
+  

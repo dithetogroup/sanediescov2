@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to ESCo</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            color: #333;
+            background-color: #f4f4f4;
+            padding: 0;
+            margin: 0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            text-align: center;
+        }
+        .header img {
+            max-width: 100%;
+            height: auto;
+        }
+        h2 {
+            color: #FF8C00;
+        }
+        p {
+            line-height: 1.6;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+        .btn {
+            display: block;
+            width: fit-content;
+            margin: 20px auto;
+            padding: 10px 20px;
+            background-color: #FF8C00;
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+        }
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #777;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="container">
+        <div class="header">
+            <img src="https://staging.sanediesco.org.za/img/emails-banner.png" alt="ESCo Header"
+                 width="600"
+                 height="auto"
+                 style="display:block; max-width:100%; height:auto;">
+          </div>
+          <br/>
+
+        <p>Hello {{TITLE}} {{SURNAME}},</p>
+        <p>
+            Thank you for registering with the SANEDI ESCo Management Portal.<br/>
+            We are excited to have you join our network of Energy Services Companies (ESCos) dedicated to advancing South Africa's energy development goals.
+        </p>
+
+        <strong>Here is what you can do next:</strong>
+        <ul>
+            <li><strong>Complete Your ESCo Profile:</strong> Login to add information such as past and current project and company experiences etc</li>
+            <li><strong> Download Certificate: </strong>Upon completing your profile you will be able to view and download your Tier Certificate.
+            </li>
+        </ul>
+
+        <p><strong>Your account is all set up and ready to go!</strong></p>
+        
+        <ul>
+            <li><strong>Username:</strong> {{EMAIL}}</li>
+            <li><strong>Password:</strong> Your choosen Password during registration</li>
+        </ul>
+        <p>
+            <a href="https://tier.sanediesco.co.za/" class="btn">Login</a></p>
+        </p>
+
+        <p>If you have any questions or need assistance,
+             feel free to reach out to us at <a href="mailto:helpdesk@sanediesco.org.za">helpdesk@sanediesco.org.za</a> 
+              / <a href="mailto: wendyj@sanedi.org.za"> wendyj@sanedi.org.za</a> </p>
+      
+        <p>Thank you for being part of South Africa's energy future. </p>
+
+     
+
+        <p>Warm Regards,<br>
+            SANEDI ESCo Management Team
+            </p>
+    </div>
+
+    <div class="footer">
+        <p>&copy; 2025 SANEDI ESCo Management Team. All rights reserved.</p>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+    <div class="container">
+        <div class="header">
+            <img src="https://tier.sanediesco.org.za/img/emails-banner.png" alt="Header Banner" width="100%">
+            <h2>Registration Confirmation</h2>
+        </div>
+        <p>Hi {{TITLE}} {{SURNAME}},</p>
+        <p>Thank you for registering on ESCo Portal, Here are your login details:</p>
+        <ul>
+            <li><strong>Username:</strong> {{USERNAME}}</li>
+            <li><strong>Password:</strong> {{PASSWORD}}</li>
+        </ul>
+        <br/>
+        <p>Click here to log in: <a href="https://tier.sanediesco.org.za/">ESCo Portal</a></p>
+        <br/>
+        <div class="footer">
+            <p>Kind Regards,</p>
+            <p>ESCo Team</p>
+        </div>
+    </div>
+</body>
+</html>

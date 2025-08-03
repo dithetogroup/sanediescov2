@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-company-information-dialog',
@@ -7,5 +8,14 @@ import { Component } from '@angular/core';
   styleUrl: './company-information-dialog.component.scss'
 })
 export class CompanyInformationDialogComponent {
+
+  constructor(
+    public dialogRef: MatDialogRef<CompanyInformationDialogComponent>
+) {}
+
+
+  close(){
+    this.dialogRef.close(true);
+}
 
 }
