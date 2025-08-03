@@ -24,7 +24,4 @@ export class CreateService {
     return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyPreviousProjects, formData);
   }
 
-  
-
-
 }

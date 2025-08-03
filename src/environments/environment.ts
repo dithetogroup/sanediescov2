@@ -15,6 +15,7 @@ export const environment = {
     //previous projects
     StepSaveCompanyPreviousProjects: baseUrl + '/step-save-previous-projects.php',
     StepGetPreviousProjects: baseUrl + '/step-get-previous-projects.php',
-    StepDeletePreviousProject: baseUrl + '/step-delete-previous-projects.php'
+    StepDeletePreviousProject: baseUrl + '/step-delete-previous-projects.php',
+    StepUpdatePreviousProjects: baseUrl + '/step-update-previous-projects.php'
   }
 };

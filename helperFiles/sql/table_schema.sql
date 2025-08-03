@@ -8,22 +8,6 @@ CREATE TABLE company_information (
     ci_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-CREATE TABLE files_upload (
-    fu_id INT AUTO_INCREMENT PRIMARY KEY,
-    fu_esco_id VARCHAR(32) NOT NULL,
-    fu_name VARCHAR(255) NOT NULL,
-    fu_size INT(25) NULL,
-    fu_type VARCHAR(255) NOT NULL,
-    fu_path VARCHAR(255) NOT NULL,
-    fu_category VARCHAR(255) NULL,
-    fu_isRemoved BOOLEAN NULL,
-    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
-
-
-CREATE INDEX idx_fu_esco_id ON files_upload(fu_esco_id);
-
-
 CREATE TABLE previous_projects (
     pp_id INT AUTO_INCREMENT PRIMARY KEY,
     pp_esco_id VARCHAR(32) NOT NULL,
@@ -41,4 +25,18 @@ CREATE TABLE previous_projects (
     pp_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
-
+CREATE TABLE files_upload (
+    fu_id INT AUTO_INCREMENT PRIMARY KEY,
+    fu_esco_id VARCHAR(32) NOT NULL,
+    fu_name VARCHAR(255) NOT NULL,
+    fu_size INT(25) NULL,
+    fu_pp_id INT NULL,
+    fu_type VARCHAR(255) NOT NULL,
+    fu_path VARCHAR(255) NOT NULL,
+    fu_category VARCHAR(255) NULL,
+    fu_isRemoved BOOLEAN NULL,
+    uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    INDEX idx_fu_pp_id (fu_pp_id),
+    INDEX idx_fu_esco_id (fu_esco_id),
+    CONSTRAINT fk_fu_pp_id FOREIGN KEY (fu_pp_id) REFERENCES previous_projects(pp_id) ON DELETE CASCADE
+);
