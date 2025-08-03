@@ -1,9 +1,15 @@
+-- Drop order: children before parents
+DROP TABLE IF EXISTS files_upload;
+DROP TABLE IF EXISTS previous_projects;
+DROP TABLE IF EXISTS company_information;
+
 CREATE TABLE company_information (
     ci_id INT AUTO_INCREMENT PRIMARY KEY,
     ci_esco_id VARCHAR(32) NOT NULL,
     ci_energy_man_exp VARCHAR(32) NOT NULL,
     ci_com_exp_of_tech_pro VARCHAR(32) NOT NULL,
     ci_business_activities_provinces TEXT NOT NULL,
+    ci_isDeleted TINYINT(1) DEFAULT 0,
     ci_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ci_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
@@ -31,12 +37,15 @@ CREATE TABLE files_upload (
     fu_name VARCHAR(255) NOT NULL,
     fu_size INT(25) NULL,
     fu_pp_id INT NULL,
+    fu_ci_id INT NULL,
     fu_type VARCHAR(255) NOT NULL,
     fu_path VARCHAR(255) NOT NULL,
     fu_category VARCHAR(255) NULL,
     fu_isRemoved BOOLEAN NULL,
     uploaded_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     INDEX idx_fu_pp_id (fu_pp_id),
+    INDEX idx_fu_ci_id (fu_ci_id),
     INDEX idx_fu_esco_id (fu_esco_id),
-    CONSTRAINT fk_fu_pp_id FOREIGN KEY (fu_pp_id) REFERENCES previous_projects(pp_id) ON DELETE CASCADE
+    CONSTRAINT fk_fu_pp_id FOREIGN KEY (fu_pp_id) REFERENCES previous_projects(pp_id) ON DELETE CASCADE,
+    CONSTRAINT fk_fu_ci_id FOREIGN KEY (fu_ci_id) REFERENCES company_information(ci_id) ON DELETE CASCADE
 );

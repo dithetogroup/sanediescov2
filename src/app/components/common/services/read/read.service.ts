@@ -27,6 +27,14 @@ export class ReadService {
   }
 
 
+  getCompanyInfoHistory(esco_id: string) {
+    return this.httpClient.get<any>(
+      `${this.urlEndPoints.getCompanyInfoHistory}?esco_id=${esco_id}`
+    );
+  }
+
+
+
   //step Previous Projects
   StepGetPreviousProjects(esco_id: string) {
     return this.httpClient.get<any>(

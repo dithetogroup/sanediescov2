@@ -11,10 +11,10 @@ if (!$esco_id) {
     exit;
 }
 
-// Fetch the latest company_information record for this ESCo
+// Fetch the latest (active) company_information record for this ESCo
 $stmt = $mysqli->prepare("
     SELECT * FROM company_information 
-    WHERE ci_esco_id = ?
+    WHERE ci_esco_id = ? AND ci_isDeleted = 0
     ORDER BY ci_updated_date DESC
     LIMIT 1
 ");

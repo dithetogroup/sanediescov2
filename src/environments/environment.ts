@@ -11,6 +11,8 @@ export const environment = {
     StepSaveCompanyInformation: baseUrl + '/step-save-company-information.php',
     StepGetCompanyInformation: baseUrl + '/step-get-company-information.php',
     StepGetCompanyInformationCICPFILE: baseUrl + '/step-get-company-information-cicpfile.php',
+    getCompanyInfoHistory: baseUrl + '/get-company-information-history.php',
+
 
     //previous projects
     StepSaveCompanyPreviousProjects: baseUrl + '/step-save-previous-projects.php',

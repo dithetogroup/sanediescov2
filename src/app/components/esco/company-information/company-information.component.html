@@ -47,10 +47,10 @@
                 <div *ngIf="latestFile" class="mt-2">
                     <span>
                       <a [href]="latestFileUrl" target="_blank" class="btn btn-link" *ngIf="latestFile">
-                        <mat-icon>cloud_download</mat-icon> Uploaded File
+                        <mat-icon>cloud_download</mat-icon> 
+                        <small>Your uploaded <b>CICP</b> File</small>
                       </a>
-                        ({{ latestFile.fu_name  }})
-                      <!-- ({{ latestFile.fu_size | number }} bytes) -->
+                        <!-- ({{ latestFile.fu_name  }}) -->
                     </span>
                   </div>
             </div>

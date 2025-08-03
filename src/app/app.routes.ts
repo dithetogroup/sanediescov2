@@ -143,6 +143,8 @@ import { TreeComponent } from './components/ui-kit/tree/tree.component';
 import { TypographyComponent } from './components/ui-kit/typography/typography.component';
 import { VideosComponent } from './components/ui-kit/videos/videos.component';
 import { StepperFormComponent } from './components/esco/stepper-form/stepper-form.component';
+import { HistoryManagerComponent } from './components/esco/steps-history/history-manager/history-manager.component';
+import { CompanyInformationHistoryComponent } from './components/esco/steps-history/company-information-history/company-information-history.component';
 
 
 export const routes: Routes = [
@@ -177,6 +179,22 @@ export const routes: Routes = [
             {path: 'recent-files', component: FmRecentFilesComponent}
         ]
     },
+
+    {
+        path: 'history',
+        component: HistoryManagerComponent,
+        children: [
+            {path: '', component: MyDriveComponent},
+            {path: 'company', component: CompanyInformationHistoryComponent},
+            {path: 'projects', component: FmProjectsComponent},
+            {path: 'personal', component: FmPersonalComponent},
+            {path: 'templates', component: FmTemplatesComponent},
+            {path: 'documents', component: FmDocumentsComponent},
+            {path: 'media', component: FmMediaComponent},
+            {path: 'recent-files', component: FmRecentFilesComponent}
+        ]
+    },
+
     {path: 'to-do-list', component: ToDoListComponent},
     {path: 'task-details', component: TaskDetailsComponent},
     {path: 'calendar', component: CalendarComponent},
