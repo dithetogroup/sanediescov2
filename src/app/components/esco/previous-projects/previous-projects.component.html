@@ -154,6 +154,7 @@
             </div>
 
             <div *ngIf="projectGroup.get('pp_reference_letter')?.value">
+
               <a [href]="'/' + projectGroup.get('pp_reference_letter')?.value" target="_blank">
                 <mat-icon>cloud_download</mat-icon>
                 <small>Uploaded Reference File</small>

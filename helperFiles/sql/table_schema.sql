@@ -1,13 +1,6 @@
--- Drop order: children before parents
 DROP TABLE IF EXISTS files_upload;
 DROP TABLE IF EXISTS previous_projects;
 DROP TABLE IF EXISTS company_information;
-DROP TABLE IF EXISTS client_reference;
-DROP TABLE IF EXISTS login_user;
-DROP TABLE IF EXISTS registered_user;
-DROP TABLE IF EXISTS sector_experience;
-DROP TABLE IF EXISTS company_equity;
-
 
 CREATE TABLE company_information (
     ci_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -17,7 +10,8 @@ CREATE TABLE company_information (
     ci_business_activities_provinces TEXT NOT NULL,
     ci_isDeleted TINYINT(1) DEFAULT 0,
     ci_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    ci_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    ci_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_ci_esco_id (ci_esco_id)
 );
 
 -- Company Equity Table
@@ -47,7 +41,8 @@ CREATE TABLE previous_projects (
     pp_proj_end_date DATE,
     pp_isDeleted TINYINT(1) DEFAULT 0,
     pp_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    pp_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+    pp_updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    INDEX idx_pp_esco_id (pp_esco_id)
 );
 
 CREATE TABLE client_reference (

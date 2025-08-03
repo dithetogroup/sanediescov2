@@ -61,7 +61,6 @@ export class PreviousProjectsComponent implements OnInit {
   public noProjects = false;
   public maxtDate: Date = new Date();
   public maxEndDate: Date = new Date();
-
   esco_id = "ESCo-A001";
   //esco_id: string;
 
@@ -251,6 +250,9 @@ export class PreviousProjectsComponent implements OnInit {
     if (project.pp_id) {
       // It's an update
       formData.append('pp_id', project.pp_id); // Backend needs to know
+      formData.append('esco_id', project.esco_id); // Backend needs to know
+
+      debugger;
       this.updateService.StepUpdatePreviousProjects(formData).subscribe({
         next: (res) => {
           this.snackBar.open('Project updated successfully!', 'Close', {

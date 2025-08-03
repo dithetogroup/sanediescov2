@@ -8,6 +8,9 @@ export const environment = {
   filedownloadUrl,
   dynamicBaseUrl,
   urlEndPoints: {
+
+    //User login
+    Userlogin: baseUrl + '/user-login.php',
     
     //company information
     StepSaveCompanyInformation: baseUrl + '/step-save-company-information.php',

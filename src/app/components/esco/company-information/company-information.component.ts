@@ -37,6 +37,7 @@ export class CompanyInformationComponent {
     latestFile: any = null;
 
     esco_id =  "ESCo-A001";
+
     //esco_id: string;
 
     yearsInESCoBusiness: string[] = [
