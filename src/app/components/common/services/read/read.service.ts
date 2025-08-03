@@ -59,11 +59,17 @@ export class ReadService {
     );
   }
 
-
   //company equeity
   StepGetCompanyEquiity(esco_id: string) {
     return this.httpClient.get<any>(
     `${this.urlEndPoints.StepGetCompanyEquiity}?esco_id=${esco_id}`
+    );
+  }
+
+  //KeyEmployee
+  StepGetKeyemployee(esco_id: string) {
+    return this.httpClient.get<any>(
+    `${this.urlEndPoints.StepGetKeyemployee}?esco_id=${esco_id}`
     );
   }
 

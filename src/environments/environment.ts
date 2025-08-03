@@ -34,6 +34,12 @@ export const environment = {
     StepSaveCompanyEquiity: baseUrl + '/step-save-company-equity.php',
     StepGetCompanyEquiity: baseUrl + '/step-get-company-equity.php',
 
+    //keyEmployee
+    StepSaveKeyEmployee: baseUrl + '/step-save-key-employee.php',
+    StepGetKeyEmployee: baseUrl + '/step-get-key-employee.php',
+    StepDeleteKeyEmployee: baseUrl + '/step-delete-key-employee.php',
+    StepDeleteEmployeeFile: baseUrl + '/step-delete-key-employee-file.php',
+
 
   }
 };
