@@ -10,6 +10,7 @@ import { NgFor, NgIf } from '@angular/common';
 import { CreateService } from '../../common/services/create/create.service';
 import { ReadService } from '../../common/services/read/read.service';
 import { environment } from '../../../../environments/environment';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 
 @Component({
@@ -32,11 +33,10 @@ export class CompanyInformationComponent {
 
     @Input() parentForm!: FormGroup;
     @Output() fileUploaded = new EventEmitter<File>();
-    public saveSuccessMessage: string | null = null;
-    public saveErrorMessage: string | null = null;
+
     latestFile: any = null;
 
-    esco_id =  "ESCo-A023";
+    esco_id =  "ESCo-A001";
     //esco_id: string;
 
     yearsInESCoBusiness: string[] = [
@@ -51,7 +51,8 @@ export class CompanyInformationComponent {
   
     constructor(private fb: FormBuilder,
       private createService: CreateService,
-      private readService: ReadService
+      private readService: ReadService,
+      private snackBar: MatSnackBar
     ) {}
   
     ngOnInit(): void {
@@ -63,11 +64,6 @@ export class CompanyInformationComponent {
       this.parentForm.addControl('ci_com_exp_of_tech_pro', this.fb.control('', Validators.required));
       this.parentForm.addControl('ci_business_activities_provinces', this.fb.control([], Validators.required));
       this.parentForm.addControl('ci_cicp_file', this.fb.control(null));
-
-      this.parentForm.valueChanges.subscribe(() => {
-        this.saveSuccessMessage = null;
-        this.saveErrorMessage = null;
-      })
     }
   
     onFileSelected(event: any) {
@@ -132,26 +128,28 @@ export class CompanyInformationComponent {
         this.createService.StepSaveCompanyInformation(formData).subscribe({
           next: (res) => {
             if (res.status === 'success') {
-              this.saveSuccessMessage = 'Company Information successfully saved! Click Next to add more data.';
-              this.saveErrorMessage = null;
-              setTimeout(() => {
-                this.saveSuccessMessage = null;
-              }, 3000);
+              this.snackBar.open('Company Information successfully saved! Click Next to add more data.', 'Close', {
+                duration: 3500, // ms, adjust as you wish
+                verticalPosition: 'top', // or 'bottom'
+                panelClass: ['snackbar-success'] // add custom styling if you want
+              });
+
+              
+              // }, 3000);
             } else {
-              this.saveSuccessMessage = null;
-              this.saveErrorMessage = 'Failed to add Company Information. Try again.';
-              setTimeout(() => {
-                this.saveErrorMessage = null;
-              }, 3000);
+
+              this.snackBar.open('Failed to add Company Information. Try again.', 'Close', {
+                duration: 4000,
+                panelClass: ['snackbar-error']
+              });
             }
           },
           error: (err) => {
-            console.error("Error adding Company Information:", err);
-            this.saveSuccessMessage = null;
-            this.saveErrorMessage = 'An error occurred while adding the Company Information.';
-            setTimeout(() => {
-              this.saveErrorMessage = null;
-            }, 3000);
+
+            this.snackBar.open('An error occurred while adding the Company Information.', 'Close', {
+              duration: 4000,
+              panelClass: ['snackbar-error']
+            });
           }
         });
     

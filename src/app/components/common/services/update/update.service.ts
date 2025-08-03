@@ -18,6 +18,11 @@ export class UpdateService {
     return this.httpClient.post<any>(this.urlEndPoints.StepUpdatePreviousProjects, formData);
   }
 
+  public StepUpdateClientReferences(formData: any) {
+    //return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyInformation, formData,  { withCredentials: true });
+    return this.httpClient.post<any>(this.urlEndPoints.StepUpdateClientReferences, formData);
+  }
+
 }
 
 

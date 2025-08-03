@@ -10,7 +10,7 @@ error_log("[INFO] === Start Previous Project Save ===");
 // 2. Collect ESCo ID and file info
 $pp_esco_id = $_POST['esco_id'] ?? '';
 $hasFile = isset($_FILES['pp_reference_letter']) && $_FILES['pp_reference_letter']['error'] === UPLOAD_ERR_OK;
-$file_category = $_POST['file_category'] ?? 'Reference Letter';
+$file_category = $_POST['file_category'] ?? 'Previous Project Reference Letter';
 
 // 3. Log received post keys
 error_log("[INFO] Received POST keys: " . json_encode(array_keys($_POST)));
@@ -29,8 +29,8 @@ $project = [
     'pp_client_contact_no' => $_POST['pp_client_contact_no'] ?? '',
     'pp_proj_desc' => $_POST['pp_proj_desc'] ?? '',
     'pp_contact_email' => $_POST['pp_contact_email'] ?? '',
-    'pp_proj_value' => $_POST['pp_proj_value'] ?? '',
-    'pp_savingkilowatz' => $_POST['pp_savingkilowatz'] ?? '',
+    'pp_proj_value' => isset($_POST['pp_proj_value']) && $_POST['pp_proj_value'] !== '' ? $_POST['pp_proj_value'] : null,
+    'pp_savingkilowatz' => isset($_POST['pp_savingkilowatz']) && $_POST['pp_savingkilowatz'] !== '' ? $_POST['pp_savingkilowatz'] : null,
     'pp_proj_start_date' => $_POST['pp_proj_start_date'] ?? '',
     'pp_proj_end_date' => $_POST['pp_proj_end_date'] ?? ''
 ];
@@ -82,10 +82,11 @@ try {
         date_default_timezone_set('Africa/Johannesburg');
 
         $originalName = basename($_FILES['pp_reference_letter']['name']);
+        $file_cat = "previousprojectref";
         $ext = pathinfo($originalName, PATHINFO_EXTENSION);
         $filenameNoExt = preg_replace('/\s+/', '-', pathinfo($originalName, PATHINFO_FILENAME));
         $dateStr = date('ymdHis'); // yymmddhhmmss
-        $newName = $pp_esco_id . '_' . $file_category . '_'. $filenameNoExt . '_' . $dateStr . '.' . $ext;
+        $newName = $pp_esco_id . '_' . $file_cat . '_'. $filenameNoExt . '_' . $dateStr . '.' . $ext;
         $filePath = $uploadDir . $newName;
         $relativePath = "uploads/" . $newName;
 

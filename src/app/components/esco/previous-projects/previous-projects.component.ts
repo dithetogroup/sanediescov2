@@ -29,6 +29,8 @@ import { ValidationsService } from "../../common/services/utilities/validations.
 import { DeleteService } from "../../common/services/delete/delete.service";
 import { ToastrService } from "ngx-toastr";
 import { UpdateService } from "../../common/services/update/update.service";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-previous-projects",
@@ -49,6 +51,7 @@ import { UpdateService } from "../../common/services/update/update.service";
     MatDividerModule,
     NgIf,
     NgForOf,
+    MatTooltipModule
   ],
   templateUrl: "./previous-projects.component.html",
   styleUrl: "./previous-projects.component.scss",
@@ -59,13 +62,7 @@ export class PreviousProjectsComponent implements OnInit {
   public maxtDate: Date = new Date();
   public maxEndDate: Date = new Date();
 
-  public saveSuccessMessage: string | null = null;
-  public saveErrorMessage: string | null = null;
-
-  public deleteSuccessMessage: string | null = null;
-  public deleteErrorMessage: string | null = null;
-
-  esco_id = "ESCo-A023";
+  esco_id = "ESCo-A001";
   //esco_id: string;
 
   constructor(
@@ -77,6 +74,7 @@ export class PreviousProjectsComponent implements OnInit {
     private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
     private updateService: UpdateService,
+    private snackBar: MatSnackBar
   ) {}
 
   ngOnInit() {
@@ -155,7 +153,7 @@ export class PreviousProjectsComponent implements OnInit {
         pp_proj_desc: ["", Validators.required],
         pp_contact_email: ["", [Validators.required, Validators.email]],
         pp_proj_value: [""],
-        pp_savingkilowatz: ["", [Validators.required]],
+        pp_savingkilowatz: [""],
         pp_proj_start_date: ["", Validators.required],
         pp_proj_end_date: ["", Validators.required],
         pp_reference_letter: [null],
@@ -190,42 +188,29 @@ export class PreviousProjectsComponent implements OnInit {
     const project = this.projectsArray.at(i).value;
     if (project.pp_id) {
       // It's an existing project from the database
-
       this.deleteService.StepDeletePreviousProject(project.pp_id).subscribe({
         next: (res) => {
           debugger;
           if (res.status === "success") {
             this.projectsArray.removeAt(i);
             this.cdr.detectChanges();
-
-            // Optionally: show a message
-            this.toastr.success("Projects deleted successfully.");
-            this.deleteSuccessMessage = "Projects deleted successfully.";
-            this.deleteErrorMessage = null;
-            setTimeout(() => {
-              this.deleteSuccessMessage = null;
-            }, 3000);
+            this.snackBar.open('Projects deleted successfully!', 'Close', {
+              duration: 3500, // ms, adjust as you wish
+              verticalPosition: 'top', // or 'bottom'
+              panelClass: ['snackbar-success'] // add custom styling if you want
+            });
           } else {
-            this.toastr.error(
-              "Failed to delete Previous Projects. Please Try again"
-            );
-            this.deleteSuccessMessage = null;
-            this.deleteErrorMessage = `Failed to delete Previous Projects. Please Try again.`;
-            setTimeout(() => {
-              this.saveSuccessMessage = null;
-            }, 3000);
+          this.snackBar.open('Failed to delete Previous Projects. Please Try again', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
           }
         },
         error: (err) => {
-          this.toastr.error(
-            "An error occurred while deleting Previous Projects."
-          );
-
-          this.deleteSuccessMessage = null;
-          this.deleteErrorMessage = `An error occurred while deleting Previous Projects.`;
-          setTimeout(() => {
-            this.saveSuccessMessage = null;
-          }, 3000);
+          this.snackBar.open('An error occurred while deleting Previous Projects.', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
         },
       });
     } else {
@@ -240,7 +225,6 @@ export class PreviousProjectsComponent implements OnInit {
       this.projectsArray.at(i).patchValue({ pp_reference_letter: file });
     }
   }
-
 
   onSaveOrUpdateProject(i: number) {
     const projectGroup = this.projectsArray.at(i) as FormGroup;
@@ -269,104 +253,40 @@ export class PreviousProjectsComponent implements OnInit {
       formData.append('pp_id', project.pp_id); // Backend needs to know
       this.updateService.StepUpdatePreviousProjects(formData).subscribe({
         next: (res) => {
-          // Show success or error messages, reload data if needed, etc.
-          this.toastr.success('Project updated successfully!');
-          this.saveSuccessMessage = 'Project updated successfully!';
-          setTimeout(() => this.saveSuccessMessage = null, 3000);
+          this.snackBar.open('Project updated successfully!', 'Close', {
+            duration: 3500, // ms, adjust as you wish
+            verticalPosition: 'top', // or 'bottom'
+            panelClass: ['snackbar-success'] // add custom styling if you want
+          });
+
         },
         error: (err) => {
-          this.toastr.error('Failed to update project.');
-          this.saveErrorMessage = 'Failed to update project.';
-          setTimeout(() => this.saveErrorMessage = null, 3000);
+
+          this.snackBar.open('Failed to save Previous Projects!', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
         }
       });
     } else {
       // It's a new add
       this.createService.StepSaveCompanyPreviousProjects(formData).subscribe({
         next: (res) => {
-          this.toastr.success('Project saved successfully!');
-          this.saveSuccessMessage = 'Project saved successfully!';
-          setTimeout(() => this.saveSuccessMessage = null, 3000);
+          this.snackBar.open('Project saved successfully!', 'Close', {
+            duration: 3500, // ms, adjust as you wish
+            verticalPosition: 'top', // or 'bottom'
+            panelClass: ['snackbar-success'] // add custom styling if you want
+          });
         },
         error: (err) => {
-          this.toastr.error('Failed to save project.');
-          this.saveErrorMessage = 'Failed to save project.';
-          setTimeout(() => this.saveErrorMessage = null, 3000);
+
+          this.snackBar.open('Error saving Previous Projects!', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
         }
       });
     }
   }
   
-
-  // submitPreviousProjects() {
-  //   if (this.parentForm.valid) {
-  //     const formValue = this.parentForm.value;
-  //     const projects = formValue.projects;
-  //     let numSubmitted = 0;
-  //     let numFailed = 0;
-
-  //     projects.forEach((project: any, i: number) => {
-  //       const formData = new FormData();
-  //       formData.append("esco_id", this.esco_id);
-
-  //       // Append all project fields
-  //       formData.append("pp_client_name", project.pp_client_name);
-  //       formData.append("pp_contact_person", project.pp_contact_person);
-  //       formData.append("pp_client_contact_no", project.pp_client_contact_no);
-  //       formData.append("pp_proj_desc", project.pp_proj_desc);
-  //       formData.append("pp_contact_email", project.pp_contact_email);
-  //       formData.append("pp_proj_value", project.pp_proj_value ?? "");
-  //       formData.append("pp_savingkilowatz", project.pp_savingkilowatz ?? "");
-  //       formData.append(
-  //         "pp_proj_start_date",
-  //         this.validationService.toMysqlDate(project.pp_proj_start_date)
-  //       );
-  //       formData.append(
-  //         "pp_proj_end_date",
-  //         this.validationService.toMysqlDate(project.pp_proj_end_date)
-  //       );
-
-  //       // Attach the reference letter if present
-  //       if (project.pp_reference_letter) {
-  //         formData.append("pp_reference_letter", project.pp_reference_letter);
-  //       }
-
-  //       // Call your API to save each project
-  //       this.createService.StepSaveCompanyPreviousProjects(formData).subscribe({
-  //         next: (res) => {
-  //           if (res.status === "success") {
-  //             numSubmitted++;
-  //             if (numSubmitted + numFailed === projects.length) {
-  //               // All projects processed
-  //               this.saveSuccessMessage =
-  //                 "Previous Projects successfully saved! Click Next to add more data.";
-  //               this.saveErrorMessage = null;
-  //               setTimeout(() => {
-  //                 this.saveSuccessMessage = null;
-  //               }, 3000);
-  //             }
-  //           } else {
-  //             numFailed++;
-  //             this.saveSuccessMessage = null;
-  //             this.saveErrorMessage = `Failed to add some Previous Projects. Try again.`;
-  //             setTimeout(() => {
-  //               this.saveSuccessMessage = null;
-  //             }, 3000);
-  //           }
-  //         },
-  //         error: (err) => {
-  //           numFailed++;
-  //           this.saveSuccessMessage = null;
-  //           this.saveErrorMessage =
-  //             "An error occurred while adding Previous Projects.";
-  //           setTimeout(() => {
-  //             this.saveErrorMessage = null;
-  //           }, 3000);
-  //         },
-  //       });
-  //     });
-  //   } else {
-  //     this.parentForm.markAllAsTouched();
-  //   }
-  // }
 }
