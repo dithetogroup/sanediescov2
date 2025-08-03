@@ -6,6 +6,7 @@ header("Content-Type: application/json");
 error_log("[INFO] === Start Previous Project Update ===");
 
 $pp_id = $_POST['pp_id'] ?? '';
+$pp_esco_id = $_POST['esco_id'] ?? '';
 if (!$pp_id) {
     error_log("[ERROR] Missing pp_id in POST: " . json_encode($_POST));
     http_response_code(400);
@@ -28,7 +29,7 @@ $fields = [
 
 // File upload logic
 $hasFile = isset($_FILES['pp_reference_letter']) && $_FILES['pp_reference_letter']['error'] === UPLOAD_ERR_OK;
-$file_category = $_POST['file_category'] ?? 'Reference Letter';
+$file_category = $_POST['file_category'] ?? 'Previous Project Reference Letter';
 
 $mysqli->begin_transaction();
 try {
@@ -98,7 +99,13 @@ try {
         $ext = pathinfo($originalName, PATHINFO_EXTENSION);
         $filenameNoExt = preg_replace('/\s+/', '-', pathinfo($originalName, PATHINFO_FILENAME));
         $dateStr = date('ymdHis');
-        $newName = 'UPDATE_' . $pp_id . '_' . $file_category . '_' . $filenameNoExt . '_' . $dateStr . '.' . $ext;
+        $file_cat = "previousprojectref";
+
+        //$newName = 'UPDATE_' . $pp_id . '_' . $file_category . '_' . $filenameNoExt . '_' . $dateStr . '.' . $ext;
+
+        $newName = $pp_esco_id . '_' . $file_cat . '_'. $filenameNoExt . '_' . $dateStr . '.' . $ext;
+
+
         $filePath = $uploadDir . $newName;
         $relativePath = "uploads/" . $newName;
 

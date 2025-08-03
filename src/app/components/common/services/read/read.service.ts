@@ -40,7 +40,6 @@ export class ReadService {
     );
   }
 
-
   //step Previous Projects
   StepGetPreviousProjects(esco_id: string) {
     return this.httpClient.get<any>(
@@ -50,6 +49,21 @@ export class ReadService {
   StepGettPreviousProjectsReferenceLetters(esco_id: string) {
     return this.httpClient.get<any>(
     `${this.urlEndPoints.StepGettPreviousProjectsReferenceLetters}?esco_id=${esco_id}`
+    );
+  }
+
+  //step Client Reference
+  StepGetClientReferences(esco_id: string) {
+    return this.httpClient.get<any>(
+    `${this.urlEndPoints.StepGetClientReferences}?esco_id=${esco_id}`
+    );
+  }
+
+
+  //company equeity
+  StepGetCompanyEquiity(esco_id: string) {
+    return this.httpClient.get<any>(
+    `${this.urlEndPoints.StepGetCompanyEquiity}?esco_id=${esco_id}`
     );
   }
 

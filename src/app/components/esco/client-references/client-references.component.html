@@ -1,139 +1,166 @@
-<mat-slide-toggle [(ngModel)]="noClientReferences" (change)="onNoClientReferencesChange()" class="mb-25">
-    {{ noClientReferences ? "I don't have client references" : "I do have client references" }}
-  </mat-slide-toggle>
-  
-  <div class="mt-2">
-    <small class="text-muted">
-      {{ noClientReferences 
-          ? "You have indicated that you don’t have client references to declare. Please click Next to proceed."
-          : "Please complete your client reference details below." }}
-    </small>
-  </div>
-  
-  <form *ngIf="!noClientReferences" [formGroup]="parentForm" class="mt-25">
-    <div formArrayName="clientReferences">
-      <div *ngFor="let clientRefGroup of clientReferencesArray.controls; let i = index" [formGroupName]="i" class="mb-10">
-        <div class="row">
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="tagus-form-group">
-              <mat-form-field appearance="fill">
-                <i class="ri-user-3-line"></i>
-                <mat-label>Client Name</mat-label>
-                <input matInput formControlName="cr_client_name" placeholder="Client Name" />
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="tagus-form-group">
-              <mat-form-field appearance="fill">
-                <i class="ri-user-3-line"></i>
-                <mat-label>Contact Person</mat-label>
-                <input matInput formControlName="cr_contact_person" placeholder="Contact Person" />
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="tagus-form-group">
-              <mat-form-field appearance="fill">
-                <i class="flaticon-phone-call"></i>
-                <mat-label>Contact Number</mat-label>
-                <input matInput formControlName="cr_client_contact_no" placeholder="Client contact number" maxlength="10" />
-              </mat-form-field>
-            </div>
-          </div>
+<mat-slide-toggle [(ngModel)]="noClientReferences" (change)="onNoClientReferencesChange()" class="mb-25" *ngIf="clientReferencesArray.length < 5">
+  {{ noClientReferences ? "I don't have client references" : "I do have client references" }}
+</mat-slide-toggle>
 
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="tagus-form-group">
-                <mat-form-field appearance="fill">
-                    <i class="ri-list-check"></i>
-                    <mat-label>Technology</mat-label>
-                    <mat-select formControlName="cr_technologies" multiple>
-                      <mat-option *ngFor="let tech of technologyClassifications" [value]="tech">
-                        {{ tech }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                  <mat-error *ngIf="clientRefGroup.get('cr_technologies')?.hasError('required') && clientRefGroup.get('cr_technologies')?.touched">
-                    Please select at least one technology.
-                  </mat-error>
-            </div>
-          </div>
+<div class="mt-2" *ngIf="clientReferencesArray.length < 5">
+  <small class="text-muted">
+    {{ noClientReferences
+    ? "You have indicated that you don’t have client references to declare. Please click Next to proceed."
+    : "Please complete your client reference details below." }}
+  </small>
+</div>
 
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="tagus-form-group without-icon">
-              <mat-form-field appearance="fill" class="example-full-width">
-                <mat-label>Project Start Date</mat-label>
-                <input matInput [matDatepicker]="startPicker" formControlName="cr_start_date" [max]="maxDate"
-                  placeholder="Select start project date">
-                <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
-                <mat-datepicker #startPicker></mat-datepicker>
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="tagus-form-group without-icon">
-              <mat-form-field appearance="fill" class="example-full-width">
-                <mat-label>Project End Date</mat-label>
-                <input matInput [matDatepicker]="endPicker" formControlName="cr_end_date"
-                  [disabled]="!clientRefGroup.get('cr_start_date')?.value"
-                  [min]="clientRefGroup.get('cr_start_date')?.value" [max]="maxEndDate"
-                  placeholder="Select project end date" />
-                <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
-                <mat-datepicker #endPicker></mat-datepicker>
-              </mat-form-field>
-            </div>
-          </div>
-       
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="tagus-form-group">
-              <mat-form-field appearance="fill">
-                <i class="flaticon-chat"></i>
-                <mat-label>Project Description</mat-label>
-                <textarea matInput formControlName="cr_proj_desc" placeholder="Project Description"></textarea>
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="col-lg-6 col-md-6 col-sm-6">
-            <div class="tagus-form-group without-icon">
-              <mat-form-field appearance="fill" floatLabel="always" class="example-full-width">
-                <i class="laticon-credit-card"></i>
-                <mat-label>Project Value</mat-label>
-                <input matInput type="number" class="example-right-align" placeholder="0" formControlName="cr_proj_value">
-                <span matTextPrefix>R&nbsp;</span>
-                <span matTextSuffix>.00</span>
-              </mat-form-field>
-            </div>
-          </div>
+<span *ngIf="clientReferencesArray.length >= 5" class="badge text-bg-warning">
+  Maximum of 5 client references reached.
+</span>
 
-          <div class="col-lg-6 col-md-6 col-sm-6 mb-5">
-            <div class="tagus-form-group">
-              <label class="d-block mb-12 fw-semibold gray-color">Reference Letter</label>
-              <input type="file" formControlName="cr_reference_letter" (change)="onFileSelected($event, i)" />
+<form *ngIf="!noClientReferences" [formGroup]="parentForm" class="mt-25">
+  <div formArrayName="clientReferences">
+    <div *ngFor="let clientRefGroup of clientReferencesArray.controls; let i = index" [formGroupName]="i" class="mb-10">
+      <span class="badge text-bg-tagus mb-25 mt-25">Client Reference #{{ i + 1 }}</span>
+      <div class="row">
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group">
+            <mat-form-field appearance="fill">
+              <i class="ri-user-3-line"></i>
+              <mat-label>Client Name</mat-label>
+              <input matInput formControlName="cr_client_name" placeholder="Client Name" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group">
+            <mat-form-field appearance="fill">
+              <i class="ri-user-3-line"></i>
+              <mat-label>Contact Person</mat-label>
+              <input matInput formControlName="cr_contact_person" placeholder="Contact Person" />
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group">
+            <mat-form-field appearance="fill">
+              <i class="flaticon-phone-call"></i>
+              <mat-label>Contact Number</mat-label>
+              <input matInput formControlName="cr_client_contact_no" placeholder="Client contact number"
+                maxlength="10" />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group">
+            <mat-form-field appearance="fill">
+              <i class="ri-list-check"></i>
+              <mat-label>Technology</mat-label>
+              <mat-select formControlName="cr_technologies" multiple>
+                <mat-option *ngFor="let tech of technologyClassifications" [value]="tech">
+                  {{ tech }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+            <mat-error
+              *ngIf="clientRefGroup.get('cr_technologies')?.hasError('required') && clientRefGroup.get('cr_technologies')?.touched">
+              Please select at least one technology.
+            </mat-error>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group without-icon">
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Project Start Date</mat-label>
+              <input matInput [matDatepicker]="startPicker" formControlName="cr_start_date" [max]="maxDate"
+                placeholder="Select start project date">
+              <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
+              <mat-datepicker #startPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group without-icon">
+            <mat-form-field appearance="fill" class="example-full-width">
+              <mat-label>Project End Date</mat-label>
+              <input matInput [matDatepicker]="endPicker" formControlName="cr_end_date"
+                [disabled]="!clientRefGroup.get('cr_start_date')?.value"
+                [min]="clientRefGroup.get('cr_start_date')?.value" [max]="maxEndDate"
+                placeholder="Select project end date" />
+
+              <mat-datepicker-toggle matIconSuffix [for]="endPicker"></mat-datepicker-toggle>
+              <mat-datepicker #endPicker></mat-datepicker>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group">
+            <mat-form-field appearance="fill">
+              <i class="flaticon-chat"></i>
+              <mat-label>Project Description</mat-label>
+              <textarea matInput formControlName="cr_proj_desc" placeholder="Project Description"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-6">
+          <div class="tagus-form-group without-icon">
+            <mat-form-field appearance="fill" floatLabel="always" class="example-full-width">
+              <i class="laticon-credit-card"></i>
+              <mat-label>Project Value</mat-label>
+              <input matInput type="number" class="example-right-align" placeholder="0" formControlName="cr_proj_value">
+              <span matTextPrefix>R&nbsp;</span>
+              <span matTextSuffix>.00</span>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="col-lg-6 col-md-6 col-sm-6 mb-5">
+          <div class="tagus-form-group">
+            <label class="d-block mb-12 fw-semibold gray-color">Reference Letter</label>
+            <input type="file" (change)="onFileSelected($event, i)" />
+            <div *ngIf="clientReferencesArray.at(i).value.cr_reference_letter">
+            {{ clientReferencesArray.at(i).value.cr_reference_letter.name }}
+            </div>
+
+            <div *ngIf="clientRefGroup.get('cr_reference_letter')?.value">
+              <a [href]="'connectdbsanedi/' + clientRefGroup.get('pp_reference_letter')?.value" target="_blank">
+                <mat-icon>cloud_download</mat-icon>
+                <small>Uploaded Reference File</small>
+              </a>
+
             </div>
           </div>
         </div>
-        <button mat-stroked-button color="warn" (click)="removeClientReference(i)" *ngIf="clientReferencesArray.length > 1">
-          Remove Client Reference
-        </button>
-        <mat-divider class="my-3" *ngIf="i < clientReferencesArray.length - 1"></mat-divider>
       </div>
 
 
-      <div class="actionbt">
-        <!-- Add Client Reference -->
-        <button mat-flat-button color="primary" (click)="addClientReference()"
-          [disabled]="clientReferencesArray.length >= 5 || (clientReferencesArray.length > 0 && !clientReferencesArray.at(clientReferencesArray.length - 1).valid)"
-          class="my-3 actionbutton">
-          <mat-icon>note_add</mat-icon>
-          Add Client Reference
+      <div class="button-row mb-4 mt-2 btn-wrapper">
+        <button mat-raised-button color="warn" (click)="removeClientReference(i)" *ngIf="clientReferencesArray.length > 1" class="mainbtn">
+          <mat-icon>delete_forever</mat-icon>Remove Project
         </button>
-        <!-- Save -->
-        <button class="actionbutton" mat-flat-button color="accent" (click)="submitForm()"
-          [disabled]="parentForm.invalid">
-          Save
+      
+        <button mat-flat-button color="accent" (click)="onSaveOrUpdateClientReference(i)"
+          [disabled]="clientRefGroup.invalid || (clientRefGroup.get('cr_id')?.value && !clientRefGroup.dirty)"
+          [matTooltip]="clientRefGroup.get('cr_id')?.value && !clientRefGroup.dirty ? 'Change something to enable update' : ''">
+          {{ clientRefGroup.get('cr_id')?.value ? 'Update' : 'Save' }}
           <mat-icon>save</mat-icon>
         </button>
       </div>
+      
+      <mat-divider class="my-3" *ngIf="i < clientReferencesArray.length - 1"></mat-divider>
     </div>
-  </form>
-  
+    <div class="actionbt">
+      <!-- Add Client Reference -->
+      <button mat-flat-button color="primary" (click)="addClientReference()"
+        [disabled]="clientReferencesArray.length >= 5 || (clientReferencesArray.length > 0 && !clientReferencesArray.at(clientReferencesArray.length - 1).valid)"
+        class="my-3 actionbutton">
+        <mat-icon>note_add</mat-icon>
+        Add New Client Reference
+      </button>
+
+
+     
+      
+      <!-- Save -->
+    </div>
+  </div>
+</form>

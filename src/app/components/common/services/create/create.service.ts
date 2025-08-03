@@ -18,10 +18,19 @@ export class CreateService {
     return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyInformation, formData);
   }
 
-
   public StepSaveCompanyPreviousProjects(formData: any) {
     //return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyInformation, formData,  { withCredentials: true });
     return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyPreviousProjects, formData);
+  }
+
+  public StepSaveClientReferences(formData: any) {
+    //return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyInformation, formData,  { withCredentials: true });
+    return this.httpClient.post<any>(this.urlEndPoints.StepSaveClientReferences, formData);
+  }
+
+  public StepSaveCompanyEquiity(formData: any) {
+    //return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyInformation, formData,  { withCredentials: true });
+    return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyEquiity, formData);
   }
 
 }
