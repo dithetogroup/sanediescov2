@@ -25,6 +25,17 @@ export class ValidationsService {
     }
   }
 
+  // toDateObject(mysqlDateString: string | null | undefined): Date | null {
+  //   if (!mysqlDateString) return null;
+  //   // Handles '2025-06-17 00:00:00' or '2025-06-17'
+  //   const parts = mysqlDateString.split(' ')[0].split('-'); // ['2025','06','17']
+  //   if (parts.length !== 3) return null;
+  //   const [year, month, day] = parts.map(Number);
+  //   // Months in JS Date are 0-based
+  //   return new Date(year, month - 1, day);
+  // }
+
+
     /** ✅ Format Date for UI Display */
     formatDate(date: string | Date, format: string = 'dd MMM yyyy'): string {
       const options: Intl.DateTimeFormatOptions = this.getDateFormatOptions(format);

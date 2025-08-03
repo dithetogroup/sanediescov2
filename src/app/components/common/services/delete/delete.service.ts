@@ -7,17 +7,28 @@ import { environment } from '../../../../../environments/environment';
   providedIn: 'root'
 })
 export class DeleteService {
-
+  StepDeletePreviousProject(pp_id: number) {
+    const formData = new FormData();
+    formData.append('pp_id', pp_id.toString());
+    return this.httpClient.post<any>(this.urlEndPoints.StepDeletePreviousProject, formData);
+  }
   urlEndPoints : any = environment.urlEndPoints;
   redirectUrl!: string;
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
 
-  StepDeletePreviousProject(pp_id: number) {
+
+  StepDeleteClientReferences(cr_id: number, esco_id: string) {
     const formData = new FormData();
-    formData.append('pp_id', pp_id.toString());
-    return this.httpClient.post<any>(this.urlEndPoints.StepDeletePreviousProject, formData);
+    formData.append('cr_id', cr_id.toString());
+    formData.append('esco_id', esco_id);
+    return this.httpClient.post<any>(this.urlEndPoints.StepDeleteClientReferences, formData);
   }
+  
+
+  // StepDeleteClientReferences(cr_id: number, esco_id: string) {
+  //   return this.httpClient.post<any>(this.urlEndPoints.StepDeleteClientReferences, {cr_id, esco_id});
+  // }
   
 }

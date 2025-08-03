@@ -1,18 +1,41 @@
-import { CommonModule, NgIf, NgForOf } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormsModule, ReactiveFormsModule, AbstractControl, FormArray, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
-import { MatButtonModule } from '@angular/material/button';
-import { MatNativeDateModule, MatOptionModule } from '@angular/material/core';
-import { MatDatepicker, MatDatepickerToggle, MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDividerModule } from '@angular/material/divider';
-import { MatFormField, MatLabel } from '@angular/material/form-field';
-import { MatIcon } from '@angular/material/icon';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { MatSlideToggle } from '@angular/material/slide-toggle';
+import { CommonModule, NgForOf, NgIf } from "@angular/common";
+import { ChangeDetectorRef, Component, Input, OnInit } from "@angular/core";
+import {
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  FormArray,
+  Validators,
+  FormBuilder,
+  AbstractControl,
+  ValidationErrors,
+  ValidatorFn,
+} from "@angular/forms";
+import { MatButtonModule } from "@angular/material/button";
+import { MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from "@angular/material/core";
+import {
+  MatDatepicker,
+  MatDatepickerModule,
+  MatDatepickerToggle,
+} from "@angular/material/datepicker";
+import { MatDividerModule } from "@angular/material/divider";
+import { MatFormField, MatLabel } from "@angular/material/form-field";
+import { MatIcon } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatSlideToggle } from "@angular/material/slide-toggle";
+import { CreateService } from "../../common/services/create/create.service";
+import { ReadService } from "../../common/services/read/read.service";
+import { ValidationsService } from "../../common/services/utilities/validations.service";
+import { DeleteService } from "../../common/services/delete/delete.service";
+import { ToastrService } from "ngx-toastr";
+import { UpdateService } from "../../common/services/update/update.service";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { MatSelectModule } from "@angular/material/select";
+import { MY_DATE_FORMATS } from "../../../app.config";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
-  selector: 'app-client-references',
+  selector: "app-client-references",
   imports: [
     CommonModule,
     ReactiveFormsModule,
@@ -28,62 +51,77 @@ import { MatSlideToggle } from '@angular/material/slide-toggle';
     FormsModule,
     MatSlideToggle,
     MatDividerModule,
-    MatOptionModule,
-    MatSelectModule,
     NgIf,
     NgForOf,
-],
-  templateUrl: './client-references.component.html',
-  styleUrl: './client-references.component.scss'
+    MatTooltipModule,
+    MatSelectModule
+  ],
+  templateUrl: "./client-references.component.html",
+  styleUrl: "./client-references.component.scss",
 })
-export class ClientReferencesComponent implements OnInit{
-
-
+export class ClientReferencesComponent implements OnInit {
   @Input() parentForm!: FormGroup;
   public noClientReferences = false;
   public maxDate: Date = new Date();
   public maxEndDate: Date = new Date();
 
-  technologyClassifications: string[] = [
-    'LED for public lighting(Street-lighting & High mast lighting)',
-    'Building Lighting',
-    'High efficient HVAC',
-    'High efficient water heating systems',
-    'High efficient steam boilers / systems',
-    'High efficient motors and pumps for fresh and wastewater',
-    'Water and Wastewater Treatment',
-    'Cogeneration',
-    'Cogeneration (with biogas)',
-    'Biogas',
-    'Energy management systems and Smart Metering',
-    'Small-Scale Solar PV systems'
-  ];    
+  esco_id = "ESCo-A001";
+  technologyClassifications = [
+    "Solar PV", "Wind", "Biomass", "Hydro", "Storage", "Other"
+  ]; // Example options
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder,
+    private createService: CreateService,
+    private readService: ReadService,
+    private validationService: ValidationsService,
+    private deleteService: DeleteService,
+    private toastr: ToastrService,
+    private cdr: ChangeDetectorRef,
+    private updateService: UpdateService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit() {
-    // Only add a client reference if user says they DO have references
     if (!this.noClientReferences && this.clientReferencesArray.length === 0) {
       this.addClientReference();
     }
+    this.patchClientReferences();
   }
 
-  createClientReferenceGroup(): FormGroup {
-    return this.fb.group({
-      cr_client_name: ['', Validators.required],
-      cr_contact_person: ['', Validators.required],
-      cr_client_contact_no: ['', Validators.required],
-      cr_proj_desc: ['', Validators.required],
-      cr_contact_email: ['', [Validators.required, Validators.email]],
-      cr_proj_value: [''],
-      cr_technologies: [[], Validators.required],
-      cr_start_date: ['', Validators.required],
-      cr_end_date: ['', Validators.required],
-      cr_reference_letter: [null]
-    }, { validators: [this.endDateAfterStartDateValidator()] });
+  patchClientReferences() {
+    this.readService.StepGetClientReferences(this.esco_id).subscribe((res) => {
+      if (res.status === "success" && res.references.length > 0) {
+
+        const refFormArray = this.parentForm.get("clientReferences") as FormArray;
+        refFormArray.clear();
+        res.references.forEach((ref: any) => {
+          const group = this.createClientReferenceGroup();
+          group.patchValue({
+            cr_id: ref.cr_id,
+            cr_client_name: ref.cr_client_name,
+            cr_contact_person: ref.cr_contact_person,
+            cr_client_contact_no: ref.cr_client_contact_no,
+            cr_proj_desc: ref.cr_proj_desc,
+            cr_technologies: ref.cr_technologies ? JSON.parse(ref.cr_technologies) : [],
+            cr_proj_value: ref.cr_proj_value,
+           // cr_start_date: ref.cr_start_date,
+        //  cr_start_date: this.validationService.toDateObject(ref.cr_start_date),
+          //cr_end_date: this.validationService.toDateObject(ref.cr_end_date),
+            cr_start_date: ref.cr_start_date ? new Date(ref.cr_start_date) : null,
+           cr_end_date: ref.cr_end_date ? new Date(ref.cr_end_date) : null,
+          // cr_end_date: ref.cr_end_date,
+          });
+          if (ref.reference_letter) {
+            group.patchValue({
+              cr_reference_letter: ref.reference_letter.fu_path,
+            });
+          }
+          refFormArray.push(group);
+        });
+      }
+    });
   }
-
-
 
   onNoClientReferencesChange() {
     if (this.noClientReferences) {
@@ -91,41 +129,45 @@ export class ClientReferencesComponent implements OnInit{
       this.parentForm.disable();
     } else {
       this.parentForm.enable();
-
-      const clientReferences = this.clientReferencesArray;
-      if (clientReferences.length === 0) {
-        this.addClientReference(); // Ensure one form is shown when toggle is OFF
+      if (this.clientReferencesArray.length === 0) {
+        this.addClientReference();
       }
     }
   }
 
+  toDateOnly(str: string): Date | null {
+    if (!str) return null;
+    // Extract YYYY-MM-DD only
+    const d = str.split(' ')[0];
+    return new Date(d);
+  }
+  
 
-  // getAvailableTechnologies(index: number): string[] {
-  //   // Exclude already-selected technologies in other rows
-  //   const selected = this.noClientReferences.controls
-  //     .map((ctrl, i) => i !== index ? ctrl.get('cr_technologies')?.value : null)
-  //     .filter(v => !!v);
-  //   return this.technologyClassifications.filter(tc => !selected.includes(tc));
-  // }
-
-  addClientReference() {
-    if (this.clientReferencesArray.length < 5) {
-      this.clientReferencesArray.push(this.createClientReferenceGroup());
-    }
+  createClientReferenceGroup(): FormGroup {
+    return this.fb.group(
+      {
+        cr_id: [null],
+        cr_client_name: ["", Validators.required],
+        cr_contact_person: ["", Validators.required],
+        cr_client_contact_no: [
+          "",
+          [Validators.required, Validators.pattern(/^\d{10}$/)],
+        ],
+        cr_proj_desc: ["", Validators.required],
+        cr_technologies: [[], Validators.required],
+        cr_proj_value: [""],
+        cr_start_date: ["", Validators.required],
+        cr_end_date: ["", Validators.required],
+        cr_reference_letter: [null],
+      },
+      { validators: [this.endDateAfterStartDateValidator()] }
+    );
   }
 
-  // onTechSelected(index: number) {
-  //   // Optionally reset the number of projects when tech changes
-  //   this.techClassifications.at(index).get('cr_technologies')?.reset('');
-  // }
-
-
-
-  // Custom validator: end date must be >= start date
   endDateAfterStartDateValidator(): ValidatorFn {
     return (group: AbstractControl): ValidationErrors | null => {
-      const start = group.get('cr_start_date')?.value;
-      const end = group.get('cr_end_date')?.value;
+      const start = group.get("cr_start_date")?.value;
+      const end = group.get("cr_end_date")?.value;
       if (start && end && new Date(end) < new Date(start)) {
         return { endBeforeStart: true };
       }
@@ -134,13 +176,48 @@ export class ClientReferencesComponent implements OnInit{
   }
 
   get clientReferencesArray() {
-    return this.parentForm.get('clientReferences') as FormArray;
+    return this.parentForm.get("clientReferences") as FormArray;
   }
 
- 
-  removeClientReference(index: number) {
-    if (this.clientReferencesArray.length > 1) {
-      this.clientReferencesArray.removeAt(index);
+  addClientReference() {
+    if (this.clientReferencesArray.length < 5) {
+      this.clientReferencesArray.push(this.createClientReferenceGroup());
+    }
+  }
+
+  removeClientReference(i: number) {
+    const ref = this.clientReferencesArray.at(i).value;
+    if (ref.cr_id) {
+      debugger;
+      this.deleteService.StepDeleteClientReferences(ref.cr_id, this.esco_id).subscribe({
+        next: (res) => {
+          if (res.status === "success") {
+            this.clientReferencesArray.removeAt(i);
+            this.cdr.detectChanges();
+            this.snackBar.open('Client Reference saved successfully!', 'Close', {
+              duration: 3500, // ms, adjust as you wish
+              verticalPosition: 'top', // or 'bottom'
+              panelClass: ['snackbar-success'] // add custom styling if you want
+            });
+
+          } else {
+
+            this.snackBar.open('Error saving client reference!', 'Close', {
+              duration: 4000,
+              panelClass: ['snackbar-error']
+            });
+          }
+        },
+        error: (err) => {
+
+          this.snackBar.open('An error occurred while deleting Client Reference!', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
+        },
+      });
+    } else {
+      this.clientReferencesArray.removeAt(i);
     }
   }
 
@@ -151,12 +228,58 @@ export class ClientReferencesComponent implements OnInit{
     }
   }
 
-  submitForm() {
-    if (this.noClientReferences) return;
-    if (this.parentForm.valid) {
-      // Save to DB
-      console.log('Form submitted:', this.parentForm.value);
+  onSaveOrUpdateClientReference(i: number) {
+    const refGroup = this.clientReferencesArray.at(i) as FormGroup;
+    const ref = refGroup.value;
+
+    const formData = new FormData();
+    formData.append('esco_id', this.esco_id);
+    formData.append('cr_client_name', ref.cr_client_name);
+    formData.append('cr_contact_person', ref.cr_contact_person);
+    formData.append('cr_client_contact_no', ref.cr_client_contact_no);
+    formData.append('cr_proj_desc', ref.cr_proj_desc);
+    formData.append('cr_technologies', JSON.stringify(ref.cr_technologies));
+    formData.append('cr_proj_value', ref.cr_proj_value ?? '');
+    formData.append('cr_start_date', this.validationService.toMysqlDate(ref.cr_start_date));
+    formData.append('cr_end_date', this.validationService.toMysqlDate(ref.cr_end_date));
+
+    if (ref.cr_reference_letter) {
+      formData.append('cr_reference_letter', ref.cr_reference_letter);
+    }
+
+    if (ref.cr_id) {
+      formData.append('cr_id', ref.cr_id);
+      this.updateService.StepUpdateClientReferences(formData).subscribe({
+        next: (res) => {
+          this.snackBar.open('Client Reference updated successfully!', 'Close', {
+            duration: 3500, // ms, adjust as you wish
+            verticalPosition: 'top', // or 'bottom'
+            panelClass: ['snackbar-success'] // add custom styling if you want
+          });
+        },
+        error: (err) => {
+          this.snackBar.open('Failed to update Client Reference!', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      });
+    } else {
+      this.createService.StepSaveClientReferences(formData).subscribe({
+        next: (res) => {
+          this.snackBar.open('Client Reference saved successfully!', 'Close', {
+            duration: 3500, // ms, adjust as you wish
+            verticalPosition: 'top', // or 'bottom'
+            panelClass: ['snackbar-success'] // add custom styling if you want
+          });
+        },
+        error: (err) => {
+          this.snackBar.open('Error saving client reference!', 'Close', {
+            duration: 4000,
+            panelClass: ['snackbar-error']
+          });
+        }
+      });
     }
   }
 }
-

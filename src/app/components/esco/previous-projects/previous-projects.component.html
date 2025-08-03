@@ -1,17 +1,26 @@
-<mat-slide-toggle [(ngModel)]="noProjects" (change)="onNoProjectsChange()" class="mb-25">
+<mat-slide-toggle [(ngModel)]="noProjects" (change)="onNoProjectsChange()" class="mb-25" *ngIf="projectsArray.length === 0">
   {{ noProjects ? 'I don\'t have previous projects' : 'I do have previous projects' }}
 </mat-slide-toggle>
 
-<div class="mt-2">
+<div class="mt-2"  *ngIf="projectsArray.length === 0">
   <small class="text-muted">
     {{ noProjects ? 'You have indicated that you don’t have past projects to declare, Please click Next to proceed.' :
     'Please complete your previous project details below.' }}
   </small>
 </div>
+
+<span *ngIf="projectsArray.length >= 5" class="badge text-bg-warning">
+  Maximum of 5 Previous project reached.
+</span>
+
+
 <form *ngIf="!noProjects" [formGroup]="parentForm" class="mt-25">
+
   <div formArrayName="projects">
     <div *ngFor="let projectGroup of projectsArray.controls; let i = index" [formGroupName]="i" class="mb-10">
+      <span class="badge text-bg-tagus mb-25 mt-25">Previous Project #{{ i + 1 }}</span>
       <div class="row">
+
         <div class="col-lg-6 col-md-6 col-sm-6 mb-20">
           <div class="tagus-form-group">
             <mat-form-field appearance="fill">
@@ -135,7 +144,7 @@
             </mat-form-field>
           </div>
         </div>
-   
+
         <div class="col-lg-6 col-md-6 col-sm-6 mb-5">
           <div class="tagus-form-group">
             <label class="d-block mb-12 fw-semibold gray-color">Reference Letter</label>
@@ -146,7 +155,8 @@
 
             <div *ngIf="projectGroup.get('pp_reference_letter')?.value">
               <a [href]="'/' + projectGroup.get('pp_reference_letter')?.value" target="_blank">
-                <mat-icon>cloud_download</mat-icon> Uploaded Reference Letter
+                <mat-icon>cloud_download</mat-icon>
+                <small>Uploaded Reference File</small>
               </a>
 
             </div>
@@ -154,32 +164,19 @@
         </div>
       </div>
 
-      <!-- Success message -->
-      <div *ngIf="saveSuccessMessage" class="alert alert-success mb-3">
-        {{ saveSuccessMessage }}
-      </div>
-      <!-- Error message -->
-      <div *ngIf="saveErrorMessage" class="alert alert-danger mb-3">
-        {{ saveErrorMessage }}
-      </div>
-
-
       <!-- Put BOTH buttons in a flex row container -->
       <div class="button-row mb-4 mt-2">
-      <button mat-raised-button color="warn" (click)="removeProject(i)" *ngIf="projectsArray.length > 1">
-        <mat-icon>delete_forever</mat-icon>Remove Project
-      </button>
-      <button class="actionbutton actionbt" mat-flat-button color="accent" (click)="onSaveOrUpdateProject(i)"
-        [disabled]="projectGroup.invalid">
-        {{ projectGroup.get('pp_id')?.value ? 'Update' : 'Save' }}
-        <mat-icon>save</mat-icon>
-      </button>
-    </div>
-
-
+        <button mat-raised-button color="warn" (click)="removeProject(i)" *ngIf="projectsArray.length > 1">
+          <mat-icon>delete_forever</mat-icon>Remove Project
+        </button>
+        <button mat-flat-button color="accent" (click)="onSaveOrUpdateProject(i)"
+          [disabled]="projectGroup.invalid || (projectGroup.get('pp_id')?.value && !projectGroup.dirty)"
+          [matTooltip]="projectGroup.get('pp_id')?.value && !projectGroup.dirty ? 'Change something to enable update' : ''">
+          {{ projectGroup.get('pp_id')?.value ? 'Update' : 'Save' }}
+          <mat-icon>save</mat-icon>
+        </button>
+      </div>
       <mat-divider class="my-3" *ngIf="i < projectsArray.length - 1"></mat-divider>
-
-      
     </div>
 
     <div class="actionbt">
@@ -187,7 +184,7 @@
         [disabled]="projectsArray.length >= 5 || (projectsArray.length > 0 && !projectsArray.at(projectsArray.length - 1).valid)"
         class="my-3 actionbutton">
         <mat-icon>note_add</mat-icon>
-        Add Project
+        Add Another Project
       </button>
 
 

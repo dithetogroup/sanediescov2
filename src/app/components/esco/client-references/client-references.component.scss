@@ -1,0 +1,18 @@
+.mainbtn {
+    margin-right: 20px;
+}
+
+.btn-wrapper {
+    margin-top: 30px;
+    margin-bottom:20px;
+}
+
+::ng-deep .snackbar-success {
+    background: #43a047;
+    color: #fff;
+  }
+  ::ng-deep .snackbar-error {
+    background: #d32f2f;
+    color: #fff;
+  }
+  

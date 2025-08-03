@@ -53,7 +53,7 @@ import { MatSelectModule } from "@angular/material/select";
 export class CompanyInformationHistoryComponent {
   history: any[] = [];
   loading = false;
-  esco_id = "ESCo-A023";
+  esco_id = "ESCo-A001";
   latestFile: any = null;
   baseUrl = environment.baseUrl + "/";
   rawData: CompanyInfo[] = [];
