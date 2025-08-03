@@ -1,48 +1,61 @@
-<div
-    class="h-100vh pt-50 pb-50"
-    [class.component-dark-theme]="themeService.isDark()"
+<div class="h-100vh pt-50 pb-50" [class.component-dark-theme]="themeService.isDark()"
     [class.card-borderd-theme]="themeService.isCardBorder()"
     [class.card-border-radius]="themeService.isCardBorderRadius()"
-    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
->
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()">
     <div class="d-table">
         <div class="d-table-cell">
             <div class="tagus-form ms-auto me-auto">
                 <div class="title">
-                    <div class="d-flex mb-10 align-items-center">
-                        <h2 class="mb-0 me-30">Get Started</h2>
-                        <img src="img/logo-icon.png" alt="logo-icon">
+                    <div class="d-flex mb-10 align-items-center register">
+                        <h2 class="mb-0 get-started">Get Started</h2>
+                        <img src="img/sanedilogo2.png" alt="logo-icon">
+                        <img src="img/denergy.png" alt="deparment of energy" class="logo drm">
                     </div>
-                    <p>Don’t have an accounter-jsn? <a routerLink="/authentication/register" class="main-color fw-medium">Register now!</a></p>
-                </div>
-                <form [formGroup]="loginForm" autocomplete="off">
-                    <!-- <div class="login-with-socials d-md-flex align-items-center justify-content-space-between">
-                        <button mat-flat-button class="gray fw-semibold d-block me-5"><img src="img/icon/google.png" alt="google"> Login with Google</button>
-                        <button mat-flat-button class="tagus fw-semibold d-block ms-5"><img src="img/icon/facebook.png" alt="facebook"> Login with Facebook</button>
+
+                    <!-- <div class=" notice">
+                        <div class="" role="alert">
+                            <h4>ESCo Registrations For 2023/2024 are Closed.</h4>
+                        </div>
+                        <div class=" explanation">
+                            An evaluation process will follow next,
+                            where registered ESCOs will be classified into
+                            tiers based on their experience and other provided company
+                            information. Once the evaluation process is complete, 
+                            we will notify companies of their respective tiers
+                            and provide information on what this classification entails.
+                        </div>
                     </div> -->
-                    <div class="or text-center position-relative">
-                        <span class="fw-semibold fs-16">or</span>
+               <p>Don’t have an account? <a routerLink="/authentication/register" class="main-color fw-medium">Register now!</a></p> 
+                </div>
+                <!-- <div *ngIf="ClosedMessage">
+                    <div class="alert alert-warning" role="alert">
+                        {{ ClosedMessage }}
                     </div>
+                </div> -->
+                
+                <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" autocomplete="off">
                     <div class="bg-white border-radius pt-20 ps-20 pe-20">
-                        <div class="tagus-form-group without-icon">
+                        <div class="tagus-form-group without-icon mb-5">
                             <label class="d-block mb-12 fw-semibold gray-color">Email Address <span>*</span></label>
                             <mat-form-field appearance="fill">
                                 <mat-label>Enter email address</mat-label>
                                 <input type="email" matInput formControlName="lu_email" name="lu_email">
                                 <mat-error
-                                *ngIf="loginForm.get('lu_email')?.dirty || loginForm.get('lu_email')?.touched">
-                                <span *ngIf="loginForm.get('lu_email')?.hasError('required')">Email is
-                                    required.</span>
-                                <span *ngIf="loginForm.get('lu_email')?.hasError('email')">Email is invalid</span>
-                            </mat-error>
-                             </mat-form-field>
+                                    *ngIf="loginForm.get('lu_email')?.dirty || loginForm.get('lu_email')?.touched">
+                                    <span *ngIf="loginForm.get('lu_email')?.hasError('required')">Email is
+                                        required.</span>
+                                    <span *ngIf="loginForm.get('lu_email')?.hasError('email')">Email is invalid</span>
+                                </mat-error>
+                            </mat-form-field>
                         </div>
-                        <div class="tagus-form-group without-icon">
+                        <div class="tagus-form-group without-icon mt-5">
                             <label class="d-block mb-12 fw-semibold gray-color">Password <span>*</span></label>
                             <mat-form-field appearance="fill">
                                 <mat-label>Enter your password</mat-label>
-                                <input matInput [type]="hide ? 'password' : 'text'" formControlName="lu_password">
-                                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                <input matInput [type]="hide ? 'password' : 'text'" formControlName="lu_password"
+                                    name="lu_password">
+                                <button mat-icon-button matSuffix (click)="hide = !hide"
+                                    [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                     <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
                                 </button>
                                 <mat-error *ngIf="loginForm.controls['lu_password'].invalid">
@@ -52,23 +65,20 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <!-- <div id="messageBox" role="alert" *ngIf="message" class="mb-3 fw-semibold alert" [ngClass]="{
+                    <div id="messageBox" role="alert" *ngIf="message" class="mb-3 fw-semibold alert" [ngClass]="{
                         'alert-success': messageType === 'success',
                         'alert-danger': messageType === 'error',
                         'alert-warning': messageType === 'warning'
                         }">
                         {{ message }}
-                    </div> -->
-                    <div class="d-flex info align-items-center justify-content-space-between">
-                        <mat-checkbox class="gray-color">Remember me</mat-checkbox>
-                        <a routerLink="/authentication/forgot-password" class="d-inline-block main-color fw-medium">Forgot your password?</a>
-                    </div>
-                    <!-- <button mat-flat-button class="tagus d-block fw-semibold" (click)="testApi()">Test API Connection</button>
-                    <button mat-flat-button class="tagus d-block fw-semibold" (click)="testFree()">Test Free Connection</button>
-                    <button mat-flat-button class="tagus d-block fw-semibold" (click)="onSubmit()">Log In</button>
-                    <button mat-flat-button class="tagus d-block fw-semibold" (click)="onTest()">Test</button> -->
-                    
+                        </div>
 
+                    <div class="d-flex info align-items-center justify-content-space-between">
+                        <a routerLink="/authentication/forgot-password"
+                            class="d-inline-block main-color fw-medium text-end">Forgot your password?</a>
+                    </div>
+                    <button mat-flat-button class="tagus d-block fw-semibold" type="submit"
+                        [disabled]="loginForm.invalid">Log In</button>
                 </form>
             </div>
         </div>

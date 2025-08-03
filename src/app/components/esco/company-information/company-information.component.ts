@@ -36,7 +36,7 @@ export class CompanyInformationComponent {
     public saveErrorMessage: string | null = null;
     latestFile: any = null;
 
-    esco_id =  "ESCo-A023";
+    esco_id = "ESCo-A001";
     //esco_id: string;
 
     yearsInESCoBusiness: string[] = [

@@ -10,4 +10,15 @@ export interface CompanyInfo {
     fu_path?: string;
     fu_category?: string;
   }
+
+  export class UserDataLogin {
+    email: string;
+    role: string;
+    name:string;
+    surname: string;
+    escoid: string;
+    token:string;
+    exp?: number;
+}
+
   

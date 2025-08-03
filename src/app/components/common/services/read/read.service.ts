@@ -13,26 +13,32 @@ export class ReadService {
 
   constructor(private httpClient: HttpClient) { }
 
+
+  //User Authentication
+  Userlogin(lu_email: string, lu_password: string) {
+    return this.httpClient.post<any>( `${this.urlEndPoints.Userlogin}`,
+      { lu_email, lu_password },
+      { withCredentials: true } 
+    );
+  }
+
+
   //Step Company Information
   StepGetCompanyInformation(esco_id: string) {
     return this.httpClient.get<any>(
      `${this.urlEndPoints.StepGetCompanyInformation}?esco_id=${esco_id}`
     );
   }
-  
   StepGetCompanyInformationCICPFILE(esco_id: string) {
     return this.httpClient.get<any>(
     `${this.urlEndPoints.StepGetCompanyInformationCICPFILE}?esco_id=${esco_id}`
     );
   }
-
-
   getCompanyInfoHistory(esco_id: string) {
     return this.httpClient.get<any>(
       `${this.urlEndPoints.getCompanyInfoHistory}?esco_id=${esco_id}`
     );
   }
-
 
 
   //step Previous Projects
@@ -41,7 +47,6 @@ export class ReadService {
      `${this.urlEndPoints.StepGetPreviousProjects}?esco_id=${esco_id}`
     );
   }
-  
   StepGettPreviousProjectsReferenceLetters(esco_id: string) {
     return this.httpClient.get<any>(
     `${this.urlEndPoints.StepGettPreviousProjectsReferenceLetters}?esco_id=${esco_id}`

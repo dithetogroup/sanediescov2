@@ -44,7 +44,7 @@ import { MatSelectModule } from "@angular/material/select";
     MatInputModule,
     FormsModule,
     MatOptionModule,
-    MatSelectModule
+    MatSelectModule,
   ],
 
   templateUrl: "./company-information-history.component.html",
@@ -53,15 +53,13 @@ import { MatSelectModule } from "@angular/material/select";
 export class CompanyInformationHistoryComponent {
   history: any[] = [];
   loading = false;
-  esco_id = "ESCo-A023";
+  esco_id = "ESCo-A001";
   latestFile: any = null;
   baseUrl = environment.baseUrl + "/";
   rawData: CompanyInfo[] = [];
-  dateFilterField: 'ci_created_at' | 'ci_updated_date' = 'ci_created_at';
+  dateFilterField: "ci_created_at" | "ci_updated_date" = "ci_created_at";
   filterOn = this.dateFilterField;
   maxDate = new Date();
-
-
 
   displayedColumns: string[] = [
     "created",
@@ -91,10 +89,10 @@ export class CompanyInformationHistoryComponent {
     this.readService.getCompanyInfoHistory(this.esco_id).subscribe((res) => {
       this.loading = false;
       if (res.status === "success") {
-        this.rawData = res.history;         // <<--- This is what your filter works on!
+        this.rawData = res.history; // <<--- This is what your filter works on!
 
         this.dataSource = new MatTableDataSource(res.history);
-        console.log('passed data', res.history);
+        console.log("passed data", res.history);
         setTimeout(() => {
           if (this.dataSource) this.dataSource.paginator = this.paginator;
         });
@@ -102,11 +100,9 @@ export class CompanyInformationHistoryComponent {
     });
   }
 
-
-  
   applyGlobalFilter() {
     let filtered = this.rawData;
-  
+
     // Text filter
     if (this.filterValue.allColumns) {
       const val = this.filterValue.allColumns.trim().toLowerCase();
@@ -116,48 +112,46 @@ export class CompanyInformationHistoryComponent {
         )
       );
     }
-  
+
     // Always use ci_updated_date
-    const filterOn = 'ci_updated_date';
+    const filterOn = "ci_updated_date";
     const fromYMD = this.filterValue.fromDate
       ? this.dateToLocalYMD(this.filterValue.fromDate)
       : null;
     const toYMD = this.filterValue.toDate
       ? this.dateToLocalYMD(this.filterValue.toDate)
       : null;
-  
+
     console.log("Filtering on:", filterOn);
     console.log("From:", fromYMD, "To:", toYMD);
-  
+
     if (fromYMD || toYMD) {
       filtered = filtered.filter((item) => {
         if (!item[filterOn]) return false;
         const itemDateYMD = this.extractLocalYMD(item[filterOn]);
         console.log("Item date:", itemDateYMD);
-  
+
         if (fromYMD && itemDateYMD < fromYMD) return false;
         if (toYMD && itemDateYMD > toYMD) return false;
         return true;
       });
     }
-  
+
     if (this.dataSource) {
       this.dataSource.data = filtered;
     }
   }
-  
+
   dateToLocalYMD(date: Date): string {
     const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const day = String(date.getDate()).padStart(2, "0");
     return `${year}-${month}-${day}`;
   }
-  
+
   extractLocalYMD(dbDateStr: string): string {
     return dbDateStr.slice(0, 10);
   }
-
-  
 
   resetFilters() {
     this.filterValue = {

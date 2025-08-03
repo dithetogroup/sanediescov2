@@ -65,7 +65,7 @@ export class PreviousProjectsComponent implements OnInit {
   public deleteSuccessMessage: string | null = null;
   public deleteErrorMessage: string | null = null;
 
-  esco_id = "ESCo-A023";
+  esco_id = "ESCo-A001";
   //esco_id: string;
 
   constructor(
@@ -267,6 +267,9 @@ export class PreviousProjectsComponent implements OnInit {
     if (project.pp_id) {
       // It's an update
       formData.append('pp_id', project.pp_id); // Backend needs to know
+      formData.append('esco_id', project.esco_id); // Backend needs to know
+
+      debugger;
       this.updateService.StepUpdatePreviousProjects(formData).subscribe({
         next: (res) => {
           // Show success or error messages, reload data if needed, etc.
@@ -297,76 +300,4 @@ export class PreviousProjectsComponent implements OnInit {
     }
   }
   
-
-  // submitPreviousProjects() {
-  //   if (this.parentForm.valid) {
-  //     const formValue = this.parentForm.value;
-  //     const projects = formValue.projects;
-  //     let numSubmitted = 0;
-  //     let numFailed = 0;
-
-  //     projects.forEach((project: any, i: number) => {
-  //       const formData = new FormData();
-  //       formData.append("esco_id", this.esco_id);
-
-  //       // Append all project fields
-  //       formData.append("pp_client_name", project.pp_client_name);
-  //       formData.append("pp_contact_person", project.pp_contact_person);
-  //       formData.append("pp_client_contact_no", project.pp_client_contact_no);
-  //       formData.append("pp_proj_desc", project.pp_proj_desc);
-  //       formData.append("pp_contact_email", project.pp_contact_email);
-  //       formData.append("pp_proj_value", project.pp_proj_value ?? "");
-  //       formData.append("pp_savingkilowatz", project.pp_savingkilowatz ?? "");
-  //       formData.append(
-  //         "pp_proj_start_date",
-  //         this.validationService.toMysqlDate(project.pp_proj_start_date)
-  //       );
-  //       formData.append(
-  //         "pp_proj_end_date",
-  //         this.validationService.toMysqlDate(project.pp_proj_end_date)
-  //       );
-
-  //       // Attach the reference letter if present
-  //       if (project.pp_reference_letter) {
-  //         formData.append("pp_reference_letter", project.pp_reference_letter);
-  //       }
-
-  //       // Call your API to save each project
-  //       this.createService.StepSaveCompanyPreviousProjects(formData).subscribe({
-  //         next: (res) => {
-  //           if (res.status === "success") {
-  //             numSubmitted++;
-  //             if (numSubmitted + numFailed === projects.length) {
-  //               // All projects processed
-  //               this.saveSuccessMessage =
-  //                 "Previous Projects successfully saved! Click Next to add more data.";
-  //               this.saveErrorMessage = null;
-  //               setTimeout(() => {
-  //                 this.saveSuccessMessage = null;
-  //               }, 3000);
-  //             }
-  //           } else {
-  //             numFailed++;
-  //             this.saveSuccessMessage = null;
-  //             this.saveErrorMessage = `Failed to add some Previous Projects. Try again.`;
-  //             setTimeout(() => {
-  //               this.saveSuccessMessage = null;
-  //             }, 3000);
-  //           }
-  //         },
-  //         error: (err) => {
-  //           numFailed++;
-  //           this.saveSuccessMessage = null;
-  //           this.saveErrorMessage =
-  //             "An error occurred while adding Previous Projects.";
-  //           setTimeout(() => {
-  //             this.saveErrorMessage = null;
-  //           }, 3000);
-  //         },
-  //       });
-  //     });
-  //   } else {
-  //     this.parentForm.markAllAsTouched();
-  //   }
-  // }
 }
