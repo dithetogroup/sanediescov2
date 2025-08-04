@@ -41,5 +41,10 @@ export const environment = {
     StepDeleteEmployeeFile: baseUrl + '/step-delete-key-employee-file.php',
 
 
+    //TechnologyClassification
+    StepGetTechnologyClassifications: baseUrl + '/step-get-tech-classifications.php',
+    StepSaveTechnologyClassifications: baseUrl + '/step-save-tech-classifications.php',
+    StepDeleteTechnologyClassification: baseUrl + '/step-delete-tech-classifications.php',
+
   }
 };

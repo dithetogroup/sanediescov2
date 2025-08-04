@@ -7,6 +7,8 @@ DROP TABLE IF EXISTS login_user;
 DROP TABLE IF EXISTS registered_user;
 DROP TABLE IF EXISTS sector_experience;
 DROP TABLE IF EXISTS key_employee;
+DROP TABLE IF EXISTS technology_classification;
+
 
 CREATE TABLE company_information (
     ci_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -157,6 +159,17 @@ CREATE TABLE sector_experience (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 
+CREATE TABLE technology_classification (
+  tc_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  esco_id VARCHAR(15) NOT NULL,
+  tc_tech_entpr_exp VARCHAR(100) NOT NULL,
+  tc_no_projs_completed INT NOT NULL,
+  tc_is_deleted TINYINT(1) DEFAULT 0,
+  created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+  updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+CREATE INDEX idx_esco_id ON technology_classification(esco_id);
 
 DELIMITER $$
 CREATE TRIGGER generate_ru_esco_id BEFORE INSERT ON registered_user FOR EACH ROW

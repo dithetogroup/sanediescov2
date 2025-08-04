@@ -73,4 +73,13 @@ export class ReadService {
     );
   }
 
+
+
+  //TechnologyClassification
+  StepGetTechnologyClassifications(esco_id: string) {
+    return this.httpClient.get<any>(
+    `${this.urlEndPoints.StepGetTechnologyClassifications}?esco_id=${esco_id}`
+    );
+  }
+
 }

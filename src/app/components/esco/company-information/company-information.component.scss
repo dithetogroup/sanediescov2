@@ -1,0 +1,43 @@
+.snackbar-success {
+    background-color: #43a047 !important; // a nice green
+    color: #fff !important;
+  }
+  
+  .snackbar-error {
+    background-color: #e53935 !important; // a strong red
+    color: #fff !important;
+  }
+  
+  /* Optional: for warnings/info etc */
+  .snackbar-warning {
+    background-color: #ffa000 !important;
+    color: #fff !important;
+  }
+
+
+  // For Angular Material v15+ (MDC)
+// Success
+.snackbar-success,
+.mat-mdc-snack-bar-container.snackbar-success {
+  background-color: #43a047 !important;
+  color: #fff !important;
+}
+
+// Error
+.snackbar-error,
+.mat-mdc-snack-bar-container.snackbar-error {
+  background-color: #e53935 !important;
+  color: #fff !important;
+}
+
+
+::ng-deep .mat-mdc-snack-bar-container.snackbar-success {
+    background: #43a047 !important;
+    color: #fff !important;
+  }
+  ::ng-deep .mat-mdc-snack-bar-container.snackbar-error {
+    background: #e53935 !important;
+    color: #fff !important;
+  }
+  
+  

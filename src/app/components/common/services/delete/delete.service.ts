@@ -24,6 +24,7 @@ export class DeleteService {
     return this.httpClient.post<any>(this.urlEndPoints.StepDeleteClientReferences, formData);
   }
 
+
   // delete.service.ts
   StepDeleteKeyEmployee(ke_id: number, esco_id: string) {
     const formData = new FormData();
@@ -37,7 +38,25 @@ export class DeleteService {
     return this.httpClient.post<any>(this.urlEndPoints.StepDeleteEmployeeFile, { fu_id: fileId });
   }
 
+  
+  StepDeleteTechnologyClassification(fileId: number) {
+    // Assumes soft delete endpoint
+    return this.httpClient.post<any>(this.urlEndPoints.StepDeleteTechnologyClassification, { fu_id: fileId });
+  }
 
+
+  // delete.service.ts
+  StepDeleteKeyEmployee(ke_id: number, esco_id: string) {
+    const formData = new FormData();
+    formData.append('ke_id', ke_id.toString());
+    formData.append('esco_id', esco_id);
+    return this.httpClient.post<any>(this.urlEndPoints.StepDeleteKeyEmployee, formData);
+  }
+
+  StepDeleteEmployeeFile(fileId: number) {
+    // Assumes soft delete endpoint
+    return this.httpClient.post<any>(this.urlEndPoints.StepDeleteEmployeeFile, { fu_id: fileId });
+  }
 
   
 }

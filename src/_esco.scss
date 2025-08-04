@@ -86,14 +86,15 @@
     color: #fff;
   }
 
-  /* styles.scss or styles.css */
-.snackbar-success {
-    background: #43a047 !important;
-    color: #fff !important;
+.mat-step-header {
+  background-color: #43a047 !important;
+  border-radius: 5px !important;
+  margin-bottom: 20px;
+ 
+
+  .mat-step-text-label {
+    color: white !important;
+    font-size: 17px;
   }
-  
-  .snackbar-error {
-    background: #d32f2f !important;
-    color: #fff !important;
-  }
+}
   

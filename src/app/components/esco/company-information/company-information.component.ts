@@ -33,6 +33,8 @@ export class CompanyInformationComponent {
 
     @Input() parentForm!: FormGroup;
     @Output() fileUploaded = new EventEmitter<File>();
+    public isDirty = false;
+    public lastSavedAt: Date | null = null;
 
     latestFile: any = null;
 
@@ -65,6 +67,15 @@ export class CompanyInformationComponent {
       this.parentForm.addControl('ci_com_exp_of_tech_pro', this.fb.control('', Validators.required));
       this.parentForm.addControl('ci_business_activities_provinces', this.fb.control([], Validators.required));
       this.parentForm.addControl('ci_cicp_file', this.fb.control(null));
+
+      this.parentForm.valueChanges.subscribe(() => {
+        this.isDirty = this.parentForm.dirty;
+      });
+    }
+
+    public markAsSaved() {
+      this.isDirty = false;
+      this.lastSavedAt = new Date();
     }
   
     onFileSelected(event: any) {
@@ -107,57 +118,68 @@ export class CompanyInformationComponent {
       // Assuming fu_path is relative (e.g., "uploads/yourfile.pdf") and your API/baseUrl points to the server root
       return `${environment.baseUrl}/${this.latestFile.fu_path}`;
     }
-    
-  
-    submitCompanyInformation() {
-      if (this.parentForm.valid) {
-        const formValue = this.parentForm.value;
-        const formData = new FormData();
-    
-        // Append text fields
-        formData.append('esco_id', this.esco_id);
-        formData.append('ci_energy_man_exp', formValue.ci_energy_man_exp);
-        formData.append('ci_com_exp_of_tech_pro', formValue.ci_com_exp_of_tech_pro);
-        // For array fields, stringify or send individually as needed by your API
-        formData.append('ci_business_activities_provinces', JSON.stringify(formValue.ci_business_activities_provinces));
-    
-        // Append file (if present)
-        if (formValue.ci_cicp_file) {
-          formData.append('ci_cicp_file', formValue.ci_cicp_file);
-        }
-    
-        this.createService.StepSaveCompanyInformation(formData).subscribe({
-          next: (res) => {
-            if (res.status === 'success') {
-              this.snackBar.open('Company Information successfully saved! Click Next to add more data.', 'Close', {
-                duration: 3500, // ms, adjust as you wish
-                verticalPosition: 'top', // or 'bottom'
-                panelClass: ['snackbar-success'] // add custom styling if you want
-              });
 
-              
-              // }, 3000);
-            } else {
-
-              this.snackBar.open('Failed to add Company Information. Try again.', 'Close', {
-                duration: 4000,
-                panelClass: ['snackbar-error']
-              });
-            }
-          },
-          error: (err) => {
-
-            this.snackBar.open('An error occurred while adding the Company Information.', 'Close', {
-              duration: 4000,
-              panelClass: ['snackbar-error']
-            });
+    submitCompanyInformation(): Promise<boolean> {
+      return new Promise((resolve) => {
+        if (this.parentForm.valid) {
+          const formValue = this.parentForm.value;
+          const formData = new FormData();
+    
+          // Append fields as before...
+          formData.append('esco_id', this.esco_id);
+          formData.append('ci_energy_man_exp', formValue.ci_energy_man_exp);
+          formData.append('ci_com_exp_of_tech_pro', formValue.ci_com_exp_of_tech_pro);
+          formData.append('ci_business_activities_provinces', JSON.stringify(formValue.ci_business_activities_provinces));
+          if (formValue.ci_cicp_file) {
+            formData.append('ci_cicp_file', formValue.ci_cicp_file);
           }
-        });
     
-      } else {
-        this.parentForm.markAllAsTouched();
-      }
+          this.createService.StepSaveCompanyInformation(formData).subscribe({
+            next: (res) => {
+              if (res.status === 'success') {
+                this.snackBar.open(
+                  'Company Information successfully saved.',
+                  'Close',
+                  {
+                     duration: 3500,
+                    verticalPosition: 'top',
+                    panelClass: ['snackbar-success'],
+                  }
+                );
+                this.markAsSaved(); // <-- Reset dirty and set lastSavedAt
+                resolve(true);
+              } else {
+                this.snackBar.open(
+                  'Failed to add Company Information. Try again.',
+                  'Close',
+                  {
+                    duration: 4000,
+                    panelClass: ['snackbar-error'],
+                  }
+                );
+                resolve(false);
+              }
+            },
+            error: () => {
+              this.snackBar.open(
+                'An error occurred while adding the Company Information.',
+                'Close',
+                {
+                  duration: 4000,
+                  panelClass: ['snackbar-error'],
+                }
+              );
+              resolve(false);
+            },
+          });
+        } else {
+          this.parentForm.markAllAsTouched();
+          resolve(false);
+        }
+      });
     }
+    
+    
     
 
 }
