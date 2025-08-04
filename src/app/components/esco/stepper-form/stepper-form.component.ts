@@ -52,8 +52,17 @@ import { SectorExpDialogComponent } from '../../ui-kit/dialog/sector-exp-dialog/
 })
 export class StepperFormComponent implements OnInit {
   @ViewChild('stepper') stepper!: MatStepper;
+  @ViewChild('companyInfoRef') companyInfoComponent!: CompanyInformationComponent;
+  @ViewChild('previousProjectsRef') previousProjectsComponent!: PreviousProjectsComponent;
+  @ViewChild('clientReferencesRef') clientReferencesComponent!: ClientReferencesComponent;
+  @ViewChild('companyEquityRef') companyEquityComponent!: CompanyEquityComponent;
+  @ViewChild('technologyClassificationRef') technologyClassificationComponent!: TechnologyClassificationComponent;
+
+
+
   progress: number = 0;
   totalSteps: number = 3;
+
 
   step1Form: FormGroup;
   step2Form: FormGroup;
@@ -183,6 +192,83 @@ export class StepperFormComponent implements OnInit {
   get stepCount(): number {
     return this.stepper?.steps?.length ?? 0;
   }
+
+  //save company information
+  handleNextForCompanyProfile() {
+    if (this.companyInfoComponent.isDirty) {
+      this.companyInfoComponent.submitCompanyInformation().then(success => {
+        if (success) {
+          this.companyInfoComponent.markAsSaved();
+          this.stepper.next();
+        }
+      });
+    } else {
+      this.stepper.next();
+    }
+  }
+
+
+  //Save previous projects
+  handleNextForPreviousProjects() {
+    if (this.previousProjectsComponent.isDirty) {
+      this.previousProjectsComponent.submitPreviousProjects().then(success => {
+        if (success) {
+          this.previousProjectsComponent.markAsSaved();
+          this.stepper.next();
+        }
+      });
+    } else {
+      this.stepper.next();
+    }
+  }  
+
+  //Client References
+  handleNextForClientReferences() {
+    if (this.clientReferencesComponent && this.clientReferencesComponent.submitClientReferences) {
+      this.clientReferencesComponent.submitClientReferences().then((success: boolean) => {
+        if (success) {
+          this.clientReferencesComponent.markAsSaved();
+          this.stepper.next();
+        }
+        // If failed, the snackbar in the child will show the error
+      });
+    }
+  }
+
+  //company equity
+  handleNextForCompanyEquity() {
+    if (this.companyEquityComponent.isDirty) {
+      this.companyEquityComponent.submit().then(success => {
+        if (success) {
+          this.companyEquityComponent.markAsSaved();
+          this.stepper.next();
+        }
+      });
+    } else {
+      this.stepper.next();
+    }
+  }
+
+  //technologyClassification
+  handleNextForTechnologyClassification() {
+    if (this.technologyClassificationComponent.isDirty) {
+      this.technologyClassificationComponent.submitTechnologyClassifications().then(success => {
+        if (success) {
+          this.technologyClassificationComponent.markAsSaved();
+          this.stepper.next();
+        }
+      });
+    } else {
+      this.stepper.next();
+    }
+  }
+  
+  
+
+
+
+
+
 
   /* Dialog triggers */
   openDialogPreviousProjects() {

@@ -63,6 +63,8 @@ export class PreviousProjectsComponent implements OnInit {
   public maxEndDate: Date = new Date();
   esco_id = "ESCo-A001";
   //esco_id: string;
+  public isDirty = false;
+  public lastSavedAt: Date | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -81,10 +83,18 @@ export class PreviousProjectsComponent implements OnInit {
     if (!this.noProjects && this.projectsArray.length === 0) {
       this.addProject();
     }
+    this.parentForm.valueChanges.subscribe(() => {
+      this.isDirty = this.parentForm.dirty;
+    });
     this.patchPreviousProjects();
 
     console.log("Should show success toast now!");
     this.toastr.success("Projects deleted successfully.");
+  }
+
+  public markAsSaved() {
+    this.isDirty = false;
+    this.lastSavedAt = new Date();
   }
 
   patchPreviousProjects() {
@@ -225,14 +235,55 @@ export class PreviousProjectsComponent implements OnInit {
     }
   }
 
-  onSaveOrUpdateProject(i: number) {
+
+submitPreviousProjects(): Promise<boolean> {
+  return new Promise(async (resolve) => {
+    // If toggle is ON (noProjects), just resolve true
+    if (this.noProjects) {
+      resolve(true);
+      return;
+    }
+
+    // Validate all project forms
+    let allValid = true;
+    for (let i = 0; i < this.projectsArray.length; i++) {
+      const group = this.projectsArray.at(i) as FormGroup;
+      group.markAllAsTouched();
+      if (group.invalid) {
+        allValid = false;
+      }
+    }
+    if (!allValid) {
+      this.snackBar.open('Please complete all project fields before continuing.', 'Close', {
+        duration: 3000,
+        panelClass: ['snackbar-error']
+      });
+      resolve(false);
+      return;
+    }
+
+    // Now, submit each project (either create or update as needed)
+    // Wait for all to complete, fail fast if any fail
+    let saveSuccess = true;
+    for (let i = 0; i < this.projectsArray.length; i++) {
+      const result = await this.saveOrUpdateProjectAsync(i);
+      if (!result) {
+        saveSuccess = false;
+        break;
+      }
+    }
+    resolve(saveSuccess);
+  });
+}
+
+// Helper to handle saving a single project, returning a Promise<boolean>
+private saveOrUpdateProjectAsync(i: number): Promise<boolean> {
+  return new Promise((resolve) => {
     const projectGroup = this.projectsArray.at(i) as FormGroup;
     const project = projectGroup.value;
-  
     const formData = new FormData();
     formData.append('esco_id', this.esco_id);
-  
-    // Append all fields
+
     formData.append('pp_client_name', project.pp_client_name);
     formData.append('pp_contact_person', project.pp_contact_person);
     formData.append('pp_client_contact_no', project.pp_client_contact_no);
@@ -242,53 +293,53 @@ export class PreviousProjectsComponent implements OnInit {
     formData.append('pp_savingkilowatz', project.pp_savingkilowatz ?? '');
     formData.append('pp_proj_start_date', this.validationService.toMysqlDate(project.pp_proj_start_date));
     formData.append('pp_proj_end_date', this.validationService.toMysqlDate(project.pp_proj_end_date));
-  
     if (project.pp_reference_letter) {
       formData.append('pp_reference_letter', project.pp_reference_letter);
     }
-  
     if (project.pp_id) {
-      // It's an update
-      formData.append('pp_id', project.pp_id); // Backend needs to know
-      formData.append('esco_id', project.esco_id); // Backend needs to know
+      formData.append('pp_id', project.pp_id);
+      formData.append('esco_id', project.esco_id);
 
-      debugger;
       this.updateService.StepUpdatePreviousProjects(formData).subscribe({
         next: (res) => {
-          this.snackBar.open('Project updated successfully!', 'Close', {
-            duration: 3500, // ms, adjust as you wish
-            verticalPosition: 'top', // or 'bottom'
-            panelClass: ['snackbar-success'] // add custom styling if you want
-          });
-
+          if (res.status === "success") {
+            resolve(true);
+          } else {
+            this.snackBar.open('Failed to update Previous Project. Please try again.', 'Close', {
+              duration: 3500, panelClass: ['snackbar-error']
+            });
+            resolve(false);
+          }
         },
         error: (err) => {
-
-          this.snackBar.open('Failed to save Previous Projects!', 'Close', {
-            duration: 4000,
-            panelClass: ['snackbar-error']
+          this.snackBar.open('Failed to update Previous Project. Please try again.', 'Close', {
+            duration: 3500, panelClass: ['snackbar-error']
           });
+          resolve(false);
         }
       });
     } else {
-      // It's a new add
       this.createService.StepSaveCompanyPreviousProjects(formData).subscribe({
         next: (res) => {
-          this.snackBar.open('Project saved successfully!', 'Close', {
-            duration: 3500, // ms, adjust as you wish
-            verticalPosition: 'top', // or 'bottom'
-            panelClass: ['snackbar-success'] // add custom styling if you want
-          });
+          if (res.status === "success") {
+            resolve(true);
+          } else {
+            this.snackBar.open('Failed to save Previous Project. Please try again.', 'Close', {
+              duration: 3500, panelClass: ['snackbar-error']
+            });
+            resolve(false);
+          }
         },
         error: (err) => {
-
-          this.snackBar.open('Error saving Previous Projects!', 'Close', {
-            duration: 4000,
-            panelClass: ['snackbar-error']
+          this.snackBar.open('Failed to save Previous Project. Please try again.', 'Close', {
+            duration: 3500, panelClass: ['snackbar-error']
           });
+          resolve(false);
         }
       });
     }
-  }
+  });
+}
+
   
 }

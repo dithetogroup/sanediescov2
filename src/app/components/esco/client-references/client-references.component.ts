@@ -65,6 +65,9 @@ export class ClientReferencesComponent implements OnInit {
   public maxDate: Date = new Date();
   public maxEndDate: Date = new Date();
 
+  public isDirty = false;
+  public lastSavedAt: Date | null = null;
+
   esco_id = "ESCo-A001";
   technologyClassifications = [
     "Solar PV", "Wind", "Biomass", "Hydro", "Storage", "Other"
@@ -86,7 +89,16 @@ export class ClientReferencesComponent implements OnInit {
     if (!this.noClientReferences && this.clientReferencesArray.length === 0) {
       this.addClientReference();
     }
+      // Track dirtiness
+      this.parentForm.valueChanges.subscribe(() => {
+        this.isDirty = this.parentForm.dirty;
+      });
     this.patchClientReferences();
+  }
+
+  public markAsSaved() {
+    this.isDirty = false;
+    this.lastSavedAt = new Date();
   }
 
   patchClientReferences() {
@@ -228,58 +240,108 @@ export class ClientReferencesComponent implements OnInit {
     }
   }
 
-  onSaveOrUpdateClientReference(i: number) {
-    const refGroup = this.clientReferencesArray.at(i) as FormGroup;
-    const ref = refGroup.value;
-
-    const formData = new FormData();
-    formData.append('esco_id', this.esco_id);
-    formData.append('cr_client_name', ref.cr_client_name);
-    formData.append('cr_contact_person', ref.cr_contact_person);
-    formData.append('cr_client_contact_no', ref.cr_client_contact_no);
-    formData.append('cr_proj_desc', ref.cr_proj_desc);
-    formData.append('cr_technologies', JSON.stringify(ref.cr_technologies));
-    formData.append('cr_proj_value', ref.cr_proj_value ?? '');
-    formData.append('cr_start_date', this.validationService.toMysqlDate(ref.cr_start_date));
-    formData.append('cr_end_date', this.validationService.toMysqlDate(ref.cr_end_date));
-
-    if (ref.cr_reference_letter) {
-      formData.append('cr_reference_letter', ref.cr_reference_letter);
-    }
-
-    if (ref.cr_id) {
-      formData.append('cr_id', ref.cr_id);
-      this.updateService.StepUpdateClientReferences(formData).subscribe({
-        next: (res) => {
-          this.snackBar.open('Client Reference updated successfully!', 'Close', {
-            duration: 3500, // ms, adjust as you wish
-            verticalPosition: 'top', // or 'bottom'
-            panelClass: ['snackbar-success'] // add custom styling if you want
-          });
-        },
-        error: (err) => {
-          this.snackBar.open('Failed to update Client Reference!', 'Close', {
-            duration: 4000,
-            panelClass: ['snackbar-error']
-          });
+  submitClientReferences(): Promise<boolean> {
+    return new Promise(async (resolve) => {
+      // If user says they have no client references, resolve true
+      if (this.noClientReferences) {
+        resolve(true);
+        return;
+      }
+  
+      // Validate all forms
+      let allValid = true;
+      for (let i = 0; i < this.clientReferencesArray.length; i++) {
+        const group = this.clientReferencesArray.at(i) as FormGroup;
+        group.markAllAsTouched();
+        if (group.invalid) {
+          allValid = false;
         }
-      });
-    } else {
-      this.createService.StepSaveClientReferences(formData).subscribe({
-        next: (res) => {
-          this.snackBar.open('Client Reference saved successfully!', 'Close', {
-            duration: 3500, // ms, adjust as you wish
-            verticalPosition: 'top', // or 'bottom'
-            panelClass: ['snackbar-success'] // add custom styling if you want
-          });
-        },
-        error: (err) => {
-          this.snackBar.open('Error saving client reference!', 'Close', {
-            duration: 4000,
-            panelClass: ['snackbar-error']
-          });
+      }
+      if (!allValid) {
+        this.snackBar.open('Please complete all client reference fields before continuing.', 'Close', {
+          duration: 3000,
+          panelClass: ['snackbar-error']
+        });
+        resolve(false);
+        return;
+      }
+  
+      // Save each client reference
+      let saveSuccess = true;
+      for (let i = 0; i < this.clientReferencesArray.length; i++) {
+        const result = await this.saveOrUpdateClientReferenceAsync(i);
+        if (!result) {
+          saveSuccess = false;
+          break;
         }
-      });
-    }
+      }
+      if (saveSuccess) this.markAsSaved();
+      resolve(saveSuccess);
+    });
   }
+  
+  // Helper function for async save/update
+  private saveOrUpdateClientReferenceAsync(i: number): Promise<boolean> {
+    return new Promise((resolve) => {
+      const refGroup = this.clientReferencesArray.at(i) as FormGroup;
+      const ref = refGroup.value;
+      const formData = new FormData();
+      formData.append('esco_id', this.esco_id);
+      formData.append('cr_client_name', ref.cr_client_name);
+      formData.append('cr_contact_person', ref.cr_contact_person);
+      formData.append('cr_client_contact_no', ref.cr_client_contact_no);
+      formData.append('cr_proj_desc', ref.cr_proj_desc);
+      formData.append('cr_technologies', JSON.stringify(ref.cr_technologies));
+      formData.append('cr_proj_value', ref.cr_proj_value ?? '');
+      formData.append('cr_start_date', this.validationService.toMysqlDate(ref.cr_start_date));
+      formData.append('cr_end_date', this.validationService.toMysqlDate(ref.cr_end_date));
+      if (ref.cr_reference_letter) {
+        formData.append('cr_reference_letter', ref.cr_reference_letter);
+      }
+  
+      if (ref.cr_id) {
+        formData.append('cr_id', ref.cr_id);
+        this.updateService.StepUpdateClientReferences(formData).subscribe({
+          next: (res) => {
+            if (res.status === "success") {
+              resolve(true);
+            } else {
+              this.snackBar.open('Failed to update Client Reference!', 'Close', {
+                duration: 3500, panelClass: ['snackbar-error']
+              });
+              resolve(false);
+            }
+          },
+          error: () => {
+            this.snackBar.open('Failed to update Client Reference!', 'Close', {
+              duration: 3500, panelClass: ['snackbar-error']
+            });
+            resolve(false);
+          }
+        });
+      } else {
+        this.createService.StepSaveClientReferences(formData).subscribe({
+          next: (res) => {
+            if (res.status === "success") {
+              resolve(true);
+            } else {
+              this.snackBar.open('Error saving client reference!', 'Close', {
+                duration: 4000, panelClass: ['snackbar-error']
+              });
+              resolve(false);
+            }
+          },
+          error: () => {
+            this.snackBar.open('Error saving client reference!', 'Close', {
+              duration: 4000, panelClass: ['snackbar-error']
+            });
+            resolve(false);
+          }
+        });
+      }
+    });
+  }
+  
+
+
 }

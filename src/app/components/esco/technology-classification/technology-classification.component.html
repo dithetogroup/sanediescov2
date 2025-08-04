@@ -53,19 +53,19 @@
       </div>
 
       <div class="actionbt mt-4">
-        <button mat-flat-button color="primary" (click)="addTechnologyClassification()"
-          [disabled]="!canAddMoreTechnology()"
-          class="my-3 actionbutton">
-          <mat-icon>note_add</mat-icon>
-          Add Technology
-        </button>
-        <!-- Save -->
-        <button  class="actionbutton" mat-flat-button color="accent" type="submit"
-          [disabled]="parentForm.invalid || !techClassifications.length"
-          (click)="submitTechnologyClassifications()">
-          Save and Continue
-          <mat-icon>save</mat-icon>
-        </button>
+        <div class="actionbt mt-4  mb-20 d-flex flex-wrap gap-2">
+          <button mat-flat-button color="primary" (click)="addTechnologyClassification()"
+            [disabled]="!canAddMoreTechnology()" class="my-3 actionbutton">
+            <mat-icon>note_add</mat-icon>
+            Add Technology
+          </button>
+          <!-- <span *ngIf="!isDirty && lastSavedAt" class="d-inline-flex align-items-center ms-3">
+            <mat-icon color="success">check_circle</mat-icon>
+            <small class="ms-1 text-success">Saved</small>
+          </span> -->
+        </div>
+        
+     
       </div>
 
     </div>

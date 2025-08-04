@@ -34,6 +34,17 @@ export const environment = {
     StepSaveCompanyEquiity: baseUrl + '/step-save-company-equity.php',
     StepGetCompanyEquiity: baseUrl + '/step-get-company-equity.php',
 
+    //keyEmployee
+    StepSaveKeyEmployee: baseUrl + '/step-save-key-employee.php',
+    StepGetKeyEmployee: baseUrl + '/step-get-key-employee.php',
+    StepDeleteKeyEmployee: baseUrl + '/step-delete-key-employee.php',
+    StepDeleteEmployeeFile: baseUrl + '/step-delete-key-employee-file.php',
+
+    //TechnologyClassification
+    StepGetTechnologyClassifications: baseUrl + '/step-get-tech-classifications.php',
+    StepSaveTechnologyClassifications: baseUrl + '/step-save-tech-classifications.php',
+    StepDeleteTechnologyClassification: baseUrl + '/step-delete-tech-classifications.php',
+
 
   }
 };

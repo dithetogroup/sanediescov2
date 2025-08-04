@@ -33,6 +33,8 @@ import { environment } from '../../../../environments/environment';
 export class CompanyEquityComponent implements OnInit {
 
   @Input() companyEquityFormGroup!: FormGroup;
+  public isDirty = false;
+  public lastSavedAt: Date | null = null;
 
   equityOptions: string[] = [
     '0%',
@@ -52,6 +54,15 @@ export class CompanyEquityComponent implements OnInit {
 
   ngOnInit(){
     this.loadAndPatchCompanyEquity();
+      // Track dirtiness of the form
+    this.companyEquityFormGroup.valueChanges.subscribe(() => {
+      this.isDirty = this.companyEquityFormGroup.dirty;
+    });
+  }
+
+  public markAsSaved() {
+    this.isDirty = false;
+    this.lastSavedAt = new Date();
   }
 
   constructor(private fb: FormBuilder,
@@ -93,32 +104,54 @@ export class CompanyEquityComponent implements OnInit {
     });
   }
 
-  submit(): void {
-    if (this.companyEquityFormGroup.valid) {
-      const data = this.companyEquityFormGroup.value;
-      const formData = new FormData();
-
-      formData.append('esco_id', this.esco_id);
-      // formData.append('esco_id', data.esco_id || '');
-      formData.append('ce_woman_owned', data.ce_woman_owned || '');
-      formData.append('ce_black_owned', data.ce_black_owned || '');
-      formData.append('ce_youth_owned', data.ce_youth_owned || '');
-      if (data.ce_id) formData.append('ce_id', data.ce_id);
-
-      if (this.selectedFile) {
-        formData.append('ce_bee_equity_cert', this.selectedFile);
-      }
-
-      this.createService.StepSaveCompanyEquiity(formData).subscribe(res => {
-        if (res.status === 'success') {
-          this.snackBar.open('Company Equity successfully saved!', 'Close', {
-            duration: 3500, // ms, adjust as you wish
-            verticalPosition: 'top', // or 'bottom'
-            panelClass: ['snackbar-success'] // add custom styling if you want
-          });
+  submit(): Promise<boolean> {
+    return new Promise((resolve) => {
+      if (this.companyEquityFormGroup.valid) {
+        const data = this.companyEquityFormGroup.value;
+        const formData = new FormData();
+  
+        formData.append('esco_id', this.esco_id);
+        formData.append('ce_woman_owned', data.ce_woman_owned || '');
+        formData.append('ce_black_owned', data.ce_black_owned || '');
+        formData.append('ce_youth_owned', data.ce_youth_owned || '');
+        if (data.ce_id) formData.append('ce_id', data.ce_id);
+  
+        if (this.selectedFile) {
+          formData.append('ce_bee_equity_cert', this.selectedFile);
         }
-      });
-    }
+  
+        this.createService.StepSaveCompanyEquiity(formData).subscribe({
+          next: (res) => {
+            if (res.status === 'success') {
+              this.snackBar.open('Company Equity successfully saved!', 'Close', {
+                duration: 3500,
+                verticalPosition: 'top',
+                panelClass: ['snackbar-success']
+              });
+              this.markAsSaved(); // Track state!
+              resolve(true);
+            } else {
+              this.snackBar.open('Failed to save Company Equity. Try again.', 'Close', {
+                duration: 4000,
+                panelClass: ['snackbar-error']
+              });
+              resolve(false);
+            }
+          },
+          error: () => {
+            this.snackBar.open('An error occurred while saving Company Equity.', 'Close', {
+              duration: 4000,
+              panelClass: ['snackbar-error']
+            });
+            resolve(false);
+          }
+        });
+      } else {
+        this.companyEquityFormGroup.markAllAsTouched();
+        resolve(false);
+      }
+    });
   }
+  
   
 }

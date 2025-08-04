@@ -33,4 +33,16 @@ export class CreateService {
     return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyEquiity, formData);
   }
 
+  public StepSaveKeyEmployee(formData: any) {
+    //return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyInformation, formData,  { withCredentials: true });
+    return this.httpClient.post<any>(this.urlEndPoints.StepSaveKeyEmployee, formData);
+  }
+
+  public StepSaveTechnologyClassifications(formData: any) {
+    //return this.httpClient.post<any>(this.urlEndPoints.StepSaveCompanyInformation, formData,  { withCredentials: true });
+    return this.httpClient.post<any>(this.urlEndPoints.StepSaveTechnologyClassifications, formData);
+  }
+
+  
+
 }

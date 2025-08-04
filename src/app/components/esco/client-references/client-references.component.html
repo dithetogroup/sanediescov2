@@ -1,13 +1,15 @@
-<mat-slide-toggle [(ngModel)]="noClientReferences" (change)="onNoClientReferencesChange()" class="mb-25" *ngIf="clientReferencesArray.length < 5">
-  {{ noClientReferences ? "I don't have client references" : "I do have client references" }}
-</mat-slide-toggle>
+<div>
+  <mat-slide-toggle [(ngModel)]="noClientReferences" (change)="onNoClientReferencesChange()" class="mb-25" *ngIf="clientReferencesArray.length < 5">
+    {{ noClientReferences ? "I don't have client references" : "I do have client references" }}
+  </mat-slide-toggle>
+</div>
 
 <div class="mt-2" *ngIf="clientReferencesArray.length < 5">
-  <small class="text-muted">
+  <p class="text-muted">
     {{ noClientReferences
     ? "You have indicated that you don’t have client references to declare. Please click Next to proceed."
     : "Please complete your client reference details below." }}
-  </small>
+  </p>
 </div>
 
 <span *ngIf="clientReferencesArray.length >= 5" class="badge text-bg-warning">
@@ -132,18 +134,17 @@
         </div>
       </div>
 
-
       <div class="button-row mb-4 mt-2 btn-wrapper">
         <button mat-raised-button color="warn" (click)="removeClientReference(i)" *ngIf="clientReferencesArray.length > 1" class="mainbtn">
           <mat-icon>delete_forever</mat-icon>Remove Project
         </button>
       
-        <button mat-flat-button color="accent" (click)="onSaveOrUpdateClientReference(i)"
+        <!-- <button mat-flat-button color="accent" (click)="onSaveOrUpdateClientReference(i)"
           [disabled]="clientRefGroup.invalid || (clientRefGroup.get('cr_id')?.value && !clientRefGroup.dirty)"
           [matTooltip]="clientRefGroup.get('cr_id')?.value && !clientRefGroup.dirty ? 'Change something to enable update' : ''">
           {{ clientRefGroup.get('cr_id')?.value ? 'Update' : 'Save' }}
           <mat-icon>save</mat-icon>
-        </button>
+        </button> -->
       </div>
       
       <mat-divider class="my-3" *ngIf="i < clientReferencesArray.length - 1"></mat-divider>

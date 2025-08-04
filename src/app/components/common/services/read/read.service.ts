@@ -67,4 +67,11 @@ export class ReadService {
     );
   }
 
+  //KeyEmployee
+  StepGetKeyemployee(esco_id: string) {
+    return this.httpClient.get<any>(
+    `${this.urlEndPoints.StepGetKeyemployee}?esco_id=${esco_id}`
+    );
+  }
+
 }
