@@ -1,8 +1,10 @@
+
 <div>
   <mat-slide-toggle [(ngModel)]="noProjects" (change)="onNoProjectsChange()" class="mb-25">
     {{ noProjects ? 'I don\'t have previous projects' : 'I do have previous projects' }}
   </mat-slide-toggle>
 </div>
+
 
 <div class="mt-2" *ngIf="projectsArray.length < 5">
   <p class="text-muted">

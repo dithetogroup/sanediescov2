@@ -17,14 +17,13 @@ export class DeleteService {
 
   constructor(private httpClient: HttpClient, private router: Router) { }
 
-
-
   StepDeleteClientReferences(cr_id: number, esco_id: string) {
     const formData = new FormData();
     formData.append('cr_id', cr_id.toString());
     formData.append('esco_id', esco_id);
     return this.httpClient.post<any>(this.urlEndPoints.StepDeleteClientReferences, formData);
   }
+
 
   // delete.service.ts
   StepDeleteKeyEmployee(ke_id: number, esco_id: string) {
@@ -46,6 +45,18 @@ export class DeleteService {
   }
 
 
+  // delete.service.ts
+  StepDeleteKeyEmployee(ke_id: number, esco_id: string) {
+    const formData = new FormData();
+    formData.append('ke_id', ke_id.toString());
+    formData.append('esco_id', esco_id);
+    return this.httpClient.post<any>(this.urlEndPoints.StepDeleteKeyEmployee, formData);
+  }
+
+  StepDeleteEmployeeFile(fileId: number) {
+    // Assumes soft delete endpoint
+    return this.httpClient.post<any>(this.urlEndPoints.StepDeleteEmployeeFile, { fu_id: fileId });
+  }
 
   
 }

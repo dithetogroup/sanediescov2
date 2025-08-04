@@ -1,112 +1,51 @@
-<form *ngIf="!noKeyEmployees" [formGroup]="parentForm" class="mt-25">
+<span *ngIf="keyemployeesArray.length >= 5" class="badge text-bg-warning">
+    Maximum of 5 client references reached.
+  </span>
+<form [formGroup]="parentForm" class="mt-25">
     <div formArrayName="keyemployees">
         <div *ngFor="let keyEmployeeGroup of keyemployeesArray.controls; let i = index" [formGroupName]="i"
             class="mb-10">
+            <span class="badge text-bg-tagus mb-25 mt-25">Key Employee #{{ i + 1 }}</span>
             <div class="row">
-
-
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="tagus-form-group">
-                      <label class="d-block mb-12 fw-semibold gray-color">
-                        Newly created job? (i.e A new employee joined recently) <span>*</span>
-                      </label>
-                      <mat-form-field appearance="fill">
-                        <i class="ri-list-check"></i>
-                        <mat-select formControlName="ke_is_new_job" placeholder="Is this a new job?">
-                          <mat-option value="Yes">Yes</mat-option>
-                          <mat-option value="No">No</mat-option>
-                        </mat-select>
-                      </mat-form-field>
-                      <small class="text-muted mb-25" *ngIf="keyEmployeeGroup.get('ke_is_new_job')?.value === 'Yes'">
-                        This will be counted as a new job created within the company. Please attach the employee’s CV and Qualifications below.
-                      </small>
-                      <br/>
-                    </div>
-                  </div>
-
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="tagus-form-group">
-                        <label class="d-block mb-12 fw-semibold gray-color">
-                            Full Names<span>*</span>
-                        </label>
                         <mat-form-field appearance="fill">
+                            <i class="ri-list-check"></i>
+                            <mat-label> Newly created job? (i.e A new employee joined recently)</mat-label>
+                            <mat-select formControlName="ke_is_new_job" placeholder="Is this a new job?">
+                                <mat-option value="Yes">Yes</mat-option>
+                                <mat-option value="No">No</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                        <br />
+                    </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <mat-label> Full Names</mat-label>
                             <i class="ri-user-3-line"></i>
                             <input matInput formControlName="ke_full_names" placeholder="Full Names" />
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-
-                    <div class="row mt-10">
-                        <div class="col-lg-4 col-4 col-md-4 col-sm-6">
-                            <div class="tagus-form-group">
-                                <label class="d-block mb-12 fw-semibold gray-color">ID Type<span>*</span></label>
-                                <mat-form-field appearance="fill">
-                                    <i class="flaticon-fingerprint-scan"></i>
-                                    <mat-select required formControlName="ke_id_type">
-                                        <mat-option value="South African">South African</mat-option>
-                                        <mat-option value="Other">Other</mat-option>
-                                    </mat-select>
-
-                                </mat-form-field>
-                            </div>
-                        </div>
-                        <div class="col-lg-8 col-8 col-md-8 col-sm-6">
-                            <div class="tagus-form-group">
-                                <label class="d-block mb-12 fw-semibold gray-color">ID Number</label>
-                                <mat-form-field appearance="fill">
-                                    <i class="flaticon-fingerprint-scan"></i>
-                                    <input matInput #input formControlName="ke_id_no" name="ke_id_no"
-                                        placeholder="ID Number" />
-                                </mat-form-field>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-12 mb-25">
                     <div class="tagus-form-group">
-                        <label class="d-block mb-12 fw-semibold gray-color">
-                            Number of years in the company
-                            <span>*</span>
-                        </label>
                         <mat-form-field appearance="fill">
-                            <i class="ri-list-check"></i>
-                            <mat-select formControlName="ke_no_yrs_firm" placeholder="Number of years in the company">
-                                <mat-option value="Yes">5 -10 years</mat-option>
-                                <mat-option value="No">10 -20 years</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                </div> -->
-
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="tagus-form-group">
-                        <label class="d-block mb-12 fw-semibold gray-color">
-                           Date Joined the company
-                            <span>*</span>
-                        </label>
-                        <mat-form-field appearance="fill">
-                            <!-- <i class="ri-list-check"></i> -->
-                            <!-- <mat-select formControlName="ke_no_yrs_firm" placeholder="Number of years in the company">
-                                <mat-option value="Yes">5 -10 years</mat-option>
-                                <mat-option value="No">10 -20 years</mat-option>
-                            </mat-select> -->
-                            <input matInput [matDatepicker]="startPicker" formControlName="ke_no_yrs_firm" [max]="maxtDate"
-                                placeholder="Select start date">
+                            <mat-label> Date Joined the company</mat-label>
+                            <input matInput [matDatepicker]="startPicker" formControlName="ke_no_yrs_firm"
+                                [max]="maxtDate" placeholder="Select start date">
                             <mat-datepicker-toggle matIconSuffix [for]="startPicker"></mat-datepicker-toggle>
                             <mat-datepicker #startPicker></mat-datepicker>
                         </mat-form-field>
                     </div>
                 </div>
-
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="tagus-form-group">
-                        <label class="d-block mb-12 fw-semibold gray-color">
-                            Highest Education<span>*</span>
-                        </label>
+
                         <mat-form-field appearance="fill">
                             <i class="ri-list-check"></i>
+                            <mat-label> Highest Education </mat-label>
                             <mat-select formControlName="ke_highest_education" placeholder="Highest Education">
                                 <mat-option value="Yes">Diploma</mat-option>
                                 <mat-option value="No">Degree</mat-option>
@@ -115,29 +54,68 @@
                     </div>
                 </div>
 
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-12">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <i class="ri-list-check"></i>
+                            <mat-label> Number of Years in energy service</mat-label>
+                            <mat-select formControlName="ke_no_of_yrs_energy"
+                                placeholder="Select number of years in energy service">
+                                <mat-option value="Yes">5 -10 years</mat-option>
+                                <mat-option value="No">10 -20 years</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-lg-2 col-2 col-md-2 col-sm-2">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <mat-label> ID Type</mat-label>
+                            <i class="flaticon-fingerprint-scan"></i>
+                            <mat-select required formControlName="ke_id_type">
+                                <mat-option value="South African">South African</mat-option>
+                                <mat-option value="Other">Other</mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-lg-4 col-4 col-md-4 col-sm-12">
+                    <div class="tagus-form-group">
+                        <mat-form-field appearance="fill">
+                            <mat-label> ID Number</mat-label>
+                            <i class="flaticon-fingerprint-scan"></i>
+                            <input matInput #input formControlName="ke_id_no" name="ke_id_no" placeholder="ID Number" />
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="tagus-form-group">
                         <div class="tagus-form-group">
                             <label class="d-block mb-12 fw-semibold gray-color">Employees CV
                                 <span *ngIf="keyEmployeeGroup.get('ke_is_new_job')?.value === 'Yes'">*</span>
                             </label>
                             <!-- Add a file input field -->
-                            <input type="file" id="ke_emp_cv" formControlName="ke_emp_cv"
-                                (change)="onFileSelected($event,i)" accept=".pdf, .doc, .docx, .odt">
+                            <input type="file" (change)="onFileSelected($event, i, 'cv')" />
+                            <!-- <input type="file" id="ke_emp_cv"
+                                (change)="onFileSelected($event,i)" accept=".pdf, .doc, .docx, .odt"> -->
                             <button mat-icon-button color="warn" (click)="removeKeyEmployee(i)">
                                 <mat-icon>delete</mat-icon>
                             </button>
                         </div>
                     </div>
                 </div>
-
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="tagus-form-group">
                         <div class="tagus-form-group">
-                            <label class="d-block mb-12 fw-semibold gray-color">Qualifications</label>
-                            <!-- Add a file input field -->
-                            <input type="file" id="ke_emp_cv" formControlName="ke_emp_cv"
-                                (change)="onFileSelected($event,i)" accept=".pdf, .doc, .docx, .odt">
+                            <label class="d-block mb-12 fw-semibold gray-color">
+                                Upload Qualifications<span>*</span>
+                            </label>
+                            <!-- <input type="file" id="ke_certification"
+                                (change)="onFileSelected($event,i)" accept=".pdf, .doc, .docx, .odt"> -->
+                                <input type="file" (change)="onFileSelected($event, i, 'certification')" multiple />
+
                             <button mat-icon-button color="warn" (click)="removeKeyEmployee(i)">
                                 <mat-icon>delete</mat-icon>
                             </button>
@@ -156,23 +134,8 @@
                         </mat-form-field>
                     </div>
                 </div>
-                <div class="col-lg-6 col-md-6 col-sm-6">
-                    <div class="tagus-form-group">
-                        <label class="d-block mb-12 fw-semibold gray-color">
-                            Number of years in energy service<span>*</span>
-                        </label>
-                        <mat-form-field appearance="fill">
-                            <i class="ri-list-check"></i>
-                            <mat-select formControlName="ke_no_of_yrs_energy"
-                                placeholder="Select number of years in energy service">
-                                <mat-option value="Yes">5 -10 years</mat-option>
-                                <mat-option value="No">10 -20 years</mat-option>
-                            </mat-select>
-                        </mat-form-field>
-                    </div>
-                </div>
                 <!-- EPC Professional Registered Yes/No -->
-                <div class="col-lg-6 col-md-6 col-sm-6">
+                <div class="col-lg-6 col-md-6 col-sm-12">
                     <div class="tagus-form-group">
                         <label class="d-block mb-12 fw-semibold gray-color">
                             EPC Professional registered <span>*</span>
@@ -194,7 +157,9 @@
                         <label class="d-block mb-12 fw-semibold gray-color">
                             SANEDI EPC Professional appointment letter <span>*</span>
                         </label>
-                        <input type="file" (change)="onEPCFileSelected($event, i)" />
+                        <!-- <input type="file" (change)="onEPCFileSelected($event, i)" /> -->
+                        <input type="file" (change)="onFileSelected($event, i, 'epc_letter')" />
+
                         <!-- Show filename if already selected -->
                         <div *ngIf="keyEmployeeGroup.get('ke_epc_professional_letter')?.value">
                             Selected: {{ keyEmployeeGroup.get('ke_epc_professional_letter')?.value.name }}
@@ -203,23 +168,30 @@
                 </div>
 
             </div>
-            <button mat-stroked-button color="warn" (click)="removeKeyEmployee(i)" *ngIf="keyemployeesArray.length > 1">
-                Remove Employee
-            </button>
+            <div class="button-row mb-4 mt-2 btn-wrapper">
+                <button mat-raised-button color="warn" (click)="removeKeyEmployee(i)"
+                    *ngIf="keyemployeesArray.length > 1" class="mainbtn">
+                    <mat-icon>delete_forever</mat-icon>Remove Project
+                </button>
+
+                <button mat-flat-button color="accent" (click)="onSaveOrUpdateKeyEmployee(i)"
+                    [disabled]="keyEmployeeGroup.invalid || (keyEmployeeGroup.get('ke_id')?.value && !keyEmployeeGroup.dirty)"
+                    [matTooltip]="keyEmployeeGroup.get('ke_id')?.value && !keyEmployeeGroup.dirty ? 'Change something to enable update' : ''">
+                    {{ keyEmployeeGroup.get('ke_id')?.value ? 'Update' : 'Save' }}
+                    <mat-icon>save</mat-icon>
+                </button>
+            </div>
+
             <mat-divider class="my-3" *ngIf="i < keyemployeesArray.length - 1"></mat-divider>
         </div>
         <div class="actionbt">
             <button mat-flat-button color="primary" (click)="addKeyEmployee()"
-            [disabled]="keyemployeesArray.length >= 5 || (keyemployeesArray.length > 0 && !keyemployeesArray.at(keyemployeesArray.length - 1).valid)"
-            class="my-3 actionbutton">
-            <mat-icon>note_add</mat-icon>
-            Add Employee
-          </button>          
-            <button class="actionbutton" mat-flat-button color="accent" (click)="submitForm()"
-                [disabled]="parentForm.invalid">
-                Save
-                <mat-icon>save</mat-icon>
+                [disabled]="keyemployeesArray.length >= 5 || (keyemployeesArray.length > 0 && !keyemployeesArray.at(keyemployeesArray.length - 1).valid)"
+                class="my-3 actionbutton">
+                <mat-icon>note_add</mat-icon>
+                Add New Key Employee
             </button>
+
         </div>
     </div>
 </form>

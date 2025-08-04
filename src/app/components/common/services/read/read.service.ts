@@ -59,7 +59,6 @@ export class ReadService {
     );
   }
 
-
   //company equeity
   StepGetCompanyEquiity(esco_id: string) {
     return this.httpClient.get<any>(
@@ -73,6 +72,7 @@ export class ReadService {
     `${this.urlEndPoints.StepGetKeyemployee}?esco_id=${esco_id}`
     );
   }
+
 
 
   //TechnologyClassification

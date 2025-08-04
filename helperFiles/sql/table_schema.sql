@@ -9,6 +9,7 @@ DROP TABLE IF EXISTS sector_experience;
 DROP TABLE IF EXISTS key_employee;
 DROP TABLE IF EXISTS technology_classification;
 
+
 CREATE TABLE company_information (
     ci_id INT AUTO_INCREMENT PRIMARY KEY,
     ci_esco_id VARCHAR(32) NOT NULL,
@@ -31,6 +32,24 @@ CREATE TABLE company_equity (
     ce_isDeleted TINYINT(1) DEFAULT 0,
     ce_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ce_last_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
+
+
+-- Key employees
+CREATE TABLE key_employee (
+    ke_id INT AUTO_INCREMENT PRIMARY KEY,
+    ke_esco_id VARCHAR(32) NOT NULL,
+    ke_full_names VARCHAR(100) NOT NULL,
+    ke_id_no VARCHAR(30),
+    ke_no_yrs_firm DATE,
+    ke_highest_education VARCHAR(50),
+    ke_add_traing_certs TEXT,
+    ke_no_of_yrs_energy VARCHAR(50),
+    ke_id_type VARCHAR(30),
+    ke_epc_professional_registered VARCHAR(3),
+    ke_is_new_job VARCHAR(5),
+    ke_isDeleted BOOLEAN DEFAULT FALSE,
+    ke_last_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
 
@@ -76,6 +95,7 @@ CREATE TABLE files_upload (
     fu_ci_id INT NULL,
     fu_cr_id INT NULL,
     fu_ce_id INT NULL, 
+    fu_ke_id INT NULL, 
     fu_type VARCHAR(255) NOT NULL,
     fu_path VARCHAR(255) NOT NULL,
     fu_category VARCHAR(255) NULL,
@@ -89,7 +109,9 @@ CREATE TABLE files_upload (
     CONSTRAINT fk_fu_pp_id FOREIGN KEY (fu_pp_id) REFERENCES previous_projects(pp_id) ON DELETE CASCADE,
     CONSTRAINT fk_fu_ci_id FOREIGN KEY (fu_ci_id) REFERENCES company_information(ci_id) ON DELETE CASCADE,
     CONSTRAINT fk_fu_cr_id FOREIGN KEY (fu_cr_id) REFERENCES client_reference(cr_id) ON DELETE CASCADE,
-    CONSTRAINT fk_fu_ce_id FOREIGN KEY (fu_ce_id) REFERENCES company_equity(ce_id) ON DELETE CASCADE
+    CONSTRAINT fk_fu_ce_id FOREIGN KEY (fu_ce_id) REFERENCES company_equity(ce_id) ON DELETE CASCADE,
+    CONSTRAINT fk_fu_ke_id FOREIGN KEY (fu_ke_id) REFERENCES key_employee(ke_id) ON DELETE CASCADE
+
 );
 
 
@@ -148,9 +170,6 @@ CREATE TABLE technology_classification (
 );
 
 CREATE INDEX idx_esco_id ON technology_classification(esco_id);
-
-
-
 
 DELIMITER $$
 CREATE TRIGGER generate_ru_esco_id BEFORE INSERT ON registered_user FOR EACH ROW
