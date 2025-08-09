@@ -12,6 +12,7 @@ import { AuthService } from "../../services/auth.service";
 import { NgClass, NgIf } from "@angular/common";
 import { ReadService } from "../../common/services/read/read.service";
 import { DataSharingService } from "../../common/services/data-sharing/data-sharing.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "app-login",
@@ -44,11 +45,12 @@ export class LoginComponent {
     private fb: FormBuilder,
     private router: Router,
     private readService: ReadService,
-    private dataSharing: DataSharingService
+    private dataSharing: DataSharingService,
+    private snackBar: MatSnackBar
   ) {
     this.loginForm = this.fb.group({
-      lu_email: ["john.smith@escosa.co.za", Validators.required],
-      lu_password: ["password123", Validators.required],
+      lu_email: ["jason@escosa.co.za", Validators.required],
+      lu_password: ["mypassword", Validators.required],
     });
   }
 
@@ -64,14 +66,32 @@ export class LoginComponent {
         this.isLoading = false;
         if (data.status === 'success') {
           this.messageType = 'success';
-          this.message = "Login successful.";
+         // this.message = "Login successful.";
+          this.snackBar.open(
+            'Login successful.',
+            'Close',
+            {
+               duration: 3500,
+              verticalPosition: 'top',
+              panelClass: ['snackbar-error'],
+            }
+          );
           this.dataSharing.setUserData(data.user);
           this.router.navigate(['/forms/esco-profile']);
         } else {
           // Account is suspended
           if (data.message === "Sorry, your account is suspended") {
-            this.message = data.message;
-            this.messageType = 'warning';
+            this.snackBar.open(
+              'Sorry, your account is suspended',
+              'Close',
+              {
+                 duration: 3500,
+                verticalPosition: 'top',
+                panelClass: ['snackbar-error'],
+              }
+            );
+            // this.message = data.message;
+            // this.messageType = 'warning';
             setTimeout(() => {
               this.message = null;
               this.messageType = null;

@@ -65,14 +65,6 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div id="messageBox" role="alert" *ngIf="message" class="mb-3 fw-semibold alert" [ngClass]="{
-                        'alert-success': messageType === 'success',
-                        'alert-danger': messageType === 'error',
-                        'alert-warning': messageType === 'warning'
-                        }">
-                        {{ message }}
-                        </div>
-
                     <div class="d-flex info align-items-center justify-content-space-between">
                         <a routerLink="/authentication/forgot-password"
                             class="d-inline-block main-color fw-medium text-end">Forgot your password?</a>

@@ -98,8 +98,8 @@ export class StepperFormComponent implements OnInit {
     });
 
     this.step5Form = this.fb.group({
-      techclassification: this.fb.array([]) 
-    });
+      techClassifications: this.fb.array([]) 
+    });    
 
     this.step7Form = this.fb.group({
       clientReferences: this.fb.array([]) 
@@ -128,7 +128,7 @@ export class StepperFormComponent implements OnInit {
       {form: this.step1Form, arrayName: 'projects'},
       {form: this.step4Form, arrayName: 'keyemployees'},
       {form: this.step7Form, arrayName: 'clientReferences'},
-      {form: this.step7Form, arrayName: 'techclassification'},
+      {form: this.step7Form, arrayName: 'techClassifications'},
       // Add more steps as you need (e.g., step2Form/arrayName)
     ];
 

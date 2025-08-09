@@ -11,6 +11,8 @@ import { CreateService } from '../../common/services/create/create.service';
 import { ReadService } from '../../common/services/read/read.service';
 import { environment } from '../../../../environments/environment';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { DataSharingService } from '../../common/services/data-sharing/data-sharing.service';
+import { UserDataLogin } from '../escoInterfaces';
 
 
 @Component({
@@ -38,9 +40,16 @@ export class CompanyInformationComponent {
 
     latestFile: any = null;
 
-    esco_id =  "ESCo-A001";
-
-    //esco_id: string;
+    esco_id: string = '';
+    userDetails: UserDataLogin | null = null;
+    lastName: string = '';
+    userRole: string = '';
+    initials: string = ''; 
+    firstName: string ='';
+    isESCoUser: boolean;
+    isAdminValidator: boolean;
+    isSuperAdmin: boolean;
+    loading: boolean = true;
 
     yearsInESCoBusiness: string[] = [
       '1 - 2', '3 - 5', '6 - 10', '10+'
@@ -55,10 +64,25 @@ export class CompanyInformationComponent {
     constructor(private fb: FormBuilder,
       private createService: CreateService,
       private readService: ReadService,
-      private snackBar: MatSnackBar
+      private snackBar: MatSnackBar,
+      private dataSharingService: DataSharingService
     ) {}
   
     ngOnInit(): void {
+      this.dataSharingService.userData$.subscribe(() => {
+        const snapshot = this.dataSharingService.getUserSnapshot();
+    
+        this.userDetails = snapshot.userDetails;
+        this.esco_id = snapshot.esco_id;
+        this.firstName = snapshot.firstName;
+        this.lastName = snapshot.lastName;
+        this.initials = snapshot.initials;
+        this.userRole = snapshot.userRole;
+    
+        this.isESCoUser = snapshot.roles.isESCoUser;
+        this.isAdminValidator = snapshot.roles.isAdminValidator;
+        this.isSuperAdmin = snapshot.roles.isSuperAdmin;
+      });
 
       this.loadLatestCompanyInfo();
       this.loadLatestFile();
@@ -86,8 +110,8 @@ export class CompanyInformationComponent {
       }
     }
 
-
     loadLatestCompanyInfo() {
+      debugger;
       this.readService.StepGetCompanyInformation(this.esco_id).subscribe(res => {
         if (res.status === 'success' && res.data) {
           // If provinces are stored as CSV, split them for the form

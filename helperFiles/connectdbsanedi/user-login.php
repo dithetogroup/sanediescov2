@@ -1,23 +1,23 @@
 <?php
-// Include necessary files
 include_once("headers.php");
 include_once("db_connect.php");
 include_once("config.php");
 
-require_once __DIR__ . '/vendor/autoload.php';  // Correct autoload inclusion
+require_once __DIR__ . '/vendor/autoload.php';
 
-use \Firebase\JWT\JWT; // Include JWT library
+use \Firebase\JWT\JWT;
 
 header("Content-Type: application/json");
 
-// ✅ Start session & ensure SameSite/secure settings
-session_set_cookie_params(['SameSite' => 'None', 'Secure' => true]);
+// ✅ Start session & ensure secure settings
+session_set_cookie_params([
+    'SameSite' => 'None',
+    'Secure'   => true
+]);
 session_start();
 
-// ✅ Debugging: Check received cookies
+// ✅ Debug: Check received cookies
 error_log("[INFO] Cookies Received: " . json_encode($_COOKIE));
-
-
 
 // ✅ Retrieve JSON data
 $postdata = file_get_contents("php://input");
@@ -43,8 +43,7 @@ if (!filter_var($lu_email, FILTER_VALIDATE_EMAIL)) {
     exit();
 }
 
-// ✅ Prepare the SQL query to find the user, personal information, and plan details
-
+// ✅ Query to get user data
 $sql = "
 SELECT 
     login_user.lu_user_id,
@@ -55,12 +54,14 @@ SELECT
     login_user.lu_title,
     login_user.lu_name,
     login_user.lu_surname,
-    login_user.lu_email, registered_user.ru_companyName, registered_user.ru_companyType
+    login_user.lu_email,
+    registered_user.ru_companyName,
+    registered_user.ru_companyType
 FROM login_user
-INNER JOIN registered_user ON login_user.lu_esco_id = registered_user.ru_esco_id
+INNER JOIN registered_user 
+    ON login_user.lu_esco_id = registered_user.ru_esco_id
 WHERE login_user.lu_email = ?
 ";
-
 
 $stmt = $mysqli->prepare($sql);
 $stmt->bind_param("s", $lu_email);
@@ -68,76 +69,88 @@ $stmt->execute();
 $stmt->store_result();
 
 if ($stmt->num_rows > 0) {
-    // ✅ User found, now fetch the data
     $stmt->bind_result(
-        $lu_user_id, 
-        $hashed_password, 
-        $lu_role, 
-        $lu_isActive, 
-        $lu_esco_id, 
-        $lu_title, 
-        $lu_name, 
-        $lu_surname, 
+        $lu_user_id,
+        $hashed_password,
+        $lu_role,
+        $lu_isActive,
+        $lu_esco_id,
+        $lu_title,
+        $lu_name,
+        $lu_surname,
         $lu_email,
         $ru_companyName,
         $ru_companyType
     );
     $stmt->fetch();
 
-    // ✅ Check if the password matches
     if (password_verify($lu_password, $hashed_password)) {
-        // ✅ Check if the user is active
         if ($lu_isActive == 1) {
-            // ✅ Generate JWT token
+            
+            // ✅ Generate JWT
             $issued_at = time();
-            $expiration_time = $issued_at + 3600;  // Token valid for 1 hour
-            $payload = array(
+            $expiration_time = $issued_at + 3600; // 1 hour
+            $payload = [
                 "lu_user_id" => $lu_user_id,
                 "lu_esco_id" => $lu_esco_id,
-                "lu_role" => $lu_role,
-                "lu_email" => $lu_email,
-                "iat" => $issued_at,
-                "exp" => $expiration_time
-            );
-
-            // ✅ Generate JWT
+                "lu_role"    => $lu_role,
+                "lu_email"   => $lu_email,
+                "iat"        => $issued_at,
+                "exp"        => $expiration_time
+            ];
             $jwt = JWT::encode($payload, JWT_SECRET_KEY, 'HS256');
 
-            // ✅ Set JWT as an HttpOnly Secure Cookie
-            setcookie("auth_token", $jwt, [
-                "expires" => $expiration_time,
-                "path" => "/",
-                //"domain" => "board.dithetogroup.co.za",  // ❌ Remove "https://"
-                "domain" => ($_SERVER['HTTP_HOST'] === 'localhost' || $_SERVER['HTTP_HOST'] === '127.0.0.1') ? "" : "tier.sanediesco.org.za",
-                "secure" => true,  // Secure cookie for HTTPS only
-                "httponly" => true,  // Prevents JavaScript access
-                "samesite" => "none"  // Prevents CSRF attacks
-            ]);
+            // ✅ Prepare cookie options
+            $cookieOpts = [
+                "expires"  => $expiration_time,
+                "path"     => "/",
+                "secure"   => true,
+                "httponly" => true,
+                "samesite" => "None"
+            ];
+            if (!in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1'])) {
+                $cookieOpts['domain'] = '.sanediesco.org.za'; // 🔹 For live site
+            }
 
-            // ✅ Update last login time
+            // ✅ Set cookie
+            setcookie("auth_token", $jwt, $cookieOpts);
+
+            // ✅ Update last login time (fixed $hu_id → $lu_user_id)
             $update_sql = "UPDATE login_user SET lu_lastLogin = NOW() WHERE lu_user_id = ?";
             $update_stmt = $mysqli->prepare($update_sql);
-            $update_stmt->bind_param("i", $hu_id);
+            $update_stmt->bind_param("i", $lu_user_id);
             $update_stmt->execute();
             $update_stmt->close();
 
-            // ✅ Log successful login
+            // ✅ Log success
             error_log("[SUCCESS] Login successful - lu_user_id: $lu_user_id, Email: $lu_email");
 
-            // ✅ Return user information
-            echo json_encode(["status" => "success", "message" => "Login successful", "user" => [
-                "id" => $lu_user_id,
-                "email" => $lu_email,
-                "role" => $lu_role,
-                "escoid" => $lu_esco_id,
-                "title" => $lu_title,
-                "firstName" => $lu_name,
-                "lastName" => $lu_surname,
-                "companyType" => $ru_companyType,
-                "companyName" => $ru_companyName
-            ]]);
+            // ✅ Build response
+            $response = [
+                "status"  => "success",
+                "message" => "Login successful",
+                "user"    => [
+                    "id"          => $lu_user_id,
+                    "email"       => $lu_email,
+                    "role"        => $lu_role,
+                    "escoid"      => $lu_esco_id,
+                    "title"       => $lu_title,
+                    "firstName"   => $lu_name,
+                    "lastName"    => $lu_surname,
+                    "companyType" => $ru_companyType,
+                    "companyName" => $ru_companyName
+                ]
+            ];
+
+            // 🔹 In dev, return the token for testing
+            if (in_array($_SERVER['HTTP_HOST'], ['localhost', '127.0.0.1'])) {
+                $response['debug_jwt'] = $jwt;
+            }
+
+            echo json_encode($response);
+
         } else {
-            error_log("[ERROR] Login attempt for inactive user - lu_user_id: $lu_user_id, Email: $lu_email");
+            error_log("[ERROR] Login attempt for inactive user - lu_user_id: $lu_user_id");
             http_response_code(403);
             echo json_encode(["status" => "error", "message" => "Sorry, your account is suspended"]);
         }
@@ -152,4 +165,3 @@ if ($stmt->num_rows > 0) {
 
 $stmt->close();
 $mysqli->close();
-?>

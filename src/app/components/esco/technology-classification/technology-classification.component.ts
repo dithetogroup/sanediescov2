@@ -89,27 +89,53 @@ export class TechnologyClassificationComponent implements OnInit {
   }
 
   // Load existing rows for edit mode
-  loadTechnologyClassifications() {
-    debugger;
+  // loadTechnologyClassifications() {
+  //   debugger;
 
+  //   this.readService.StepGetTechnologyClassifications(this.esco_id).subscribe(res => {
+  //     if (res.status === 'success' && res.data && Array.isArray(res.data)) {
+  //       const arr = this.parentForm.get('techClassifications') as FormArray;
+  //       arr.clear();
+  //       res.data.forEach((tc: any) => {
+  //         console.log('[API DATA]', res.data);
+
+  //         arr.push(this.fb.group({
+  //           tc_id: [tc.tc_id],
+  //           tc_tech_entpr_exp: [tc.tc_tech_entpr_exp, Validators.required],
+  //           tc_no_projs_completed: [tc.tc_no_projs_completed, Validators.required]
+  //         }));
+  //       });
+  //       this.isDirty = false;
+  //       this.lastSavedAt = new Date();
+  //     }
+  //   });
+  // }
+
+  loadTechnologyClassifications() {
     this.readService.StepGetTechnologyClassifications(this.esco_id).subscribe(res => {
-      if (res.status === 'success' && res.data && Array.isArray(res.data)) {
+      if (res.status === 'success' && Array.isArray(res.data)) {
         const arr = this.parentForm.get('techClassifications') as FormArray;
         arr.clear();
-        res.data.forEach((tc: any) => {
-          console.log('[API DATA]', res.data);
-
-          arr.push(this.fb.group({
-            tc_id: [tc.tc_id],
-            tc_tech_entpr_exp: [tc.tc_tech_entpr_exp, Validators.required],
-            tc_no_projs_completed: [tc.tc_no_projs_completed, Validators.required]
-          }));
-        });
+  
+        if (res.data.length > 0) {
+          res.data.forEach((tc: any) => {
+            arr.push(this.fb.group({
+              tc_id: [tc.tc_id],
+              tc_tech_entpr_exp: [tc.tc_tech_entpr_exp, Validators.required],
+              tc_no_projs_completed: [tc.tc_no_projs_completed, Validators.required]
+            }));
+          });
+        } else {
+          // No existing rows → start with one blank row so template won’t break
+          this.addTechnologyClassification();
+        }
+  
         this.isDirty = false;
         this.lastSavedAt = new Date();
       }
     });
   }
+  
   
 
   markAsSaved() {
@@ -157,10 +183,21 @@ export class TechnologyClassificationComponent implements OnInit {
     }
   }
 
+  // canAddMoreTechnology(): boolean {
+  //   return this.techClassifications.length < this.technologyClassifications.length
+  //     && this.techClassifications.at(this.techClassifications.length - 1).valid;
+  // }
+
   canAddMoreTechnology(): boolean {
-    return this.techClassifications.length < this.technologyClassifications.length
-      && this.techClassifications.at(this.techClassifications.length - 1).valid;
+    const arr = this.techClassifications as FormArray | undefined;
+    // If the array doesn't exist yet or is empty, allow adding the first row
+    if (!arr || arr.length === 0) {
+      return true;
+    }
+    const last = arr.at(arr.length - 1) as FormGroup | null;
+    return arr.length < this.technologyClassifications.length && !!last && last.valid;
   }
+  
 
   onTechSelected(index: number) {
     this.techClassifications.at(index).get('tc_no_projs_completed')?.reset('');

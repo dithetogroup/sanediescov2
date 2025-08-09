@@ -22,6 +22,7 @@
 
   <mat-vertical-stepper #stepper linear>
 
+    <!-- Company Information -->
 
     <mat-step [stepControl]="step3Form">
       <form [formGroup]="step3Form">
@@ -42,6 +43,49 @@
       </form>
     </mat-step>
 
+    <!-- EOF Company Information -->
+
+    <!-- Company Equity -->
+    <mat-step [stepControl]="step8Form">
+      <form [formGroup]="step8Form">
+        <ng-template matStepLabel>
+          Company Equity
+          <button mat-icon-button color="primary" (click)="openDialogCompanyEq()">
+            <mat-icon class="maticon-question">help_outline</mat-icon>
+          </button>
+        </ng-template>
+        <app-company-equity #companyEquityRef [companyEquityFormGroup]="step8Form"></app-company-equity>
+        <button mat-flat-button color="primary" [disabled]="step8Form.invalid" (click)="handleNextForCompanyEquity()">
+          {{ companyEquityRef.isDirty ? 'Save and Next' : 'Next' }}
+          <mat-icon>{{ companyEquityRef.isDirty ? 'save' : 'arrow_forward' }}</mat-icon>
+        </button>
+        <span *ngIf="!companyEquityRef.isDirty && companyEquityRef.lastSavedAt">
+          <mat-icon color="success">check_circle</mat-icon> Saved
+        </span>
+      </form>
+    </mat-step>
+
+    <!-- EOF Company Equity -->
+
+        <!-- Sector Experience -->
+        <mat-step [stepControl]="step6Form">
+          <form [formGroup]="step6Form">
+            <ng-template matStepLabel>
+              Sector Experience
+              <button mat-icon-button color="primary" (click)="openDialogSectorExp()">
+                <mat-icon class="maticon-question">help_outline</mat-icon>
+              </button>
+            </ng-template>
+            <app-sector-experience #step6Ref [parentForm]="step6Form"></app-sector-experience>
+            <button mat-flat-button color="primary" matStepperNext
+              [disabled]="!step6Ref.noSectorExperience && step6Form.invalid">
+              Next
+            </button>
+          </form>
+        </mat-step>
+        <!-- EOF Sector Experience  -->
+
+
     <!-- Previous Projects-->
 
     <mat-step [stepControl]="step1Form">
@@ -57,13 +101,10 @@
           [disabled]="!previousProjectsRef.noProjects && step1Form.invalid" (click)="handleNextForPreviousProjects()">
           <mat-icon>{{ previousProjectsRef.isDirty ? 'save' : 'arrow_forward' }}</mat-icon>
           {{ previousProjectsRef.isDirty ? 'Save and Next' : 'Next' }}
-
         </button>
         <span *ngIf="!previousProjectsRef.isDirty && previousProjectsRef.lastSavedAt">
           <mat-icon color="success">check_circle</mat-icon> Saved
         </span>
-
-
       </form>
     </mat-step>
     <!-- EOF Previous Projects -->
@@ -91,29 +132,7 @@
     </mat-step>
 
     <!-- EOF Client References Projects -->
-    <!-- Company Equity -->
-    <mat-step [stepControl]="step8Form">
-      <form [formGroup]="step8Form">
-        <ng-template matStepLabel>
-          Company Equity
-          <button mat-icon-button color="primary" (click)="openDialogCompanyEq()">
-            <mat-icon class="maticon-question">help_outline</mat-icon>
-          </button>
-        </ng-template>
-        <app-company-equity #companyEquityRef [companyEquityFormGroup]="step8Form"></app-company-equity>
-        <button mat-flat-button color="primary"
-          [disabled]="step8Form.invalid"
-          (click)="handleNextForCompanyEquity()">
-          {{ companyEquityRef.isDirty ? 'Save and Next' : 'Next' }}
-          <mat-icon>{{ companyEquityRef.isDirty ? 'save' : 'arrow_forward' }}</mat-icon>
-        </button>
-        <span *ngIf="!companyEquityRef.isDirty && companyEquityRef.lastSavedAt">
-          <mat-icon color="success">check_circle</mat-icon> Saved
-        </span>
-      </form>
-    </mat-step>
-    
-    <!-- EOF Company Equity -->
+
 
     <!-- Technology Classification -->
     <mat-step [stepControl]="step5Form">
@@ -124,9 +143,9 @@
             <mat-icon class="maticon-question">help_outline</mat-icon>
           </button>
         </ng-template>
-        <app-technology-classification #technologyClassificationRef [parentForm]="step5Form"></app-technology-classification>
-        <button mat-flat-button color="primary" class="mb-20"
-          [disabled]="step5Form.invalid"
+        <app-technology-classification #technologyClassificationRef
+          [parentForm]="step5Form"></app-technology-classification>
+        <button mat-flat-button color="primary" class="mb-20" [disabled]="step5Form.invalid"
           (click)="handleNextForTechnologyClassification()">
           {{ technologyClassificationRef.isDirty ? 'Save and Next' : 'Next' }}
           <mat-icon>{{ technologyClassificationRef.isDirty ? 'save' : 'arrow_forward' }}</mat-icon>
@@ -136,27 +155,8 @@
         </span>
       </form>
     </mat-step>
-    
+
     <!-- EOF Technology Classfication -->
-
-    <!-- Sector Experience -->
-    <mat-step [stepControl]="step6Form">
-      <form [formGroup]="step6Form">
-        <ng-template matStepLabel>
-          Sector Experience
-          <button mat-icon-button color="primary" (click)="openDialogSectorExp()">
-            <mat-icon class="maticon-question">help_outline</mat-icon>
-          </button>
-        </ng-template>
-        <app-sector-experience #step6Ref [parentForm]="step6Form"></app-sector-experience>
-        <button mat-flat-button color="primary" matStepperNext
-          [disabled]="!step6Ref.noSectorExperience && step6Form.invalid">
-          Next
-        </button>
-      </form>
-    </mat-step>
-    <!-- EOF Sector Experience  -->
-
 
     <!-- Energy service Offered-->
     <mat-step [stepControl]="step2Form">
@@ -192,7 +192,6 @@
         </button>
       </form>
     </mat-step>
-
     <!-- EOF Key Employee -->
 
   </mat-vertical-stepper>
