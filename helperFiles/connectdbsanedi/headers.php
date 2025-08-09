@@ -1,25 +1,23 @@
 <?php
-// ✅ Define allowed origins (local + live environment)
+// ✅ Exact origins (NO trailing slash)
 $allowed_origins = [
-    "http://localhost:4200",            // 🔹 Local development
-    "https://tier.sanediesco.org.za/",   // 🔹 Live website (non-www)
-    "https://www.tier.sanediesco.org.za/" // 🔹 Live website (www)
+  "http://localhost:4200",
+  "https://tier.sanediesco.org.za",
+  "https://www.tier.sanediesco.org.za"
 ];
 
-// ✅ Get the request's origin
-$origin = isset($_SERVER['HTTP_ORIGIN']) ? $_SERVER['HTTP_ORIGIN'] : "";
+$origin = $_SERVER['HTTP_ORIGIN'] ?? '';
 
-// ✅ Check if the request's origin is in the allowed list
-if (in_array($origin, $allowed_origins)) {
-    header("Access-Control-Allow-Origin: $origin"); // ✅ Allow dynamic origins
+if (in_array($origin, $allowed_origins, true)) {
+  header("Access-Control-Allow-Origin: $origin");
+  header("Vary: Origin"); // helps caches/CDN
 }
 
 header("Access-Control-Allow-Methods: GET, POST, PUT, DELETE, OPTIONS");
 header("Access-Control-Allow-Headers: Content-Type, Authorization");
-header("Access-Control-Allow-Credentials: true"); // ✅ Required for cookies
+header("Access-Control-Allow-Credentials: true"); // ✅ required for cookies
 
-// ✅ Handle preflight OPTIONS request
 if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
-    http_response_code(200);
-    exit();
+  http_response_code(200);
+  exit();
 }

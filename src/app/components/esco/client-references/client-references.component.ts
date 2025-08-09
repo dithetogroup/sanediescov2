@@ -117,12 +117,8 @@ export class ClientReferencesComponent implements OnInit {
             cr_proj_desc: ref.cr_proj_desc,
             cr_technologies: ref.cr_technologies ? JSON.parse(ref.cr_technologies) : [],
             cr_proj_value: ref.cr_proj_value,
-           // cr_start_date: ref.cr_start_date,
-        //  cr_start_date: this.validationService.toDateObject(ref.cr_start_date),
-          //cr_end_date: this.validationService.toDateObject(ref.cr_end_date),
             cr_start_date: ref.cr_start_date ? new Date(ref.cr_start_date) : null,
            cr_end_date: ref.cr_end_date ? new Date(ref.cr_end_date) : null,
-          // cr_end_date: ref.cr_end_date,
           });
           if (ref.reference_letter) {
             group.patchValue({

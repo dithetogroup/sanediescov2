@@ -18,6 +18,10 @@ export const environment = {
     StepGetCompanyInformationCICPFILE: baseUrl + '/step-get-company-information-cicpfile.php',
     getCompanyInfoHistory: baseUrl + '/get-company-information-history.php',
 
+  //Sector Experience
+    StepGetSectorExperience: baseUrl + '/step-get-sector-experience.php',
+    StepSaveSectorExperience: baseUrl + '/step-save-sector-experience.php',
+
     //previous projects
     StepSaveCompanyPreviousProjects: baseUrl + '/step-save-previous-projects.php',
     StepGetPreviousProjects: baseUrl + '/step-get-previous-projects.php',
@@ -39,7 +43,6 @@ export const environment = {
     StepGetKeyEmployee: baseUrl + '/step-get-key-employee.php',
     StepDeleteKeyEmployee: baseUrl + '/step-delete-key-employee.php',
     StepDeleteEmployeeFile: baseUrl + '/step-delete-key-employee-file.php',
-
 
     //TechnologyClassification
     StepGetTechnologyClassifications: baseUrl + '/step-get-tech-classifications.php',

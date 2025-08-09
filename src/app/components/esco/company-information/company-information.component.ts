@@ -55,7 +55,7 @@ export class CompanyInformationComponent {
       '1 - 2', '3 - 5', '6 - 10', '10+'
     ];
     EnumTeamExperience: string[] = [
-      '1 - 3', '4 -6 ', '7 - 10', '10+'
+      '1 - 3', '4 - 6 ', '7 - 10', '10+'
     ];
     saProvinces: string[] = [
       'Eastern Cape', 'Free State', 'Gauteng', 'KwaZulu-Natal', 'Limpopo', 'Mpumalanga', 'North West', 'Northern Cape', 'Western Cape'
@@ -111,7 +111,6 @@ export class CompanyInformationComponent {
     }
 
     loadLatestCompanyInfo() {
-      debugger;
       this.readService.StepGetCompanyInformation(this.esco_id).subscribe(res => {
         if (res.status === 'success' && res.data) {
           // If provinces are stored as CSV, split them for the form
@@ -135,7 +134,6 @@ export class CompanyInformationComponent {
         }
       });
     }
-
 
     get latestFileUrl(): string {
       if (!this.latestFile) return '';

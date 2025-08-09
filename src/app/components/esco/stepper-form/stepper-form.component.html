@@ -67,27 +67,25 @@
 
     <!-- EOF Company Equity -->
 
-        <!-- Sector Experience -->
-        <mat-step [stepControl]="step6Form">
-          <form [formGroup]="step6Form">
-            <ng-template matStepLabel>
-              Sector Experience
-              <button mat-icon-button color="primary" (click)="openDialogSectorExp()">
-                <mat-icon class="maticon-question">help_outline</mat-icon>
-              </button>
-            </ng-template>
-            <app-sector-experience #step6Ref [parentForm]="step6Form"></app-sector-experience>
-            <button mat-flat-button color="primary" matStepperNext
-              [disabled]="!step6Ref.noSectorExperience && step6Form.invalid">
-              Next
-            </button>
-          </form>
-        </mat-step>
-        <!-- EOF Sector Experience  -->
-
+    <!-- Sector Experience -->
+    <mat-step [stepControl]="step6Form">
+      <form [formGroup]="step6Form">
+        <ng-template matStepLabel>
+          Sector Experience
+          <button mat-icon-button color="primary" type="button" (click)="openDialogSectorExp()">
+            <mat-icon class="maticon-question">help_outline</mat-icon>
+          </button>
+        </ng-template>
+        <app-sector-experience #sectorExperienceRef [sectorExperienceFormGroup]="step6Form"> </app-sector-experience>
+        <button mat-flat-button color="primary" type="button" [disabled]="step6Form.invalid" (click)="handleNextForSectorExp()">
+          {{ sectorExperienceRef.isDirty ? 'Save and Next' : 'Next' }}
+          <mat-icon>{{ sectorExperienceRef.isDirty ? 'save' : 'arrow_forward' }}</mat-icon>
+        </button>
+      </form>
+    </mat-step>
+    <!-- EOF Sector Experience  -->
 
     <!-- Previous Projects-->
-
     <mat-step [stepControl]="step1Form">
       <form [formGroup]="step1Form">
         <ng-template matStepLabel>
@@ -130,9 +128,7 @@
         </span>
       </form>
     </mat-step>
-
     <!-- EOF Client References Projects -->
-
 
     <!-- Technology Classification -->
     <mat-step [stepControl]="step5Form">
@@ -155,7 +151,6 @@
         </span>
       </form>
     </mat-step>
-
     <!-- EOF Technology Classfication -->
 
     <!-- Energy service Offered-->

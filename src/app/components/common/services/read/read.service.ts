@@ -69,16 +69,20 @@ export class ReadService {
   //KeyEmployee
   StepGetKeyemployee(esco_id: string) {
     return this.httpClient.get<any>(
-    `${this.urlEndPoints.StepGetKeyemployee}?esco_id=${esco_id}`
+    `${this.urlEndPoints.StepGetKeyEmployee}?esco_id=${esco_id}`
     );
   }
-
-
 
   //TechnologyClassification
   StepGetTechnologyClassifications(esco_id: string) {
     return this.httpClient.get<any>(
     `${this.urlEndPoints.StepGetTechnologyClassifications}?esco_id=${esco_id}`
+    );
+  }
+
+  StepGetSectorExperience(esco_id: string) {
+    return this.httpClient.get<any>(
+    `${this.urlEndPoints.StepGetSectorExperience}?esco_id=${esco_id}`
     );
   }
 

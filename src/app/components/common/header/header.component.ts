@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ToggleService } from './toggle.service';
 import { NgClass, DatePipe, NgIf } from '@angular/common';
 import { CustomizerSettingsService } from '../../customizer-settings/customizer-settings.service';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,6 +34,7 @@ export class HeaderComponent  implements OnInit{
         private toggleService: ToggleService,
         public themeService: CustomizerSettingsService,
         private dataSharingService: DataSharingService,
+        private router: Router
         
     ) {
         this.toggleService.isToggled$.subscribe(isToggled => {
@@ -61,9 +62,12 @@ export class HeaderComponent  implements OnInit{
             this.initials = (this.firstName[0] + this.lastName[0]).toUpperCase();
         }
     }
+
+    logout() {
+       // this.dataSharingService.logout();
+       // this.router.navigate(['/authentication/login']); // or wherever you want to go
+    }
       
-
-
     toggleTheme() {
         this.themeService.toggleTheme();
     }
