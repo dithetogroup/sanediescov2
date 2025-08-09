@@ -81,7 +81,7 @@
             </li>
             <li class="d-none d-lg-block">
                 <div class="date-btn main-color fw-semibold position-relative">
-                    <i class="flaticon-fingerprint-scan"></i> 
+                    <i class="flaticon-fingerprint-scan"></i>
                     <span class="companyType">{{userDetails?.escoid}}</span>
                 </div>
             </li>
@@ -89,7 +89,8 @@
 
             <li>
                 <div>
-                    <button mat-icon-button [matMenuTriggerFor]="profileMenu"  class="profile-btn main-color border-none bg-transparent position-relative">
+                    <button mat-icon-button [matMenuTriggerFor]="profileMenu"
+                        class="profile-btn main-color border-none bg-transparent position-relative">
                         <div class="circle">{{ initials }}</div>
                         <!-- {{userDetails?.role}} -->
                         <!-- <span class="fw-semibold">{{users?.lu_name}} {{users?.lu_surname}}</span> -->
@@ -105,16 +106,16 @@
                                 <i class="ri-user-3-line"></i> Profile
                             </a>
                         </li>
-                        <!-- <li>
-                            <a routerLink="/change-password">
-                                <i class="ri-settings-3-line"></i> Change Password
-                            </a>
-                        </li>  -->
                         <li>
                             <a routerLink="/authentication/logout">
                                 <i class="ri-shut-down-line"></i> Logout
                             </a>
                         </li>
+                        <!-- <li>
+                            <a (click)="logout()">
+                                <i class="ri-shut-down-line"></i> Logout
+                            </a>
+                        </li> -->
                     </ul>
                 </mat-menu>
             </li>

@@ -66,7 +66,6 @@ export class LoginComponent {
         this.isLoading = false;
         if (data.status === 'success') {
           this.messageType = 'success';
-         // this.message = "Login successful.";
           this.snackBar.open(
             'Login successful.',
             'Close',
@@ -90,19 +89,16 @@ export class LoginComponent {
                 panelClass: ['snackbar-error'],
               }
             );
-            // this.message = data.message;
-            // this.messageType = 'warning';
-            setTimeout(() => {
-              this.message = null;
-              this.messageType = null;
-            }, 5000);
           } else {
-            this.message = `Login failed: ${data.message}`;
-            this.messageType = 'error';
-            setTimeout(() => {
-              this.message = null;
-              this.messageType = null;
-            }, 5000);
+            this.snackBar.open(
+              'Invalid Credientials',
+              'Close',
+              {
+                 duration: 3500,
+                verticalPosition: 'top',
+                panelClass: ['snackbar-error'],
+              }
+            );
           }
         }
       },

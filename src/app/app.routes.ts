@@ -146,6 +146,8 @@ import { StepperFormComponent } from './components/esco/stepper-form/stepper-for
 import { HistoryManagerComponent } from './components/esco/steps-history/history-manager/history-manager.component';
 import { CompanyInformationHistoryComponent } from './components/esco/steps-history/company-information-history/company-information-history.component';
 import { PreviousProjectsFilesComponent } from './components/apps/file-manager/previous-projects-files/previous-projects-files.component';
+import { authGuard } from './components/common/services/authguard/auth.guard';
+import { rolesGuard } from './components/common/services/rolesguard/roles.guard';
 
 
 export const routes: Routes = [
@@ -329,13 +331,20 @@ export const routes: Routes = [
     {
         path: 'forms',
         component: FormsComponent,
+        canActivate: [authGuard], // must be logged in
         children: [
             {path: '', component: BasicFormComponent},
             {path: 'wizard', component: WizardFormComponent},
             {path: 'advanced', component: AdvancedFormComponent},
             {path: 'editors', component: EditorsComponent},
-            {path: 'file-uploader', component: FileUploaderComponent},
-            {path: 'esco-profile', component: StepperFormComponent}
+          //  {path: 'file-uploader', component: FileUploaderComponent,},
+            {path: 'esco-profile', component: StepperFormComponent},
+            {
+                path: 'file-uploader',
+                component: FileUploaderComponent,
+                canActivate: [rolesGuard],
+                data: { roles: ['escouser', 'Validator'] } // only these roles allowed
+              }
         ]
     },
     {

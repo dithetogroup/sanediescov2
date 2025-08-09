@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, NgZone, AfterViewInit , ChangeDetectorRef} from '@angular/core';
-import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormArray } from '@angular/forms';
+import { FormGroup, FormBuilder, ReactiveFormsModule, Validators, FormArray, AbstractControl } from '@angular/forms';
 import { MatStepper, MatStepperModule } from '@angular/material/stepper';
 import { MatProgressBar } from '@angular/material/progress-bar';
 import { MatCard, MatCardContent, MatCardHeader } from '@angular/material/card';
@@ -43,7 +43,6 @@ import { SectorExpDialogComponent } from '../../ui-kit/dialog/sector-exp-dialog/
     KeyEmployeesComponent,
     TechnologyClassificationComponent,
     SectorExperienceComponent,
-    ClientReferencesComponent,
     CompanyEquityComponent
 ],
   //bootstrap: [AppComponent],
@@ -57,6 +56,8 @@ export class StepperFormComponent implements OnInit {
   @ViewChild('clientReferencesRef') clientReferencesComponent!: ClientReferencesComponent;
   @ViewChild('companyEquityRef') companyEquityComponent!: CompanyEquityComponent;
   @ViewChild('technologyClassificationRef') technologyClassificationComponent!: TechnologyClassificationComponent;
+  @ViewChild('sectorExperienceRef') sectorExperienceComponent!: SectorExperienceComponent;
+
 
 
 
@@ -116,9 +117,14 @@ export class StepperFormComponent implements OnInit {
     
   }
 
+  private isFormArray(ctrl: AbstractControl | null): ctrl is FormArray {
+    return ctrl instanceof FormArray;
+  }
+
   checkEmptyFormArray(form: FormGroup, arrayName: string): boolean {
-    const arr = form.get(arrayName) as FormArray;
-    return arr.length === 0;
+    const ctrl = form.get(arrayName);
+    if (!this.isFormArray(ctrl)) return true;
+    return ctrl.length === 0;
   }
 
 
@@ -128,7 +134,7 @@ export class StepperFormComponent implements OnInit {
       {form: this.step1Form, arrayName: 'projects'},
       {form: this.step4Form, arrayName: 'keyemployees'},
       {form: this.step7Form, arrayName: 'clientReferences'},
-      {form: this.step7Form, arrayName: 'techClassifications'},
+      {form: this.step5Form, arrayName: 'techClassifications'},
       // Add more steps as you need (e.g., step2Form/arrayName)
     ];
 
@@ -262,13 +268,20 @@ export class StepperFormComponent implements OnInit {
       this.stepper.next();
     }
   }
+
+  handleNextForSectorExp() {
+    if (this.sectorExperienceComponent?.isDirty) {
+      this.sectorExperienceComponent.submitSectorExperience().then(success => {
+        if (success) {
+          this.sectorExperienceComponent.markAsSaved();
+          this.stepper.next();
+        }
+      });
+    } else {
+      this.stepper.next();
+    }
+  }
   
-  
-
-
-
-
-
 
   /* Dialog triggers */
   openDialogPreviousProjects() {

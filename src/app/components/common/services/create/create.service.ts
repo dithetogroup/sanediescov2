@@ -44,5 +44,15 @@ export class CreateService {
     return this.httpClient.post<any>(this.urlEndPoints.StepSaveTechnologyClassifications, formData);
   }
 
+  StepSaveSectorExperience(fd: FormData) {
+    return this.httpClient.post<any>(this.urlEndPoints.StepSaveSectorExperience, fd, {
+      withCredentials: true
+    });
+  }
+  
+
+
+  
+
  
 }

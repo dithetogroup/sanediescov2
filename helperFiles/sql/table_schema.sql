@@ -49,6 +49,7 @@ CREATE TABLE key_employee (
     ke_epc_professional_registered VARCHAR(3),
     ke_is_new_job VARCHAR(5),
     ke_isDeleted BOOLEAN DEFAULT FALSE,
+    ke_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ke_last_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
@@ -83,8 +84,9 @@ CREATE TABLE client_reference (
     cr_end_date datetime DEFAULT NULL,
     cr_isDeleted boolean DEFAULT false,
     cr_esco_id varchar(15) DEFAULT NULL,
-    cr_last_updated_date timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+    ci_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    ci_last_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+);
 
 CREATE TABLE files_upload (
     fu_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -128,6 +130,7 @@ CREATE TABLE login_user (
     lu_isActive BOOLEAN NOT NULL DEFAULT 1,
     lu_role VARCHAR(50) NOT NULL,
     lu_lastLogin DATETIME DEFAULT NULL,
+    lu_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     lu_last_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -146,15 +149,18 @@ CREATE TABLE registered_user (
     ru_csdNumber VARCHAR(50) NULL,
     ru_companyName VARCHAR(255) NOT NULL,
     ru_period VARCHAR(255) NOT NULL,
+    ru_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     ru_last_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
 
 CREATE TABLE sector_experience (
     se_id INT AUTO_INCREMENT PRIMARY KEY,
     se_industry VARCHAR(100) DEFAULT NULL,
-    se_isOther BOOLEAN DEFAULT FALSE,
-    se_isDeleted BOOLEAN DEFAULT FALSE,
+    se_isOther VARCHAR(255) DEFAULT '',
+    se_isDeleted TINYINT(1) DEFAULT 0,
     se_esco_id VARCHAR(15) NOT NULL,
+    se_created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     se_last_updated_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 

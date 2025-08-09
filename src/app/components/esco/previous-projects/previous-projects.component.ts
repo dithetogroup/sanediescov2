@@ -27,7 +27,6 @@ import { CreateService } from "../../common/services/create/create.service";
 import { ReadService } from "../../common/services/read/read.service";
 import { ValidationsService } from "../../common/services/utilities/validations.service";
 import { DeleteService } from "../../common/services/delete/delete.service";
-import { ToastrService } from "ngx-toastr";
 import { UpdateService } from "../../common/services/update/update.service";
 import { MatTooltipModule } from "@angular/material/tooltip";
 import { MatSnackBar } from "@angular/material/snack-bar";
@@ -72,7 +71,6 @@ export class PreviousProjectsComponent implements OnInit {
     private readService: ReadService,
     private validationService: ValidationsService,
     private deleteService: DeleteService,
-    private toastr: ToastrService,
     private cdr: ChangeDetectorRef,
     private updateService: UpdateService,
     private snackBar: MatSnackBar
@@ -87,9 +85,6 @@ export class PreviousProjectsComponent implements OnInit {
       this.isDirty = this.parentForm.dirty;
     });
     this.patchPreviousProjects();
-
-    console.log("Should show success toast now!");
-    this.toastr.success("Projects deleted successfully.");
   }
 
   public markAsSaved() {
