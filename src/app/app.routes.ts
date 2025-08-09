@@ -145,6 +145,7 @@ import { VideosComponent } from './components/ui-kit/videos/videos.component';
 import { StepperFormComponent } from './components/esco/stepper-form/stepper-form.component';
 import { HistoryManagerComponent } from './components/esco/steps-history/history-manager/history-manager.component';
 import { CompanyInformationHistoryComponent } from './components/esco/steps-history/company-information-history/company-information-history.component';
+import { PreviousProjectsFilesComponent } from './components/apps/file-manager/previous-projects-files/previous-projects-files.component';
 
 
 export const routes: Routes = [
@@ -170,6 +171,7 @@ export const routes: Routes = [
         component: FileManagerComponent,
         children: [
             {path: '', component: MyDriveComponent},
+            {path: 'previous-projects', component: PreviousProjectsFilesComponent},
             {path: 'assets', component: FmAssetsComponent},
             {path: 'projects', component: FmProjectsComponent},
             {path: 'personal', component: FmPersonalComponent},

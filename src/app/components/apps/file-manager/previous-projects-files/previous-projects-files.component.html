@@ -1,0 +1,117 @@
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-space-between">
+    <h5 class="mb-0">Previous Projects</h5>
+    <ol class="breadcrumb mb-0 ps-0">
+        <li class="breadcrumb-item">
+            <a routerLink="/">
+                <i class="ri-home-8-line"></i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item fw-semibold">Previous Project Files</li>
+    </ol>
+</div>
+
+<div fxLayout="row" fxLayoutGap="25px" fxLayout.xs="column" fxLayoutGap.xs="0" fxLayout.sm="column" fxLayoutGap.sm="0">
+    <div fxFlex="100%" fxFlex.xl="80%" fxFlex.xs="100%" fxFlex.sm="100%" class="col">
+        <mat-card class="mb-25 tagus-card agent-performance-box">
+            <mat-card-header>
+                <h5 class="mb-0">
+                    <div class="search-box position-relative">
+                        <input matInput class="input-search d-block" [(ngModel)]="filterValue.allColumns"
+                            (input)="applyGlobalFilter()" placeholder="Filter by ..">
+                    </div>
+                </h5>
+                <!-- <div class="d-flex align-items-center mb-3 gap-3 flex-wrap">
+                    <mat-form-field appearance="fill" class="me-2" class="tagus-form-group">
+
+                        <mat-label>From</mat-label>
+                        <input matInput [matDatepicker]="pickerFrom" [(ngModel)]="filterValue.fromDate"
+                            (dateChange)="applyGlobalFilter()" [max]="maxDate">
+                        <mat-datepicker-toggle matSuffix [for]="pickerFrom"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerFrom></mat-datepicker>
+                    </mat-form-field>
+                    <span>—</span>
+                    <mat-form-field appearance="fill" class="tagus-form-group">
+                        <mat-label>To</mat-label>
+                        <input matInput [matDatepicker]="pickerTo" [(ngModel)]="filterValue.toDate"
+                            (dateChange)="applyGlobalFilter()" [max]="maxDate">
+                        <mat-datepicker-toggle matSuffix [for]="pickerTo"></mat-datepicker-toggle>
+                        <mat-datepicker #pickerTo></mat-datepicker>
+                    </mat-form-field>
+                </div> -->
+                <!-- <span class="d-flex align-items-center gap-2" style="cursor:pointer" (click)="resetFilters()" >
+                 Reset<mat-icon aria-hidden="false" class="material-symbols-outlined" style="font-size: 24px;">autorenew</mat-icon>
+              </span> -->
+
+            </mat-card-header>
+            <div *ngIf="!dataSource">
+                <mat-spinner></mat-spinner>
+            </div>
+            <mat-card-content>
+                <div class="agent-performance-table table-responsive" *ngIf="dataSource">
+                    <table mat-table matSort [dataSource]="dataSource">
+
+                        <!-- Created At -->
+                        <ng-container matColumnDef="created">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Created</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.ci_created_at | date: 'dd MMM yyyy' }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Updated At -->
+                        <ng-container matColumnDef="updated">
+                            <th mat-header-cell *matHeaderCellDef mat-sort-header>Updated</th>
+                            <td mat-cell *matCellDef="let element">
+                                {{ element.ci_updated_date | date: 'dd MMM yyyy' }}
+                            </td>
+                        </ng-container>
+
+                        <!-- Energy Exp -->
+                        <!-- <ng-container matColumnDef="energy">
+                            <th mat-header-cell *matHeaderCellDef>Energy Exp</th>
+                            <td mat-cell *matCellDef="let element">{{ element.ci_energy_man_exp }}</td>
+                        </ng-container> -->
+
+                        <!-- Tech Exp -->
+                        <!-- <ng-container matColumnDef="tech">
+                            <th mat-header-cell *matHeaderCellDef>Tech Exp</th>
+                            <td mat-cell *matCellDef="let element">{{ element.ci_com_exp_of_tech_pro }}</td>
+                        </ng-container> -->
+
+                        <!-- Provinces -->
+                        <!-- <ng-container matColumnDef="provinces">
+                            <th mat-header-cell *matHeaderCellDef>Provinces</th>
+                            <td mat-cell *matCellDef="let element">{{ element.ci_business_activities_provinces }}</td>
+                        </ng-container> -->
+
+                        <!-- File Name -->
+                        <ng-container matColumnDef="filename">
+                            <th mat-header-cell *matHeaderCellDef>File Name</th>
+                            <td mat-cell *matCellDef="let element">
+                                <ng-container *ngIf="element.fu_name">
+                                    <a [href]="baseUrl + element.fu_path" target="_blank" class="text-primary">
+                                        <mat-icon>cloud_download</mat-icon> {{element.fu_name}}
+                                    </a>
+                                </ng-container>
+                                <span *ngIf="!element.fu_name" class="text-muted">—</span>
+                            </td>
+                        </ng-container>
+
+                        <!-- Category -->
+                        <!-- <ng-container matColumnDef="category">
+                            <th mat-header-cell *matHeaderCellDef>Category</th>
+                            <td mat-cell *matCellDef="let element">{{element.fu_category}}</td>
+                        </ng-container> -->
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+                    <mat-paginator [pageSizeOptions]="[10, 20, 40]" showFirstLastButtons
+                        aria-label="Select page of results">
+                    </mat-paginator>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
