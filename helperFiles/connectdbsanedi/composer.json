@@ -1,19 +1,27 @@
 {
-    "name": "dithetogroup/hikingadventure",
+    "name": "dithetogroup/sanediapp",
     "description": "Third party applications for mails and generating of tokens",
     "type": "library",
     "require-dev": {
-        "phpmailer/phpmailer": "^6.8"
+      "phpmailer/phpmailer": "^6.8"
     },
     "authors": [
-        {
-            "name": "mathipa makgato"
-        }
+      {
+        "name": "mathipa makgato"
+      }
     ],
     "require": {
+        "php": ">=8.2.0",
         "firebase/php-jwt": "^6.11",
         "phpoffice/phpspreadsheet": "1.*",
         "kreait/firebase-php": "^7.16",
-        "php": ">=8.2.0"
+        "paragonie/sodium_compat": "^1.20",
+        "dompdf/dompdf": "^3.1",
+        "mpdf/mpdf": "^8.2"
+    },
+    "config": {
+      "platform": {
+        "php": "8.2.4"
+      }
     }
-}
+  }

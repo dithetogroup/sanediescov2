@@ -18,7 +18,13 @@ export interface CompanyInfo {
     surname: string;
     escoid: string;
     token:string;
+    title: string;
+    firstName: string;
+    lastName: string;
     exp?: number;
+    companyType: string;
+    companyName: string;
+
 }
 
   

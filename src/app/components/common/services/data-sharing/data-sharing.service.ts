@@ -17,6 +17,42 @@ export class DataSharingService {
     this.checkTokenExpiration(); // ✅ Check expiration on service initialization
   }
 
+
+  getUserSnapshot() {
+    const user = this.userData.getValue(); // BehaviorSubject current value
+    if (!user) {
+      return {
+        userDetails: null,
+        esco_id: '',
+        firstName: '',
+        lastName: '',
+        initials: '',
+        userRole: '',
+        roles: {
+          isESCoUser: false,
+          isAdminValidator: false,
+          isSuperAdmin: false,
+          isValidator: false
+        }
+      };
+    }
+  
+    const { escoid, firstName, lastName, role } = user;
+    const initials = firstName && lastName ? (firstName[0] + lastName[0]).toUpperCase() : '';
+    const roles = this.getUserRoles();
+  
+    return {
+      userDetails: user,
+      esco_id: escoid,
+      firstName,
+      lastName,
+      initials,
+      userRole: role,
+      roles
+    };
+  }
+  
+
   /**
    * ✅ Set user data and store it in sessionStorage
    */
@@ -84,6 +120,18 @@ export class DataSharingService {
   private getToken(): string | null {
     const matches = document.cookie.match(/(^| )auth_token=([^;]+)/);
     return matches ? matches[2] : null;
+  }
+
+  getUserRoles() {
+    const user = this.userData.getValue();
+    const role = user?.role || '';
+  
+    return {
+      isESCoUser: role === 'escouser',
+      isAdminValidator: role === 'adminvalidator',
+      isSuperAdmin: role === 'Super Admin',
+      isValidator: role === 'Validator',
+    };
   }
 
 
